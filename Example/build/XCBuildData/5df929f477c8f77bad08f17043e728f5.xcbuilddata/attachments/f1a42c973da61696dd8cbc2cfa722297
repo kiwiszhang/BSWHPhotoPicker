@@ -1,0 +1,5 @@
+ extern const unsigned char BSWHPhotoPickerVersionString[];
+ extern const double BSWHPhotoPickerVersionNumber;
+
+ const unsigned char BSWHPhotoPickerVersionString[] __attribute__ ((used)) = "@(#)PROGRAM:BSWHPhotoPicker  PROJECT:Pods-1" "\n";
+ const double BSWHPhotoPickerVersionNumber __attribute__ ((used)) = (double)1.;

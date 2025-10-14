@@ -1,0 +1,18 @@
+{
+  "" : {
+    "diagnostics" : "/Users/bishangwenhua/Downloads/BSWHPhotoPicker-main/Example/build/Pods.build/Debug-iphoneos/FBSnapshotTestCase.build/Objects-normal/arm64/FBSnapshotTestCase-master.dia",
+    "emit-module-dependencies" : "/Users/bishangwenhua/Downloads/BSWHPhotoPicker-main/Example/build/Pods.build/Debug-iphoneos/FBSnapshotTestCase.build/Objects-normal/arm64/FBSnapshotTestCase-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/bishangwenhua/Downloads/BSWHPhotoPicker-main/Example/build/Pods.build/Debug-iphoneos/FBSnapshotTestCase.build/Objects-normal/arm64/FBSnapshotTestCase-master-emit-module.dia",
+    "swift-dependencies" : "/Users/bishangwenhua/Downloads/BSWHPhotoPicker-main/Example/build/Pods.build/Debug-iphoneos/FBSnapshotTestCase.build/Objects-normal/arm64/FBSnapshotTestCase-master.swiftdeps"
+  },
+  "/Users/bishangwenhua/Downloads/BSWHPhotoPicker-main/Example/Pods/FBSnapshotTestCase/FBSnapshotTestCase/SwiftSupport.swift" : {
+    "const-values" : "/Users/bishangwenhua/Downloads/BSWHPhotoPicker-main/Example/build/Pods.build/Debug-iphoneos/FBSnapshotTestCase.build/Objects-normal/arm64/SwiftSupport.swiftconstvalues",
+    "dependencies" : "/Users/bishangwenhua/Downloads/BSWHPhotoPicker-main/Example/build/Pods.build/Debug-iphoneos/FBSnapshotTestCase.build/Objects-normal/arm64/SwiftSupport.d",
+    "diagnostics" : "/Users/bishangwenhua/Downloads/BSWHPhotoPicker-main/Example/build/Pods.build/Debug-iphoneos/FBSnapshotTestCase.build/Objects-normal/arm64/SwiftSupport.dia",
+    "index-unit-output-path" : "/Pods.build/Debug-iphoneos/FBSnapshotTestCase.build/Objects-normal/arm64/SwiftSupport.o",
+    "llvm-bc" : "/Users/bishangwenhua/Downloads/BSWHPhotoPicker-main/Example/build/Pods.build/Debug-iphoneos/FBSnapshotTestCase.build/Objects-normal/arm64/SwiftSupport.bc",
+    "object" : "/Users/bishangwenhua/Downloads/BSWHPhotoPicker-main/Example/build/Pods.build/Debug-iphoneos/FBSnapshotTestCase.build/Objects-normal/arm64/SwiftSupport.o",
+    "swift-dependencies" : "/Users/bishangwenhua/Downloads/BSWHPhotoPicker-main/Example/build/Pods.build/Debug-iphoneos/FBSnapshotTestCase.build/Objects-normal/arm64/SwiftSupport.swiftdeps",
+    "swiftmodule" : "/Users/bishangwenhua/Downloads/BSWHPhotoPicker-main/Example/build/Pods.build/Debug-iphoneos/FBSnapshotTestCase.build/Objects-normal/arm64/SwiftSupport~partial.swiftmodule"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "version": 0,
+  "use-external-names": false,
+  "case-sensitive": false,
+  "roots": [{
+    "type": "directory",
+    "name": "/Users/bishangwenhua/Downloads/BSWHPhotoPicker-main/Example/build/Debug-iphoneos/BSWHPhotoPicker/BSWHPhotoPicker.framework/Modules",
+    "contents": [{
+      "type": "file",
+      "name": "module.modulemap",
+      "external-contents": "/Users/bishangwenhua/Downloads/BSWHPhotoPicker-main/Example/build/Pods.build/Debug-iphoneos/BSWHPhotoPicker.build/unextended-module.modulemap",
+    }]
+    },
+    {
+    "type": "directory",
+    "name": "/Users/bishangwenhua/Downloads/BSWHPhotoPicker-main/Example/build/Debug-iphoneos/BSWHPhotoPicker/BSWHPhotoPicker.framework/Headers",
+    "contents": [{
+      "type": "file",
+      "name": "BSWHPhotoPicker-Swift.h",
+      "external-contents": "/Users/bishangwenhua/Downloads/BSWHPhotoPicker-main/Example/build/Pods.build/Debug-iphoneos/BSWHPhotoPicker.build/unextended-interface-header.h",
+    }]
+  }]
+}
