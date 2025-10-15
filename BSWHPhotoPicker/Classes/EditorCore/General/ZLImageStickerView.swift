@@ -27,7 +27,7 @@
 import UIKit
 
 open class ZLImageStickerView: ZLBaseStickerView {
-    private let image: UIImage
+    public var image: UIImage
     
     private static let edgeInset: CGFloat = 5
     

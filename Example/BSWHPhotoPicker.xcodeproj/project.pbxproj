@@ -8,6 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		2002012A1B0EA79BA1ED45A4 /* Pods_BSWHPhotoPicker_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D925E5EE90C5758598A8BEBB /* Pods_BSWHPhotoPicker_Tests.framework */; };
+		533A14A92E9F789700A2E1C6 /* Christmas00.json in Resources */ = {isa = PBXBuildFile; fileRef = 533A14A82E9F789700A2E1C6 /* Christmas00.json */; };
+		533A14AB2E9F7CBC00A2E1C6 /* ImageStickerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A14AA2E9F7CBC00A2E1C6 /* ImageStickerModel.swift */; };
+		533A14AD2E9F887F00A2E1C6 /* Christmas01.json in Resources */ = {isa = PBXBuildFile; fileRef = 533A14AC2E9F887F00A2E1C6 /* Christmas01.json */; };
+		533A14AF2E9F925900A2E1C6 /* Christmas02.json in Resources */ = {isa = PBXBuildFile; fileRef = 533A14AE2E9F925900A2E1C6 /* Christmas02.json */; };
+		533A14B32E9F926B00A2E1C6 /* Christmas06.json in Resources */ = {isa = PBXBuildFile; fileRef = 533A14B22E9F926B00A2E1C6 /* Christmas06.json */; };
+		533A14B52E9F926E00A2E1C6 /* Christmas05.json in Resources */ = {isa = PBXBuildFile; fileRef = 533A14B42E9F926E00A2E1C6 /* Christmas05.json */; };
+		533A14B72E9F927600A2E1C6 /* Christmas04.json in Resources */ = {isa = PBXBuildFile; fileRef = 533A14B62E9F927600A2E1C6 /* Christmas04.json */; };
+		533A14B92E9F927900A2E1C6 /* Christmas03.json in Resources */ = {isa = PBXBuildFile; fileRef = 533A14B82E9F927900A2E1C6 /* Christmas03.json */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
@@ -30,6 +38,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		533A14A82E9F789700A2E1C6 /* Christmas00.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Christmas00.json; sourceTree = "<group>"; };
+		533A14AA2E9F7CBC00A2E1C6 /* ImageStickerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStickerModel.swift; sourceTree = "<group>"; };
+		533A14AC2E9F887F00A2E1C6 /* Christmas01.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Christmas01.json; sourceTree = "<group>"; };
+		533A14AE2E9F925900A2E1C6 /* Christmas02.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Christmas02.json; sourceTree = "<group>"; };
+		533A14B22E9F926B00A2E1C6 /* Christmas06.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Christmas06.json; sourceTree = "<group>"; };
+		533A14B42E9F926E00A2E1C6 /* Christmas05.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Christmas05.json; sourceTree = "<group>"; };
+		533A14B62E9F927600A2E1C6 /* Christmas04.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Christmas04.json; sourceTree = "<group>"; };
+		533A14B82E9F927900A2E1C6 /* Christmas03.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Christmas03.json; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* BSWHPhotoPicker_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BSWHPhotoPicker_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -100,6 +116,14 @@
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				9899F87A2E73ED02000AABA4 /* EditImageViewController.swift */,
+				533A14AA2E9F7CBC00A2E1C6 /* ImageStickerModel.swift */,
+				533A14A82E9F789700A2E1C6 /* Christmas00.json */,
+				533A14AC2E9F887F00A2E1C6 /* Christmas01.json */,
+				533A14AE2E9F925900A2E1C6 /* Christmas02.json */,
+				533A14B82E9F927900A2E1C6 /* Christmas03.json */,
+				533A14B62E9F927600A2E1C6 /* Christmas04.json */,
+				533A14B42E9F926E00A2E1C6 /* Christmas05.json */,
+				533A14B22E9F926B00A2E1C6 /* Christmas06.json */,
 				9801A70D2E726C2A00607935 /* testImage.png */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
@@ -255,10 +279,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				533A14AF2E9F925900A2E1C6 /* Christmas02.json in Resources */,
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
+				533A14B52E9F926E00A2E1C6 /* Christmas05.json in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
+				533A14A92E9F789700A2E1C6 /* Christmas00.json in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				533A14AD2E9F887F00A2E1C6 /* Christmas01.json in Resources */,
+				533A14B92E9F927900A2E1C6 /* Christmas03.json in Resources */,
 				9801A70E2E726C2A00607935 /* testImage.png in Resources */,
+				533A14B72E9F927600A2E1C6 /* Christmas04.json in Resources */,
+				533A14B32E9F926B00A2E1C6 /* Christmas06.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -364,6 +395,7 @@
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				9899F87B2E73ED02000AABA4 /* EditImageViewController.swift in Sources */,
+				533A14AB2E9F7CBC00A2E1C6 /* ImageStickerModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
