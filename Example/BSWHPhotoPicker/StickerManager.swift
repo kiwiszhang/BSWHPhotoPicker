@@ -69,10 +69,10 @@ final class StickerManager: NSObject {
                 originScale: item.originScale,
                 originAngle: item.originAngle,
                 originFrame: CGRect(
-                    x: item.originFrameX,
-                    y: item.originFrameY,
-                    width: item.originFrameWidth == -1 ? kkScreenWidth : item.originFrameWidth,
-                    height: item.originFrameHeight
+                    x: item.originFrameX.w,
+                    y: item.originFrameY.h,
+                    width: item.originFrameWidth == -1 ? kkScreenWidth : item.originFrameWidth.w,
+                    height: item.originFrameHeight.h
                 ),
                 gesScale: item.gesScale,
                 gesRotation: item.gesRotation,
@@ -87,6 +87,9 @@ final class StickerManager: NSObject {
     func attachTapGestures(in view: UIView,vc:UIViewController) {
         controller = vc
         attachTapGestures(in: view)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.attachModelsToStickerViews(in: view, modelArr: StickerManager.shared.modelArr)
+        }
         setupTapGestureForStickersPeriodically()
     }
     // ✅ 递归扫描并绑定可点击贴纸
@@ -108,6 +111,23 @@ final class StickerManager: NSObject {
             }
         }
         findStickerViews(in: view)
+    }
+    
+    func attachModelsToStickerViews(in rootView: UIView, modelArr: [ImageStickerModel]) {
+        var index = 0
+        func traverse(_ view: UIView) {
+            for sub in view.subviews {
+                if let stickerView = sub as? ZLImageStickerView,
+                   index < modelArr.count {
+                    let model = modelArr[index]
+                    stickerView.stickerModel = model
+                    index += 1
+                } else {
+                    traverse(sub)
+                }
+            }
+        }
+        traverse(rootView)
     }
     
     func setupTapGestureForStickersPeriodically() {

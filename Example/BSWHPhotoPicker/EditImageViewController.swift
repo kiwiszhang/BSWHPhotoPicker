@@ -13,8 +13,6 @@ import PhotosUI
 
 class EditImageViewController: ZLEditImageViewController {
 
-    private var stickerManager: StickerManager!
-
     let nextButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("下一步", for: .normal)
@@ -74,28 +72,9 @@ class EditImageViewController: ZLEditImageViewController {
 
 
         StickerManager.shared.attachTapGestures(in: view, vc: self)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            self.attachModelsToStickerViews(in: self.view, modelArr: StickerManager.shared.modelArr)
-        }
+        
     }
-    
-    func attachModelsToStickerViews(in rootView: UIView, modelArr: [ImageStickerModel]) {
-        var index = 0
-        func traverse(_ view: UIView) {
-            for sub in view.subviews {
-                if let stickerView = sub as? ZLImageStickerView,
-                   index < modelArr.count {
-                    // 绑定顺序模型（因为 ZL 不公开 id，我们退而求其次）
-                    let model = modelArr[index]
-                    stickerView.stickerModel = model
-                    index += 1
-                } else {
-                    traverse(sub)
-                }
-            }
-        }
-        traverse(rootView)
-    }
+
 
     @objc private func onClickNext(_ sender: UIButton) {
         if canRedo {

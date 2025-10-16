@@ -112,21 +112,6 @@ class ViewController: UIViewController {
         testImageView.isUserInteractionEnabled = true
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTapImage(_:)))
         testImageView.addGestureRecognizer(tapGesture)
-        
-//        let items = loadLocalJSON(fileName: "Christmas02", type: [ImageStickerModel].self)
-//        for item in items ?? [] {
-//            let imageSticker = ZLImageStickerState(
-//                id: UUID().uuidString,
-//                image: .init(named: item.image)!,
-//                originScale: item.originScale,
-//                originAngle: item.originAngle,
-//                originFrame: CGRect(x: item.originFrameX, y: item.originFrameY, width: item.originFrameWidth == -1 ? kkScreenWidth : item.originFrameWidth, height: item.originFrameHeight),
-//                gesScale: item.gesScale,
-//                gesRotation: item.gesRotation,
-//                totalTranslationPoint: .zero
-//            )
-//            stickerArr.append(imageSticker)
-//        }
     }
 
     @objc private func onTapImage(_ gesture: UITapGestureRecognizer) {
@@ -139,26 +124,6 @@ class ViewController: UIViewController {
             self.present(controller, animated: true)
         }
         
-    }
-    
-    
-    
-    func loadLocalJSON<T: Decodable>(fileName: String, type: T.Type) -> T? {
-        guard let url = Bundle.main.url(forResource: fileName, withExtension: "json") else {
-            print("❌ 找不到文件 \(fileName).json")
-            return nil
-        }
-
-        do {
-            let data = try Data(contentsOf: url)
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            let result = try decoder.decode(T.self, from: data)
-            return result
-        } catch {
-            print("❌ 解析 JSON 出错：\(error)")
-            return nil
-        }
     }
 
 }
