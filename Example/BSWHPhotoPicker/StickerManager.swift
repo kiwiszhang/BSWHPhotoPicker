@@ -36,7 +36,7 @@ final class StickerManager: NSObject {
     private var currentStickerModel: ImageStickerModel?
     private var baseView:UIView?
 
-    var modelArr: [ImageStickerModel] = []
+    private var modelMap: [String: ImageStickerModel] = [:]
 
     static let shared = StickerManager()
     private override init() {}
@@ -57,7 +57,7 @@ final class StickerManager: NSObject {
     }
 
     func makeStickerStates(from fileName: String) -> [ZLImageStickerState] {
-        modelArr.removeAll()
+        modelMap.removeAll()
         guard let items = loadLocalJSON(fileName: fileName, type: [ImageStickerModel].self) else { return [] }
         var result: [ZLImageStickerState] = []
 
@@ -71,7 +71,7 @@ final class StickerManager: NSObject {
                 originFrame: CGRect(
                     x: item.originFrameX.w,
                     y: item.originFrameY.h,
-                    width: item.originFrameWidth == -1 ? kkScreenWidth : item.originFrameWidth.w,
+                    width: item.originFrameWidth == -1 ? UIScreen.main.bounds.width : item.originFrameWidth.w,
                     height: item.originFrameHeight.h
                 ),
                 gesScale: item.gesScale,
@@ -79,7 +79,7 @@ final class StickerManager: NSObject {
                 totalTranslationPoint: .zero
             )
             result.append(imageSticker)
-            modelArr.append(item)
+            modelMap[uuid] = item
         }
         return result
     }
@@ -88,7 +88,7 @@ final class StickerManager: NSObject {
         controller = vc
         attachTapGestures(in: view)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            self.attachModelsToStickerViews(in: view, modelArr: StickerManager.shared.modelArr)
+            self.attachModelsToStickerViews(in: view, modelMap: StickerManager.shared.modelMap)
         }
         setupTapGestureForStickersPeriodically()
     }
@@ -113,15 +113,19 @@ final class StickerManager: NSObject {
         findStickerViews(in: view)
     }
     
-    func attachModelsToStickerViews(in rootView: UIView, modelArr: [ImageStickerModel]) {
-        var index = 0
+    func rebindStickersIfNeeded() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.attachModelsToStickerViews(in: self.baseView ?? UIView(), modelMap: StickerManager.shared.modelMap)
+        }
+    }
+//1111111111222222222
+    func attachModelsToStickerViews(in rootView: UIView, modelMap: [String: ImageStickerModel]) {
         func traverse(_ view: UIView) {
             for sub in view.subviews {
-                if let stickerView = sub as? ZLImageStickerView,
-                   index < modelArr.count {
-                    let model = modelArr[index]
+                if let stickerView = sub as? ZLImageStickerView {
+                    let uuid = stickerView.id
+                    let model = modelMap[uuid]
                     stickerView.stickerModel = model
-                    index += 1
                 } else {
                     traverse(sub)
                 }
@@ -134,6 +138,7 @@ final class StickerManager: NSObject {
         // 每次视图出现后，每隔 0.5s 检查一次贴纸状态
         Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
             self?.attachTapGestures(in: self?.baseView ?? UIView())
+            self?.attachModelsToStickerViews(in: self?.baseView ?? UIView(), modelMap: StickerManager.shared.modelMap)
         }
     }
     

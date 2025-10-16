@@ -60,7 +60,7 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         case left = 270
     }
     
-    var id: String
+    public var id: String
     
     var borderWidth = 1 / UIScreen.main.scale
     
