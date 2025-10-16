@@ -86,19 +86,24 @@ final class StickerManager: NSObject {
 
     func attachTapGestures(in view: UIView,vc:UIViewController) {
         controller = vc
-        attachTapGestures(in: view)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            self.attachModelsToStickerViews(in: view, modelMap: StickerManager.shared.modelMap)
-        }
+        attachGesturesAndModels(in: view, modelMap: StickerManager.shared.modelMap)
         setupTapGestureForStickersPeriodically()
     }
     // ✅ 递归扫描并绑定可点击贴纸
-    func attachTapGestures(in view: UIView) {
-        baseView = view
-        func findStickerViews(in view: UIView) {
-            for subview in view.subviews {
-                if let stickerView = subview as? ZLImageStickerView {
+    func attachGesturesAndModels(in rootView: UIView, modelMap: [String: ImageStickerModel]) {
+        baseView = rootView
+        
+        func traverse(_ view: UIView) {
+            for sub in view.subviews {
+                if let stickerView = sub as? ZLImageStickerView {
                     
+                    // 1️⃣ 绑定模型（如果能拿到 id）
+                    let uuid = stickerView.id
+                    if let model = modelMap[uuid] {
+                        stickerView.stickerModel = model
+                    }
+                    
+                    // 2️⃣ 如果是贴纸背景，加手势
                     if stickerView.image.isStickerBackground() {
                         let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
                         stickerView.addGestureRecognizer(tap)
@@ -106,39 +111,18 @@ final class StickerManager: NSObject {
                     }
                     
                 } else {
-                    findStickerViews(in: subview)
-                }
-            }
-        }
-        findStickerViews(in: view)
-    }
-    
-    func rebindStickersIfNeeded() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.attachModelsToStickerViews(in: self.baseView ?? UIView(), modelMap: StickerManager.shared.modelMap)
-        }
-    }
-//1111111111222222222
-    func attachModelsToStickerViews(in rootView: UIView, modelMap: [String: ImageStickerModel]) {
-        func traverse(_ view: UIView) {
-            for sub in view.subviews {
-                if let stickerView = sub as? ZLImageStickerView {
-                    let uuid = stickerView.id
-                    let model = modelMap[uuid]
-                    stickerView.stickerModel = model
-                } else {
                     traverse(sub)
                 }
             }
         }
+        
         traverse(rootView)
     }
-    
+
     func setupTapGestureForStickersPeriodically() {
         // 每次视图出现后，每隔 0.5s 检查一次贴纸状态
         Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
-            self?.attachTapGestures(in: self?.baseView ?? UIView())
-            self?.attachModelsToStickerViews(in: self?.baseView ?? UIView(), modelMap: StickerManager.shared.modelMap)
+            self?.attachGesturesAndModels(in: self?.baseView ?? UIView(), modelMap: StickerManager.shared.modelMap)
         }
     }
     
