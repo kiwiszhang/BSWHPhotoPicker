@@ -113,24 +113,25 @@ class ViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTapImage(_:)))
         testImageView.addGestureRecognizer(tapGesture)
         
-        let items = loadLocalJSON(fileName: "Christmas06", type: [ImageStickerModel].self)
-        for item in items ?? [] {
-            let imageSticker = ZLImageStickerState(
-                id: UUID().uuidString,
-                image: .init(named: item.image)!,
-                originScale: item.originScale,
-                originAngle: item.originAngle,
-                originFrame: CGRect(x: item.originFrameX, y: item.originFrameY, width: item.originFrameWidth == -1 ? kkScreenWidth : item.originFrameWidth, height: item.originFrameHeight),
-                gesScale: item.gesScale,
-                gesRotation: item.gesRotation,
-                totalTranslationPoint: .zero
-            )
-            stickerArr.append(imageSticker)
-        }
+//        let items = loadLocalJSON(fileName: "Christmas02", type: [ImageStickerModel].self)
+//        for item in items ?? [] {
+//            let imageSticker = ZLImageStickerState(
+//                id: UUID().uuidString,
+//                image: .init(named: item.image)!,
+//                originScale: item.originScale,
+//                originAngle: item.originAngle,
+//                originFrame: CGRect(x: item.originFrameX, y: item.originFrameY, width: item.originFrameWidth == -1 ? kkScreenWidth : item.originFrameWidth, height: item.originFrameHeight),
+//                gesScale: item.gesScale,
+//                gesRotation: item.gesRotation,
+//                totalTranslationPoint: .zero
+//            )
+//            stickerArr.append(imageSticker)
+//        }
     }
 
     @objc private func onTapImage(_ gesture: UITapGestureRecognizer) {
         if let image = testImageView.image {
+            stickerArr = StickerManager.shared.makeStickerStates(from: "Christmas02")
             let controller = EditImageViewController(image: image, editModel: .init(stickers: stickerArr))
 //            let controller = EditImageViewController(image: image, editModel: .init(stickers: [imageSticker,imageSticker01,imageSticker02,imageSticker03,imageSticker04]))
 //            let controller = EditImageViewController(image: image, editModel: .init(stickers: [textSticker]))

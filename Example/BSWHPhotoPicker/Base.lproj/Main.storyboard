@@ -19,7 +19,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Christmas06-bg" translatesAutoresizingMaskIntoConstraints="NO" id="x8G-tu-aik">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Christmas02-bg" translatesAutoresizingMaskIntoConstraints="NO" id="x8G-tu-aik">
                                 <rect key="frame" x="87.5" y="233.5" width="200" height="200"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="hmT-qg-yF3"/>
@@ -43,6 +43,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Christmas06-bg" width="375.33334350585938" height="591"/>
+        <image name="Christmas02-bg" width="375.33334350585938" height="591"/>
     </resources>
 </document>

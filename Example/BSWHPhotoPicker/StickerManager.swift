@@ -1,0 +1,243 @@
+//
+//  StickerManager.swift
+//  BSWHPhotoPicker_Example
+//
+//  Created by 笔尚文化 on 2025/10/16.
+//  Copyright © 2025 CocoaPods. All rights reserved.
+//
+
+import UIKit
+import PhotosUI
+import ObjectiveC
+import BSWHPhotoPicker
+
+// MARK: - 模型定义
+struct ImageStickerModel: Codable {
+    let image:String
+    let originScale:Double
+    let originAngle:Double
+    let originFrameX:Double
+    let originFrameY:Double
+    let originFrameWidth:Double
+    let originFrameHeight:Double
+    let gesScale:Double
+    let gesRotation:Double
+    let overlayRectX:Double?
+    let overlayRectY:Double?
+    let overlayRectWidth:Double?
+    let overlayRectHeight:Double?
+    let isCircle:Bool?
+}
+
+// MARK: - StickerManager
+final class StickerManager: NSObject {
+    private weak var controller: UIViewController?
+    private weak var currentStickerView: ZLImageStickerView?
+    private var currentStickerModel: ImageStickerModel?
+    private var baseView:UIView?
+
+    var modelArr: [ImageStickerModel] = []
+
+    static let shared = StickerManager()
+    private override init() {}
+
+    // MARK: 加载本地 JSON
+    func loadLocalJSON<T: Decodable>(fileName: String, type: T.Type) -> T? {
+        guard let url = Bundle.main.url(forResource: fileName, withExtension: "json") else {
+            print("❌ 未找到 \(fileName).json")
+            return nil
+        }
+        do {
+            let data = try Data(contentsOf: url)
+            return try JSONDecoder().decode(T.self, from: data)
+        } catch {
+            print("❌ 解析 \(fileName).json 失败：\(error)")
+            return nil
+        }
+    }
+
+    func makeStickerStates(from fileName: String) -> [ZLImageStickerState] {
+        modelArr.removeAll()
+        guard let items = loadLocalJSON(fileName: fileName, type: [ImageStickerModel].self) else { return [] }
+        var result: [ZLImageStickerState] = []
+
+        for item in items {
+            let uuid = UUID().uuidString
+            let imageSticker = ZLImageStickerState(
+                id: uuid,
+                image: UIImage(named: item.image)!,
+                originScale: item.originScale,
+                originAngle: item.originAngle,
+                originFrame: CGRect(
+                    x: item.originFrameX,
+                    y: item.originFrameY,
+                    width: item.originFrameWidth == -1 ? kkScreenWidth : item.originFrameWidth,
+                    height: item.originFrameHeight
+                ),
+                gesScale: item.gesScale,
+                gesRotation: item.gesRotation,
+                totalTranslationPoint: .zero
+            )
+            result.append(imageSticker)
+            modelArr.append(item)
+        }
+        return result
+    }
+
+    func attachTapGestures(in view: UIView,vc:UIViewController) {
+        controller = vc
+        attachTapGestures(in: view)
+        setupTapGestureForStickersPeriodically()
+    }
+    // ✅ 递归扫描并绑定可点击贴纸
+    func attachTapGestures(in view: UIView) {
+        baseView = view
+        func findStickerViews(in view: UIView) {
+            for subview in view.subviews {
+                if let stickerView = subview as? ZLImageStickerView {
+                    
+                    if stickerView.image.isStickerBackground() {
+                        let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
+                        stickerView.addGestureRecognizer(tap)
+                        stickerView.isUserInteractionEnabled = true
+                    }
+                    
+                } else {
+                    findStickerViews(in: subview)
+                }
+            }
+        }
+        findStickerViews(in: view)
+    }
+    
+    func setupTapGestureForStickersPeriodically() {
+        // 每次视图出现后，每隔 0.5s 检查一次贴纸状态
+        Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
+            self?.attachTapGestures(in: self?.baseView ?? UIView())
+        }
+    }
+    
+// MARK: - 点击事件处理
+    @objc private func stickerTapped(_ sender: UITapGestureRecognizer) {
+        guard let stickerView = sender.view as? ZLImageStickerView else { return }
+        currentStickerView = stickerView
+
+        PHPhotoLibrary.requestAuthorization { status in
+            guard status == .authorized || status == .limited else { return }
+            DispatchQueue.main.async {
+                var config = PHPickerConfiguration(photoLibrary: .shared())
+                config.filter = .images
+                config.selectionLimit = 1
+                let picker = PHPickerViewController(configuration: config)
+                picker.delegate = self
+                self.controller?.present(picker, animated: true)
+            }
+        }
+    }
+}
+
+extension StickerManager: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+
+        guard let result = results.first else { return }
+        let provider = result.itemProvider
+
+        if provider.canLoadObject(ofClass: UIImage.self) {
+            provider.loadObject(ofClass: UIImage.self) { [weak self] image, _ in
+                guard let self = self,
+                let newImage = image as? UIImage,
+                let stickerView = self.currentStickerView else { return }
+                DispatchQueue.main.async {
+//                    if stickerView.image == UIImage(named: "imageSticker-bg-white"){
+//                        stickerView.updateImage(newImage,withBaseImage: UIImage(named: "imageSticker-bg-white"))
+//                    }else if stickerView.image == UIImage(named: "imageSticker-bg-yellow") {
+//                        stickerView.updateImage(newImage,withBaseImage: UIImage(named: "imageSticker-bg-yellow"))
+//                    }else if stickerView.image == UIImage(named: "Christmas01-sticker-bg00") {
+//                        stickerView.updateImage(newImage,withBaseImage: UIImage(named: "Christmas01-sticker-bg00"))
+//                    }else if stickerView.image == UIImage(named: "Christmas01-sticker-bg01") {
+//                        stickerView.updateImage(newImage,withBaseImage: UIImage(named: "Christmas01-sticker-bg01"))
+//                    }else if stickerView.image == UIImage(named: "Christmas01-sticker-bg02") {
+//                        stickerView.updateImage(newImage,withBaseImage: UIImage(named: "Christmas01-sticker-bg02"))
+                    if stickerView.image == UIImage(named: "Christmas02-sticker-bg00") {
+                        print(stickerView.stickerModel?.isCircle as Any)
+                        stickerView.updateImage(newImage,stickerModel: stickerView.stickerModel!,withBaseImage: UIImage(named: "Christmas02-sticker-bg00"))
+                    }else if stickerView.image == UIImage(named: "Christmas02-sticker-bg01") {
+                        stickerView.updateImage(newImage,stickerModel: stickerView.stickerModel!,withBaseImage: UIImage(named: "Christmas02-sticker-bg01"))
+                    }
+//                    else if stickerView.image == UIImage(named: "Christmas03-sticker-bg00") {
+//                        stickerView.updateImage(newImage,withBaseImage: UIImage(named: "Christmas03-sticker-bg00"))
+//                    }else if stickerView.image == UIImage(named: "Christmas03-sticker-bg01") {
+//                        stickerView.updateImage(newImage,withBaseImage: UIImage(named: "Christmas03-sticker-bg01"))
+//                    }else if stickerView.image == UIImage(named: "Christmas04-sticker-bg00") {
+//                        stickerView.updateImage(newImage,withBaseImage: UIImage(named: "Christmas04-sticker-bg00"))
+//                    }else if stickerView.image == UIImage(named: "Christmas04-sticker-bg01") {
+//                        stickerView.updateImage(newImage,withBaseImage: UIImage(named: "Christmas04-sticker-bg01"))
+//                    }else if stickerView.image == UIImage(named: "Christmas05-sticker-bg00") {
+//                        stickerView.updateImage(newImage,withBaseImage: UIImage(named: "Christmas05-sticker-bg00"))
+//                    }else if stickerView.image == UIImage(named: "Christmas05-sticker-bg01") {
+//                        stickerView.updateImage(newImage,withBaseImage: UIImage(named: "Christmas05-sticker-bg01"))
+//                    }else if stickerView.image == UIImage(named: "Christmas06-sticker-bg00") {
+//                        stickerView.updateImage(newImage,withBaseImage: UIImage(named: "Christmas06-sticker-bg00"))
+//                    }
+                }
+            }
+        }
+    }
+}
+
+
+// MARK: - 关联属性扩展
+private var stickerIDKey: UInt8 = 0
+private var stickerModelKey: UInt8 = 0
+extension ZLImageStickerView {
+    var stickerID: String? {
+        get { objc_getAssociatedObject(self, &stickerIDKey) as? String }
+        set { objc_setAssociatedObject(self, &stickerIDKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
+    var stickerModel: ImageStickerModel? {
+        get { objc_getAssociatedObject(self, &stickerModelKey) as? ImageStickerModel }
+        set { objc_setAssociatedObject(self, &stickerModelKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
+    
+    func updateImage(_ newImage: UIImage,stickerModel:ImageStickerModel,withBaseImage baseImage: UIImage? = nil) {
+        let finalImage: UIImage
+        if let base = baseImage {
+            let size = base.size
+            finalImage = UIGraphicsImageRenderer(size: size).image { _ in
+                base.draw(in: CGRect(origin: .zero, size: size))
+                let overlayRect = CGRect(
+                    x: size.width * (stickerModel.overlayRectX ?? 0),
+                    y: size.height * (stickerModel.overlayRectY ?? 0),
+                    width: size.width * (stickerModel.overlayRectWidth ?? 0.8),
+                    height: size.height * (stickerModel.overlayRectHeight ?? 0.8)
+                )
+                let isCircle = stickerModel.isCircle ?? false
+                if isCircle {
+                    // 添加圆形裁剪区域
+                    let path = UIBezierPath(ovalIn: overlayRect)
+                    path.addClip()
+                }
+                newImage.draw(in: overlayRect, blendMode: .normal, alpha: 1.0)
+            }
+        } else {
+            finalImage = newImage
+        }
+        
+        if let imageView = self.subviews.first(where: { $0 is UIImageView }) as? UIImageView {
+            imageView.image = finalImage
+            imageView.setNeedsDisplay()
+        } else {
+            self.image = finalImage
+        }
+        self.setNeedsLayout()
+        self.layoutIfNeeded()
+    }
+}
+
+
+extension UIImage {
+    func isStickerBackground(in names: [String] = ["imageSticker-bg-white", "imageSticker-bg-yellow","Christmas01-sticker-bg00","Christmas01-sticker-bg01","Christmas01-sticker-bg02","Christmas02-sticker-bg00","Christmas02-sticker-bg01","Christmas03-sticker-bg00","Christmas03-sticker-bg01","Christmas04-sticker-bg00","Christmas04-sticker-bg01","Christmas05-sticker-bg00","Christmas05-sticker-bg01","Christmas06-sticker-bg00"]) -> Bool {
+        names.contains { UIImage(named: $0)?.isEqual(self) == true }
+    }
+}
