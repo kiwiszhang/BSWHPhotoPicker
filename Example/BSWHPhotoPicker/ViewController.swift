@@ -116,7 +116,7 @@ class ViewController: UIViewController {
 
     @objc private func onTapImage(_ gesture: UITapGestureRecognizer) {
         if let image = testImageView.image {
-            stickerArr = StickerManager.shared.makeStickerStates(from: "Christmas02")
+            stickerArr = StickerManager.shared.makeStickerStates(from: "Christmas05")
             let controller = EditImageViewController(image: image, editModel: .init(stickers: stickerArr))
 //            let controller = EditImageViewController(image: image, editModel: .init(stickers: [imageSticker,imageSticker01,imageSticker02,imageSticker03,imageSticker04]))
 //            let controller = EditImageViewController(image: image, editModel: .init(stickers: [textSticker]))
