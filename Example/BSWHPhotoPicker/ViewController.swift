@@ -15,53 +15,13 @@ import BSWHPhotoPicker
 
 class ViewController: UIViewController {
 
-    @IBOutlet weak var testImageView: UIImageView!
-    private var stickerArr:[ZLImageStickerState] = []
-    
-//    private lazy var imageSticker:ZLImageStickerState = ZLImageStickerState(
-//        id: UUID().uuidString,
-//        image: .init(named: "bg-00-header")!,
-//        originScale: 1,
-//        originAngle: 0,
-//        originFrame: CGRect(x: 0, y: 0, width: kkScreenWidth, height: 200),
-//        gesScale: 1,
-//        gesRotation: 0,
-//        totalTranslationPoint: .zero
-//    )
-    private lazy var imageSticker01:ZLImageStickerState = ZLImageStickerState(
-        id: UUID().uuidString,
-        image: .init(named: "imageSticker-bg-white")!,
-        originScale: 1,
-        originAngle: 0,
-        originFrame: CGRect(x: 40, y: 145, width: 162, height: 207),
-        gesScale: 1,
-        gesRotation: 0,
-        totalTranslationPoint: .zero
-    )
-    
-    private lazy var imageSticker02:ZLImageStickerState = ZLImageStickerState(
-        id: UUID().uuidString,
-        image: .init(named: "imageSticker-bg-white")!,
-        originScale: 1,
-        originAngle: 0,
-        originFrame: CGRect(x: 182, y: 176, width: 176, height: 229),
-        gesScale: 1,
-        gesRotation: 0,
-        totalTranslationPoint: .zero
-    )
+    private var collectionView: UICollectionView!
+    private let items:[UIImage] = [UIImage(named: "1")!,UIImage(named: "2")!,UIImage(named: "3")!,UIImage(named: "4")!,UIImage(named: "5")!,UIImage(named: "6")!,UIImage(named: "7")!]
+    private let itemsImages:[UIImage] = [UIImage(named: "Christmas00-bg")!,UIImage(named: "Christmas01-bg")!,UIImage(named: "Christmas02-bg")!,UIImage(named: "Christmas03-bg")!,UIImage(named: "Christmas04-bg")!,UIImage(named: "Christmas05-bg")!,UIImage(named: "Christmas06-bg")!]
+    private let jsonFiles:[String] = ["Christmas00","Christmas01","Christmas02","Christmas03","Christmas04","Christmas05","Christmas06"]
 
-    private lazy var imageSticker03:ZLImageStickerState = ZLImageStickerState(
-        id: UUID().uuidString,
-        image: .init(named: "imageSticker-bg-yellow")!,
-        originScale: 1,
-        originAngle: 0,
-        originFrame: CGRect(x: 66, y: 319, width: 165, height: 207),
-        gesScale: 1,
-        gesRotation: 0,
-        totalTranslationPoint: .zero
-    )
     
-    private lazy var imageSticker04:ZLImageStickerState = ZLImageStickerState(
+    private lazy var imageSticker:ZLImageStickerState = ZLImageStickerState(
         id: UUID().uuidString,
         image: .init(named: "Christmas-Tree")!,
         originScale: 1,
@@ -106,25 +66,74 @@ class ViewController: UIViewController {
         )
     }()
 
+    private func setupCollectionView() {
+            let layout = UICollectionViewFlowLayout()
+            let spacing: CGFloat = 20
+            let width = (view.bounds.width - spacing * 3) / 2
+            layout.itemSize = CGSize(width: width, height: width)
+            layout.minimumLineSpacing = spacing
+            layout.minimumInteritemSpacing = spacing
+            layout.sectionInset = UIEdgeInsets(top: spacing, left: spacing, bottom: spacing, right: spacing)
+            collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
+            collectionView.backgroundColor = .white
+            collectionView.register(MyCollectionViewCell.self, forCellWithReuseIdentifier: "MyCollectionViewCell")
+            collectionView.dataSource = self
+            collectionView.delegate = self
+            view.addSubview(collectionView)
+        }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        testImageView.isUserInteractionEnabled = true
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTapImage(_:)))
-        testImageView.addGestureRecognizer(tapGesture)
+        view.backgroundColor = .white
+        setupCollectionView()
     }
-
-    @objc private func onTapImage(_ gesture: UITapGestureRecognizer) {
-        if let image = testImageView.image {
-            stickerArr = StickerManager.shared.makeStickerStates(from: "Christmas05")
-            let controller = EditImageViewController(image: image, editModel: .init(stickers: stickerArr))
-//            let controller = EditImageViewController(image: image, editModel: .init(stickers: [imageSticker,imageSticker01,imageSticker02,imageSticker03,imageSticker04]))
-//            let controller = EditImageViewController(image: image, editModel: .init(stickers: [textSticker]))
-            controller.modalPresentationStyle = .fullScreen
-            self.present(controller, animated: true)
-        }
-        
-    }
-
 }
 
+extension ViewController: UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return items.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell:MyCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "MyCollectionViewCell", for: indexPath) as! MyCollectionViewCell
+        cell.configure(with: items[indexPath.row])
+        return cell
+    }
+}
+
+// MARK: - UICollectionViewDelegate
+extension ViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let stickerArr = StickerManager.shared.makeStickerStates(from: jsonFiles[indexPath.row])
+        let controller = EditImageViewController(image: itemsImages[indexPath.row], editModel: .init(stickers: stickerArr))
+        controller.modalPresentationStyle = .fullScreen
+        self.present(controller, animated: true)
+    }
+}
+
+class MyCollectionViewCell: UICollectionViewCell {
+    static let reuseId = "MyCollectionViewCell"
+    
+    private let imageV = UIImageView()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        contentView.backgroundColor = .white
+        contentView.addSubview(imageV)
+    }
+    
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        imageV.frame = contentView.bounds
+        imageV.contentMode = .scaleAspectFit
+    }
+    
+    func configure(with image: UIImage) {
+        imageV.image = image
+    }
+}

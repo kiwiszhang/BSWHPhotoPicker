@@ -13,6 +13,15 @@ import PhotosUI
 
 class EditImageViewController: ZLEditImageViewController {
 
+    let backButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setTitle("返回", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        button.backgroundColor = .blue
+        return button
+    }()
+    
     let nextButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("下一步", for: .normal)
@@ -41,6 +50,7 @@ class EditImageViewController: ZLEditImageViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(backButton)
         view.addSubview(nextButton)
         view.addSubview(lastButton)
         view.addSubview(menuButton)
@@ -66,6 +76,14 @@ class EditImageViewController: ZLEditImageViewController {
             make.height.equalTo(30)
         }
         
+        backButton.snp.makeConstraints { make in
+            make.width.equalTo(80)
+            make.height.equalTo(30)
+            make.left.equalToSuperview()
+            make.top.equalTo(menuButton.snp.top)
+        }
+        
+        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         nextButton.addTarget(self, action: #selector(onClickNext(_:)), for: .touchUpInside)
         lastButton.addTarget(self, action: #selector(onClickLast(_:)), for: .touchUpInside)
         menuButton.addTarget(self, action: #selector(onClickMenu(_:)), for: .touchUpInside)
@@ -124,6 +142,10 @@ class EditImageViewController: ZLEditImageViewController {
         alert.addAction(imageStickerAction)
         alert.addAction(cancelAction)
         self.present(alert, animated: true)
+    }
+    
+    @objc private func onClickBack(_ sender: UIButton) {
+        dismiss(animated: true)
     }
 }
 

@@ -196,9 +196,10 @@ extension StickerManager: PHPickerViewControllerDelegate {
                     }else if stickerView.image == UIImage(named: "Christmas05-sticker-bg01") {
                         stickerView.updateImage(newImage,stickerModel: stickerView.stickerModel!,withBaseImage: stickerView.image)
                     }
-//                    }else if stickerView.image == UIImage(named: "Christmas06-sticker-bg00") {
-//                        stickerView.updateImage(newImage,withBaseImage: UIImage(named: "Christmas06-sticker-bg00"))
-//                    }
+                    
+                    if stickerView.image == UIImage(named: "Christmas02-sticker-bg01") {
+                        stickerView.updateImage(newImage,stickerModel: stickerView.stickerModel!,withBaseImage: stickerView.image)
+                    }
                 }
             }
         }
