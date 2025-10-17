@@ -158,47 +158,20 @@ extension StickerManager: PHPickerViewControllerDelegate {
                 let newImage = image as? UIImage,
                 let stickerView = self.currentStickerView else { return }
                 DispatchQueue.main.async {
-                    if stickerView.image == UIImage(named: "Christmas00-sticker-bg00"){
-                        stickerView.updateImage(newImage,stickerModel: stickerView.stickerModel!,withBaseImage: stickerView.image)
-                    }else if stickerView.image == UIImage(named: "Christmas00-sticker-bg01") {
-                        stickerView.updateImage(newImage,stickerModel: stickerView.stickerModel!,withBaseImage: stickerView.image)
-                    }
                     
-                    if stickerView.image == UIImage(named: "Christmas02-sticker-bg01") {
-                        stickerView.updateImage(newImage,stickerModel: stickerView.stickerModel!,withBaseImage: stickerView.image)
-                    }else if stickerView.image == UIImage(named: "Christmas01-sticker-bg00") {
-                        stickerView.updateImage(newImage,stickerModel: stickerView.stickerModel!,withBaseImage: stickerView.image)
-                    }else if stickerView.image == UIImage(named: "Christmas01-sticker-bg01") {
-                        stickerView.updateImage(newImage,stickerModel: stickerView.stickerModel!,withBaseImage: stickerView.image)
-                    }
-                    
-                    if stickerView.image == UIImage(named: "Christmas02-sticker-bg00") {
-                        print(stickerView.stickerModel?.isCircle as Any)
-                        stickerView.updateImage(newImage,stickerModel: stickerView.stickerModel!,withBaseImage: stickerView.image)
-                    }else if stickerView.image == UIImage(named: "Christmas02-sticker-bg01") {
-                        stickerView.updateImage(newImage,stickerModel: stickerView.stickerModel!,withBaseImage: stickerView.image)
-                    }
-                    
-                    if stickerView.image == UIImage(named: "Christmas03-sticker-bg00") {
-                        stickerView.updateImage(newImage,stickerModel: stickerView.stickerModel!,withBaseImage: stickerView.image)
-                    }else if stickerView.image == UIImage(named: "Christmas03-sticker-bg01") {
-                        stickerView.updateImage(newImage,stickerModel: stickerView.stickerModel!,withBaseImage: stickerView.image)
-                    }
-                    
-                    if stickerView.image == UIImage(named: "Christmas02-sticker-bg01") {
-                        stickerView.updateImage(newImage,stickerModel: stickerView.stickerModel!,withBaseImage: stickerView.image)
-                    }else if stickerView.image == UIImage(named: "Christmas01-sticker-bg01") {
-                        stickerView.updateImage(newImage,stickerModel: stickerView.stickerModel!,withBaseImage: stickerView.image)
-                    }
-                    
-                    if stickerView.image == UIImage(named: "Christmas05-sticker-bg00") {
-                        stickerView.updateImage(newImage,stickerModel: stickerView.stickerModel!,withBaseImage: stickerView.image)
-                    }else if stickerView.image == UIImage(named: "Christmas05-sticker-bg01") {
-                        stickerView.updateImage(newImage,stickerModel: stickerView.stickerModel!,withBaseImage: stickerView.image)
-                    }
-                    
-                    if stickerView.image == UIImage(named: "Christmas02-sticker-bg01") {
-                        stickerView.updateImage(newImage,stickerModel: stickerView.stickerModel!,withBaseImage: stickerView.image)
+                    let validStickerNames = [
+                        UIImage(named: "Christmas00-sticker-bg00"),
+                        UIImage(named: "Christmas01-sticker-bg00"),
+                        UIImage(named: "Christmas01-sticker-bg01"),
+                        UIImage(named: "Christmas02-sticker-bg00"),
+                        UIImage(named: "Christmas02-sticker-bg01"),
+                        UIImage(named: "Christmas03-sticker-bg00"),
+                        UIImage(named: "Christmas03-sticker-bg01"),
+                        UIImage(named: "Christmas05-sticker-bg00"),
+                        UIImage(named: "Christmas05-sticker-bg01")
+                    ]
+                    if validStickerNames.contains(stickerView.image) {
+                        stickerView.updateImage(newImage, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image)
                     }
                 }
             }
