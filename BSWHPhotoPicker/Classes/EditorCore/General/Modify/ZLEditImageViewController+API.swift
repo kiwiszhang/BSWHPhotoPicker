@@ -160,6 +160,13 @@ extension ZLEditImageViewController {
         
         editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
     }
+
+    public func addImageSticker01(state: ImageStickerModel) {
+        let imageSticker = EditableStickerView(image: UIImage(named: state.image)!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX, y: state.originFrameY, width: state.originFrameWidth, height: state.originFrameHeight))
+        addSticker(imageSticker)
+        view.layoutIfNeeded()
+        editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
+    }
     
     /// 添加文字贴纸(固定为ZLTextSticker类型，如果ZLTextStickerView不适用，可以自定义，使用addCustomSticker方法)
     public func addTextSticker(font: UIFont) {
@@ -202,3 +209,112 @@ extension ZLEditImageViewController {
         
     }
 }
+
+// MARK: - 模型定义
+public struct ImageStickerModel: Codable {
+    let image:String
+    let originScale:Double
+    let originAngle:Double
+    let originFrameX:Double
+    let originFrameY:Double
+    let originFrameWidth:Double
+    let originFrameHeight:Double
+    let gesScale:Double
+    let gesRotation:Double
+    let overlayRectX:Double?
+    let overlayRectY:Double?
+    let overlayRectWidth:Double?
+    let overlayRectHeight:Double?
+    let isCircle:Bool?
+}
+
+class EditableStickerView: ZLImageStickerView {
+
+    private var resizeButton: UIButton!
+    private var initialTouchPoint = CGPoint.zero
+    private var initialGesRotation: CGFloat = 0
+    private var initialGesScale: CGFloat = 1.0
+
+    var isEditing: Bool = false {
+        didSet { resizeButton.isHidden = !isEditing }
+    }
+
+    init(image: UIImage, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect) {
+        super.init(image: image, originScale: originScale, originAngle: originAngle, originFrame: originFrame)
+        setupResizeButton()
+        enableTapSelection()
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private func setupResizeButton() {
+        let size: CGFloat = 32
+        resizeButton = UIButton(type: .custom)
+        resizeButton.frame = CGRect(x: bounds.width - size, y: bounds.height - size, width: size, height: size)
+        resizeButton.setImage(UIImage(systemName: "arrow.up.left.and.arrow.down.right.circle.fill"), for: .normal)
+        resizeButton.tintColor = .systemRed
+        resizeButton.backgroundColor = .systemTeal.withAlphaComponent(0.3)
+        resizeButton.layer.cornerRadius = size / 2
+        resizeButton.isHidden = true
+        resizeButton.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
+        addSubview(resizeButton)
+
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(handleResizePan(_:)))
+        resizeButton.addGestureRecognizer(pan)
+    }
+
+    private func enableTapSelection() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        addGestureRecognizer(tap)
+        isUserInteractionEnabled = true
+    }
+
+    @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
+        isEditing.toggle()
+    }
+
+    @objc private func handleResizePan(_ gesture: UIPanGestureRecognizer) {
+        guard let superview = superview else { return }
+        let location = gesture.location(in: superview)
+
+        switch gesture.state {
+        case .began:
+            initialTouchPoint = location
+            initialGesRotation = gesRotation
+            initialGesScale = gesScale
+            setOperation(true)
+
+        case .changed:
+            let center = self.center
+            let dx = location.x - center.x
+            let dy = location.y - center.y
+            let originDx = initialTouchPoint.x - center.x
+            let originDy = initialTouchPoint.y - center.y
+
+            // 🔹 以贴纸中心点为基准计算旋转角度差
+            let angleDiff = atan2(dy, dx) - atan2(originDy, originDx)
+            gesRotation = initialGesRotation + angleDiff
+
+            // 🔹 以贴纸中心点为基准计算缩放比例
+            let currentDistance = sqrt(dx * dx + dy * dy)
+            let originDistance = sqrt(originDx * originDx + originDy * originDy)
+            let scaleChange = currentDistance / max(originDistance, 1)
+            gesScale = max(0.2, min(initialGesScale * scaleChange, maxGesScale))
+
+            // 🔹 应用变化
+            updateTransform()
+
+        case .ended, .cancelled:
+            setOperation(false)
+
+        default:
+            break
+        }
+    }
+}
+
+
+

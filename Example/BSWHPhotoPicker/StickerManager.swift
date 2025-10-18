@@ -11,23 +11,6 @@ import PhotosUI
 import ObjectiveC
 import BSWHPhotoPicker
 
-// MARK: - 模型定义
-struct ImageStickerModel: Codable {
-    let image:String
-    let originScale:Double
-    let originAngle:Double
-    let originFrameX:Double
-    let originFrameY:Double
-    let originFrameWidth:Double
-    let originFrameHeight:Double
-    let gesScale:Double
-    let gesRotation:Double
-    let overlayRectX:Double?
-    let overlayRectY:Double?
-    let overlayRectWidth:Double?
-    let overlayRectHeight:Double?
-    let isCircle:Bool?
-}
 
 // MARK: - StickerManager
 final class StickerManager: NSObject {
@@ -61,26 +44,26 @@ final class StickerManager: NSObject {
         guard let items = loadLocalJSON(fileName: fileName, type: [ImageStickerModel].self) else { return [] }
         var result: [ZLImageStickerState] = []
 
-        for item in items {
-            let uuid = UUID().uuidString
-            let imageSticker = ZLImageStickerState(
-                id: uuid,
-                image: UIImage(named: item.image)!,
-                originScale: item.originScale,
-                originAngle: item.originAngle,
-                originFrame: CGRect(
-                    x: item.originFrameX.w,
-                    y: item.originFrameY.h,
-                    width: item.originFrameWidth == -1 ? UIScreen.main.bounds.width : item.originFrameWidth.w,
-                    height: item.originFrameHeight.h
-                ),
-                gesScale: item.gesScale,
-                gesRotation: item.gesRotation,
-                totalTranslationPoint: .zero
-            )
-            result.append(imageSticker)
-            modelMap[uuid] = item
-        }
+//        for item in items {
+//            let uuid = UUID().uuidString
+//            let imageSticker = ZLImageStickerState(
+//                id: uuid,
+//                image: UIImage(named: item.image)!,
+//                originScale: item.originScale,
+//                originAngle: item.originAngle,
+//                originFrame: CGRect(
+//                    x: item.originFrameX.w,
+//                    y: item.originFrameY.h,
+//                    width: item.originFrameWidth == -1 ? UIScreen.main.bounds.width : item.originFrameWidth.w,
+//                    height: item.originFrameHeight.h
+//                ),
+//                gesScale: item.gesScale,
+//                gesRotation: item.gesRotation,
+//                totalTranslationPoint: .zero
+//            )
+//            result.append(imageSticker)
+//            modelMap[uuid] = item
+//        }
         return result
     }
 
@@ -194,37 +177,37 @@ extension ZLImageStickerView {
     }
     
     func updateImage(_ newImage: UIImage,stickerModel:ImageStickerModel,withBaseImage baseImage: UIImage? = nil) {
-        let finalImage: UIImage
-        if let base = baseImage {
-            let size = base.size
-            finalImage = UIGraphicsImageRenderer(size: size).image { _ in
-                base.draw(in: CGRect(origin: .zero, size: size))
-                let overlayRect = CGRect(
-                    x: size.width * (stickerModel.overlayRectX ?? 0),
-                    y: size.height * (stickerModel.overlayRectY ?? 0),
-                    width: size.width * (stickerModel.overlayRectWidth ?? 0.8),
-                    height: size.height * (stickerModel.overlayRectHeight ?? 0.8)
-                )
-                let isCircle = stickerModel.isCircle ?? false
-                if isCircle {
-                    // 添加圆形裁剪区域
-                    let path = UIBezierPath(ovalIn: overlayRect)
-                    path.addClip()
-                }
-                newImage.draw(in: overlayRect, blendMode: .normal, alpha: 1.0)
-            }
-        } else {
-            finalImage = newImage
-        }
-        
-        if let imageView = self.subviews.first(where: { $0 is UIImageView }) as? UIImageView {
-            imageView.image = finalImage
-            imageView.setNeedsDisplay()
-        } else {
-            self.image = finalImage
-        }
-        self.setNeedsLayout()
-        self.layoutIfNeeded()
+//        let finalImage: UIImage
+//        if let base = baseImage {
+//            let size = base.size
+//            finalImage = UIGraphicsImageRenderer(size: size).image { _ in
+//                base.draw(in: CGRect(origin: .zero, size: size))
+//                let overlayRect = CGRect(
+//                    x: size.width * (stickerModel.overlayRectX ?? 0),
+//                    y: size.height * (stickerModel.overlayRectY ?? 0),
+//                    width: size.width * (stickerModel.overlayRectWidth ?? 0.8),
+//                    height: size.height * (stickerModel.overlayRectHeight ?? 0.8)
+//                )
+//                let isCircle = stickerModel.isCircle ?? false
+//                if isCircle {
+//                    // 添加圆形裁剪区域
+//                    let path = UIBezierPath(ovalIn: overlayRect)
+//                    path.addClip()
+//                }
+//                newImage.draw(in: overlayRect, blendMode: .normal, alpha: 1.0)
+//            }
+//        } else {
+//            finalImage = newImage
+//        }
+//        
+//        if let imageView = self.subviews.first(where: { $0 is UIImageView }) as? UIImageView {
+//            imageView.image = finalImage
+//            imageView.setNeedsDisplay()
+//        } else {
+//            self.image = finalImage
+//        }
+//        self.setNeedsLayout()
+//        self.layoutIfNeeded()
     }
 }
 

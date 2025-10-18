@@ -19,6 +19,7 @@
 		533A14C22EA0C9D200A2E1C6 /* CGFloat+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A14BF2EA0C9D200A2E1C6 /* CGFloat+Extension.swift */; };
 		533A14C32EA0C9D200A2E1C6 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A14C12EA0C9D200A2E1C6 /* Int+Extension.swift */; };
 		533A14C42EA0C9D200A2E1C6 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A14C02EA0C9D200A2E1C6 /* Double+Extension.swift */; };
+		53A625F92EA21FE100B9A6F1 /* EditableStickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A625F82EA21FE100B9A6F1 /* EditableStickerView.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
@@ -51,6 +52,7 @@
 		533A14BF2EA0C9D200A2E1C6 /* CGFloat+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extension.swift"; sourceTree = "<group>"; };
 		533A14C02EA0C9D200A2E1C6 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		533A14C12EA0C9D200A2E1C6 /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
+		53A625F82EA21FE100B9A6F1 /* EditableStickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableStickerView.swift; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* BSWHPhotoPicker_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BSWHPhotoPicker_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				9899F87A2E73ED02000AABA4 /* EditImageViewController.swift */,
 				533A14BA2EA08DCB00A2E1C6 /* StickerManager.swift */,
+				53A625F82EA21FE100B9A6F1 /* EditableStickerView.swift */,
 				9801A70D2E726C2A00607935 /* testImage.png */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -418,6 +421,7 @@
 				533A14C42EA0C9D200A2E1C6 /* Double+Extension.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				53A625F92EA21FE100B9A6F1 /* EditableStickerView.swift in Sources */,
 				9899F87B2E73ED02000AABA4 /* EditImageViewController.swift in Sources */,
 				533A14BB2EA08DCB00A2E1C6 /* StickerManager.swift in Sources */,
 			);

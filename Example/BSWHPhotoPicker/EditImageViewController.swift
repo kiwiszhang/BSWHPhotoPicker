@@ -12,6 +12,7 @@ import SnapKit
 import PhotosUI
 
 class EditImageViewController: ZLEditImageViewController {
+    private let jsonFiles:[String] = ["Christmas00","Christmas01","Christmas02","Christmas03","Christmas04","Christmas05","Christmas06"]
 
     let backButton: UIButton = {
         let button = UIButton(type: .custom)
@@ -89,9 +90,14 @@ class EditImageViewController: ZLEditImageViewController {
         menuButton.addTarget(self, action: #selector(onClickMenu(_:)), for: .touchUpInside)
 
 
-        StickerManager.shared.attachTapGestures(in: view, vc: self)
+//        StickerManager.shared.attachTapGestures(in: view, vc: self)
         
+        let items = StickerManager.shared.loadLocalJSON(fileName: jsonFiles[0], type: [ImageStickerModel].self)
+        for state in items! {
+            addImageSticker01(state: state)
+        }
     }
+
 
 
     @objc private func onClickNext(_ sender: UIButton) {
@@ -148,6 +154,7 @@ class EditImageViewController: ZLEditImageViewController {
         dismiss(animated: true)
     }
 }
+
 
 
 
