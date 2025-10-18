@@ -315,24 +315,32 @@ public class EditableStickerView: ZLImageStickerView {
         case .began:
             initialTouchPoint = location
             initialGesRotation = gesRotation
-            initialTransform = transform // 保存当前 transform
+            initialGesScale = gesScale
+            initialTransform = transform // 保存按下瞬间的 transform
             setOperation(true)
 
         case .changed:
-            // 计算旋转角度
-            let origin = layer.position // anchorPoint 已固定左上角
+            // 左上角为旋转缩放中心
+            let origin = layer.position // anchorPoint 已固定为左上角
             let dxStart = initialTouchPoint.x - origin.x
             let dyStart = initialTouchPoint.y - origin.y
             let dxNow = location.x - origin.x
             let dyNow = location.y - origin.y
 
+            // 旋转
             let angleDiff = atan2(dyNow, dxNow) - atan2(dyStart, dxStart)
             gesRotation = initialGesRotation + angleDiff
 
-            // 应用旋转到 transform
-            transform = initialTransform.rotated(by: angleDiff)
+            // 缩放
+            let distanceStart = sqrt(dxStart*dxStart + dyStart*dyStart)
+            let distanceNow = sqrt(dxNow*dxNow + dyNow*dyNow)
+            let scaleChange = distanceNow / max(distanceStart, 1)
+            gesScale = max(0.2, min(initialGesScale * scaleChange, maxGesScale))
 
-            // 更新右下角按钮
+            // 应用旋转 + 缩放到 transform
+            transform = initialTransform.rotated(by: angleDiff).scaledBy(x: scaleChange, y: scaleChange)
+
+            // 右下角按钮始终在贴纸右下角
             positionResizeButtonAtBottomRight()
 
         case .ended, .cancelled:
@@ -340,6 +348,7 @@ public class EditableStickerView: ZLImageStickerView {
         default: break
         }
     }
+
 
 
 
