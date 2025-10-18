@@ -7,8 +7,13 @@
 
 import Foundation
 
+private var stickerViewKey: UInt8 = 0
 // MARK: - 操作步骤API
 extension ZLEditImageViewController {
+    public var allStickers: [EditableStickerView]? {
+        get { objc_getAssociatedObject(self, &stickerViewKey) as? [EditableStickerView] }
+        set { objc_setAssociatedObject(self, &stickerViewKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
     /// 当前进行的操作
     public var currentOperation: ZLImageEditorConfiguration.EditTool? {
         return selectedTool
@@ -26,11 +31,21 @@ extension ZLEditImageViewController {
     /// undo
     public func undoAction() {
         editorManager.undoAction()
+//        if let stickers = allStickers {
+//            for sticker in stickers {
+//                sticker.refreshEditingState()
+//            }
+//        }
     }
     
     /// redo
     public func redoAction() {
         editorManager.redoAction()
+//        if let stickers = allStickers {
+//            for sticker in stickers {
+//                sticker.refreshEditingState()
+//            }
+//        }
     }
     
     /// 切换操作
@@ -166,6 +181,12 @@ extension ZLEditImageViewController {
         addSticker(imageSticker)
         view.layoutIfNeeded()
         editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
+        if var stickers = allStickers {
+            stickers.append(imageSticker)
+            allStickers = stickers
+        } else {
+            allStickers = [imageSticker]
+        }
     }
     
     /// 添加文字贴纸(固定为ZLTextSticker类型，如果ZLTextStickerView不适用，可以自定义，使用addCustomSticker方法)
@@ -228,21 +249,28 @@ public struct ImageStickerModel: Codable {
     let isCircle:Bool?
 }
 
-class EditableStickerView: ZLImageStickerView {
+public class EditableStickerView: ZLImageStickerView {
 
     private var resizeButton: UIButton!
     private var initialTouchPoint = CGPoint.zero
     private var initialGesRotation: CGFloat = 0
     private var initialGesScale: CGFloat = 1.0
+    private var initialTransform: CGAffineTransform = .identity
 
     var isEditing: Bool = false {
         didSet { resizeButton.isHidden = !isEditing }
     }
 
+    // MARK: - Init
     init(image: UIImage, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect) {
         super.init(image: image, originScale: originScale, originAngle: originAngle, originFrame: originFrame)
         setupResizeButton()
         enableTapSelection()
+        
+        // 设置左上角为 anchorPoint
+        let oldOrigin = frame.origin
+        layer.anchorPoint = CGPoint(x: 0, y: 0)
+        frame.origin = oldOrigin
     }
 
     @available(*, unavailable)
@@ -250,6 +278,7 @@ class EditableStickerView: ZLImageStickerView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Setup
     private func setupResizeButton() {
         let size: CGFloat = 32
         resizeButton = UIButton(type: .custom)
@@ -263,6 +292,7 @@ class EditableStickerView: ZLImageStickerView {
         addSubview(resizeButton)
 
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handleResizePan(_:)))
+        pan.delegate = self
         resizeButton.addGestureRecognizer(pan)
     }
 
@@ -276,6 +306,7 @@ class EditableStickerView: ZLImageStickerView {
         isEditing.toggle()
     }
 
+    // MARK: - Resize Button Pan (旋转+缩放)
     @objc private func handleResizePan(_ gesture: UIPanGestureRecognizer) {
         guard let superview = superview else { return }
         let location = gesture.location(in: superview)
@@ -284,35 +315,49 @@ class EditableStickerView: ZLImageStickerView {
         case .began:
             initialTouchPoint = location
             initialGesRotation = gesRotation
-            initialGesScale = gesScale
+            initialTransform = transform // 保存当前 transform
             setOperation(true)
 
         case .changed:
-            let center = self.center
-            let dx = location.x - center.x
-            let dy = location.y - center.y
-            let originDx = initialTouchPoint.x - center.x
-            let originDy = initialTouchPoint.y - center.y
+            // 计算旋转角度
+            let origin = layer.position // anchorPoint 已固定左上角
+            let dxStart = initialTouchPoint.x - origin.x
+            let dyStart = initialTouchPoint.y - origin.y
+            let dxNow = location.x - origin.x
+            let dyNow = location.y - origin.y
 
-            // 🔹 以贴纸中心点为基准计算旋转角度差
-            let angleDiff = atan2(dy, dx) - atan2(originDy, originDx)
+            let angleDiff = atan2(dyNow, dxNow) - atan2(dyStart, dxStart)
             gesRotation = initialGesRotation + angleDiff
 
-            // 🔹 以贴纸中心点为基准计算缩放比例
-            let currentDistance = sqrt(dx * dx + dy * dy)
-            let originDistance = sqrt(originDx * originDx + originDy * originDy)
-            let scaleChange = currentDistance / max(originDistance, 1)
-            gesScale = max(0.2, min(initialGesScale * scaleChange, maxGesScale))
+            // 应用旋转到 transform
+            transform = initialTransform.rotated(by: angleDiff)
 
-            // 🔹 应用变化
-            updateTransform()
+            // 更新右下角按钮
+            positionResizeButtonAtBottomRight()
 
         case .ended, .cancelled:
             setOperation(false)
-
-        default:
-            break
+        default: break
         }
+    }
+
+
+
+    private func positionResizeButtonAtBottomRight() {
+        let size = resizeButton.bounds.size
+        resizeButton.frame.origin.x = bounds.width - size.width
+        resizeButton.frame.origin.y = bounds.height - size.height
+    }
+
+    // 扩大按钮点击区域
+    public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        let largerArea = resizeButton.frame.insetBy(dx: -20, dy: -20)
+        return largerArea.contains(point) || super.point(inside: point, with: event)
+    }
+
+    // 阻止父类手势干扰
+    public override func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return gestureRecognizer.view != resizeButton
     }
 }
 
