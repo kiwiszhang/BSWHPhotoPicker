@@ -1389,11 +1389,12 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
 
         guard let oldState = oldState else { return }
 
-        if let sticker = stickerMap[oldState.id] {
-            sticker.applyState(oldState)
-            stickersContainer.addSubview(sticker)
-            sticker.refreshEditingState()
-        } else if let sticker = makeStickerView(from: oldState) as? EditableStickerView {
+//        if let sticker = stickerMap[oldState.id] {
+//            sticker.applyState(oldState)
+//            stickersContainer.addSubview(sticker)
+//            sticker.refreshEditingState()
+//        } else
+        if let sticker = makeStickerView(from: oldState) as? EditableStickerView {
             addSticker(sticker)
         }
     }
@@ -1413,11 +1414,12 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
 
         guard let newState = newState else { return }
 
-        if let sticker = stickerMap[newState.id] {
-            sticker.applyState(newState)
-            stickersContainer.addSubview(sticker)
-            sticker.refreshEditingState()
-        } else if let sticker = makeStickerView(from: newState) as? EditableStickerView {
+//        if let sticker = stickerMap[newState.id] {
+//            sticker.applyState(newState)
+//            stickersContainer.addSubview(sticker)
+//            sticker.refreshEditingState()
+//        } else
+        if let sticker = makeStickerView(from: newState) as? EditableStickerView {
             addSticker(sticker)
         }
     }

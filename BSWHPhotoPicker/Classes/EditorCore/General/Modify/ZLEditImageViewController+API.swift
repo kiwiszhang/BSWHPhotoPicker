@@ -229,47 +229,61 @@ public struct ImageStickerModel: Codable {
     let isCircle:Bool?
 }
 
+
 public class EditableStickerView: ZLImageStickerView {
 
+    // MARK: - UI
     private var resizeButton: UIButton!
-    private var initialTouchPoint = CGPoint.zero
-    private var initialGesRotation: CGFloat = 0
-    private var initialGesScale: CGFloat = 1.0
+
+    // MARK: - gesture / state
+    private var initialTouchPoint: CGPoint = .zero
     private var initialTransform: CGAffineTransform = .identity
 
-    var isEditing: Bool = false {
-        didSet { resizeButton.isHidden = !isEditing }
+    // 起始向量/角度/距离（中心 -> 手指）
+    private var initialVector: CGPoint = .zero
+    private var initialDistance: CGFloat = 0
+    private var initialAngle: CGFloat = 0
+
+    // 平移用状态
+    private var panStartTransform: CGAffineTransform = .identity
+    private var panStartTouchPoint: CGPoint = .zero
+
+    // 标志：按钮在 superview 层级上（overlay）
+    private var overlaySuperview: UIView? { superview }
+
+    // MARK: - 编辑状态
+    public var isEditingCustom: Bool = false {
+        didSet {
+            resizeButton.isHidden = !isEditingCustom
+            if isEditingCustom {
+                overlaySuperview?.bringSubviewToFront(resizeButton)
+            }
+        }
     }
 
-    // MARK: - Init
+    // MARK: - 初始化
     init(image: UIImage, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect) {
-        super.init(image: image, originScale: originScale, originAngle: originAngle, originFrame: originFrame)
-        setupResizeButton()
+        super.init(image: image,
+                   originScale: originScale,
+                   originAngle: originAngle,
+                   originFrame: originFrame)
+        setupResizeButtonLocal()
         enableTapSelection()
-        
-        // 设置左上角为 anchorPoint
-        let oldOrigin = frame.origin
-        layer.anchorPoint = CGPoint(x: 0, y: 0)
-        frame.origin = oldOrigin
     }
 
     @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    // MARK: - Setup
-    private func setupResizeButton() {
-        let size: CGFloat = 32
+    // MARK: - Setup UI
+    private func setupResizeButtonLocal() {
+        let size: CGFloat = 36
         resizeButton = UIButton(type: .custom)
-        resizeButton.frame = CGRect(x: bounds.width - size, y: bounds.height - size, width: size, height: size)
-        resizeButton.setImage(UIImage(systemName: "arrow.up.left.and.arrow.down.right.circle.fill"), for: .normal)
-        resizeButton.tintColor = .systemRed
-        resizeButton.backgroundColor = .systemTeal.withAlphaComponent(0.3)
+        resizeButton.frame = CGRect(x: 0, y: 0, width: size, height: size)
         resizeButton.layer.cornerRadius = size / 2
+        resizeButton.backgroundColor = UIColor.black.withAlphaComponent(0.35)
+        resizeButton.setImage(UIImage(systemName: "arrow.up.left.and.arrow.down.right.circle.fill"), for: .normal)
+        resizeButton.tintColor = .white
         resizeButton.isHidden = true
-        resizeButton.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
-        addSubview(resizeButton)
 
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handleResizePan(_:)))
         pan.delegate = self
@@ -283,85 +297,135 @@ public class EditableStickerView: ZLImageStickerView {
     }
 
     @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
-        isEditing.toggle()
+        isEditingCustom.toggle()
+        syncResizeButtonToOverlay()
     }
 
-    // MARK: - Resize Button Pan (旋转+缩放)
+    public override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        syncResizeButtonToOverlay()
+    }
+
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        updateResizeButtonPosition()
+    }
+
+    private func syncResizeButtonToOverlay() {
+        guard let overlay = overlaySuperview else { return }
+        if resizeButton.superview != overlay {
+            resizeButton.removeFromSuperview()
+            overlay.addSubview(resizeButton)
+        }
+        updateResizeButtonPosition()
+    }
+
+    private func updateResizeButtonPosition() {
+        guard let overlay = overlaySuperview else { return }
+        let bottomRightInOverlay = self.convert(CGPoint(x: bounds.width, y: bounds.height), to: overlay)
+        resizeButton.center = bottomRightInOverlay
+    }
+
+    // MARK: - Resize Pan (旋转 + 缩放)
     @objc private func handleResizePan(_ gesture: UIPanGestureRecognizer) {
-        guard let superview = superview else { return }
-        let location = gesture.location(in: superview)
+        guard let overlay = overlaySuperview else { return }
+
+        let centerInOverlay = self.convert(CGPoint(x: bounds.midX, y: bounds.midY), to: overlay)
+        let touchPoint = gesture.location(in: overlay)
 
         switch gesture.state {
         case .began:
-            initialTouchPoint = location
-            initialGesRotation = gesRotation
-            initialGesScale = gesScale
-            initialTransform = transform // 保存按下瞬间的 transform
+            initialTouchPoint = touchPoint
+            initialTransform = originTransform
+            initialVector = CGPoint(x: touchPoint.x - centerInOverlay.x, y: touchPoint.y - centerInOverlay.y)
+            initialDistance = hypot(initialVector.x, initialVector.y)
+            initialAngle = atan2(initialVector.y, initialVector.x)
             setOperation(true)
 
         case .changed:
-            // 左上角为旋转缩放中心
-            let origin = layer.position // anchorPoint 已固定为左上角
-            let dxStart = initialTouchPoint.x - origin.x
-            let dyStart = initialTouchPoint.y - origin.y
-            let dxNow = location.x - origin.x
-            let dyNow = location.y - origin.y
+            let currentVector = CGPoint(x: touchPoint.x - centerInOverlay.x, y: touchPoint.y - centerInOverlay.y)
+            let currentDistance = hypot(currentVector.x, currentVector.y)
+            let currentAngle = atan2(currentVector.y, currentVector.x)
 
-            // 旋转
-            let angleDiff = atan2(dyNow, dxNow) - atan2(dyStart, dxStart)
-            gesRotation = initialGesRotation + angleDiff
+            let angleDiff = currentAngle - initialAngle
+            let scale = initialDistance > 0 ? currentDistance / initialDistance : 1.0
 
-            // 缩放
-            let distanceStart = sqrt(dxStart*dxStart + dyStart*dyStart)
-            let distanceNow = sqrt(dxNow*dxNow + dyNow*dyNow)
-            let scaleChange = distanceNow / max(distanceStart, 1)
-            gesScale = max(0.2, min(initialGesScale * scaleChange, maxGesScale))
-
-            // 应用旋转 + 缩放到 transform
-            transform = initialTransform.rotated(by: angleDiff).scaledBy(x: scaleChange, y: scaleChange)
-
-            // 右下角按钮始终在贴纸右下角
-            positionResizeButtonAtBottomRight()
+            transform = initialTransform.rotated(by: angleDiff).scaledBy(x: scale, y: scale)
+            updateResizeButtonPosition()
 
         case .ended, .cancelled:
+            originTransform = transform
+            initialTransform = originTransform
+            gesRotation = 0
+            gesScale = 1
+            updateResizeButtonPosition()
             setOperation(false)
-        default: break
+        default:
+            break
         }
     }
 
+    // MARK: - 平移 (优化后更平滑)
+    @objc override func panAction(_ ges: UIPanGestureRecognizer) {
+        guard gesIsEnabled else { return }
 
+        switch ges.state {
+        case .began:
+            panStartTransform = originTransform
+            panStartTouchPoint = ges.location(in: superview)
+            setOperation(true)
 
+        case .changed:
+            guard let superview = superview else { return }
+            let currentPoint = ges.location(in: superview)
 
-    private func positionResizeButtonAtBottomRight() {
-        let size = resizeButton.bounds.size
-        resizeButton.frame.origin.x = bounds.width - size.width
-        resizeButton.frame.origin.y = bounds.height - size.height
+            // 位移量（全局坐标）
+            let dx = currentPoint.x - panStartTouchPoint.x
+            let dy = currentPoint.y - panStartTouchPoint.y
+
+            // 将位移量映射到当前旋转角度的局部坐标中
+            let rotation = atan2(panStartTransform.b, panStartTransform.a)
+            let cosA = cos(rotation)
+            let sinA = sin(rotation)
+
+            // 修正后位移，使旋转后方向仍然正确
+            let localDx = dx * cosA + dy * sinA
+            let localDy = dy * cosA - dx * sinA
+
+            transform = panStartTransform.translatedBy(x: localDx, y: localDy)
+            updateResizeButtonPosition()
+
+        case .ended, .cancelled:
+            originTransform = transform
+            setOperation(false)
+
+        default:
+            break
+        }
     }
 
-    // 扩大按钮点击区域
-    public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        let largerArea = resizeButton.frame.insetBy(dx: -20, dy: -20)
-        return largerArea.contains(point) || super.point(inside: point, with: event)
+    public func refreshResizeButtonPosition() {
+        syncResizeButtonToOverlay()
+        updateResizeButtonPosition()
     }
 
-    // 阻止父类手势干扰
-    public override func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return gestureRecognizer.view != resizeButton
-    }
-    
-    // MARK: - 状态恢复
-    func applyState(_ state: ZLBaseStickertState) {
-        gesScale = state.gesScale
-        gesRotation = state.gesRotation
-        frame = state.originFrame
-        updateTransform()
+    public override func removeFromSuperview() {
+        resizeButton.removeFromSuperview()
+        super.removeFromSuperview()
     }
 
-    func refreshEditingState() {
-        isEditing = true
-        layoutIfNeeded()
+    deinit {
+        resizeButton.removeFromSuperview()
+    }
+
+    // MARK: - UIGestureRecognizerDelegate
+    public override func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer.view == resizeButton || otherGestureRecognizer.view == resizeButton {
+            return false
+        }
+        return true
     }
 }
-
 
 

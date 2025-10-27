@@ -53,7 +53,7 @@ protocol ZLStickerViewAdditional: NSObject {
 }
 
 open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
-    private enum Direction: Int {
+    public enum Direction: Int {
         case up = 0
         case right = 90
         case bottom = 180
@@ -211,7 +211,7 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     func setupUIFrameWhenFirstLayout() {}
     
-    private func direction(for angle: CGFloat) -> ZLBaseStickerView.Direction {
+    public func direction(for angle: CGFloat) -> ZLBaseStickerView.Direction {
         // 将角度转换为0~360，并对360取余
         let angle = ((Int(angle) % 360) + 360) % 360
         return ZLBaseStickerView.Direction(rawValue: angle) ?? .up
