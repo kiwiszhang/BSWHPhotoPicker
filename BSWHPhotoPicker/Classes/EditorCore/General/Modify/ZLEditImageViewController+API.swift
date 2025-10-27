@@ -7,13 +7,8 @@
 
 import Foundation
 
-private var stickerViewKey: UInt8 = 0
 // MARK: - 操作步骤API
 extension ZLEditImageViewController {
-    public var allStickers: [EditableStickerView]? {
-        get { objc_getAssociatedObject(self, &stickerViewKey) as? [EditableStickerView] }
-        set { objc_setAssociatedObject(self, &stickerViewKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
-    }
     /// 当前进行的操作
     public var currentOperation: ZLImageEditorConfiguration.EditTool? {
         return selectedTool
@@ -31,21 +26,12 @@ extension ZLEditImageViewController {
     /// undo
     public func undoAction() {
         editorManager.undoAction()
-//        if let stickers = allStickers {
-//            for sticker in stickers {
-//                sticker.refreshEditingState()
-//            }
-//        }
+
     }
     
     /// redo
     public func redoAction() {
         editorManager.redoAction()
-//        if let stickers = allStickers {
-//            for sticker in stickers {
-//                sticker.refreshEditingState()
-//            }
-//        }
     }
     
     /// 切换操作
@@ -181,12 +167,6 @@ extension ZLEditImageViewController {
         addSticker(imageSticker)
         view.layoutIfNeeded()
         editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
-        if var stickers = allStickers {
-            stickers.append(imageSticker)
-            allStickers = stickers
-        } else {
-            allStickers = [imageSticker]
-        }
     }
     
     /// 添加文字贴纸(固定为ZLTextSticker类型，如果ZLTextStickerView不适用，可以自定义，使用addCustomSticker方法)
@@ -367,6 +347,19 @@ public class EditableStickerView: ZLImageStickerView {
     // 阻止父类手势干扰
     public override func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return gestureRecognizer.view != resizeButton
+    }
+    
+    // MARK: - 状态恢复
+    func applyState(_ state: ZLBaseStickertState) {
+        gesScale = state.gesScale
+        gesRotation = state.gesRotation
+        frame = state.originFrame
+        updateTransform()
+    }
+
+    func refreshEditingState() {
+        isEditing = true
+        layoutIfNeeded()
     }
 }
 

@@ -110,6 +110,8 @@ open class ZLEditImageViewController: UIViewController {
     
     public var ashbinSize = CGSize(width: 160, height: 80)
     
+    private var stickerMap: [String: EditableStickerView] = [:]
+
     open lazy var mainScrollView: UIScrollView = {
         let view = UIScrollView()
         view.backgroundColor = .black
@@ -936,24 +938,30 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     func addSticker(_ sticker: ZLBaseStickerView) {
+//        stickersContainer.addSubview(sticker)
+//        sticker.frame = sticker.originFrame
+//        configSticker(sticker)
         stickersContainer.addSubview(sticker)
         sticker.frame = sticker.originFrame
         configSticker(sticker)
+        stickerMap[sticker.id] = sticker as? EditableStickerView
     }
     
     private func removeSticker(id: String?) {
+//        guard let id else { return }
+//        
+//        for sticker in stickersContainer.subviews.reversed() {
+//            guard let stickerID = (sticker as? ZLBaseStickerView)?.id,
+//                  stickerID == id else {
+//                continue
+//            }
+//            
+//            (sticker as? ZLBaseStickerView)?.moveToAshbin()
+//            
+//            break
+//        }
         guard let id else { return }
-        
-        for sticker in stickersContainer.subviews.reversed() {
-            guard let stickerID = (sticker as? ZLBaseStickerView)?.id,
-                  stickerID == id else {
-                continue
-            }
-            
-            (sticker as? ZLBaseStickerView)?.moveToAshbin()
-            
-            break
-        }
+        stickerMap[id]?.removeFromSuperview()
     }
     
     private func configSticker(_ sticker: ZLBaseStickerView) {
@@ -1367,28 +1375,76 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
     }
     
     private func undoSticker(_ oldState: ZLBaseStickertState?, _ newState: ZLBaseStickertState?) {
-        guard let oldState else {
-            removeSticker(id: newState?.id)
-            return
-        }
+//        guard let oldState else {
+//            removeSticker(id: newState?.id)
+//            return
+//        }
+//        
+//        removeSticker(id: oldState.id)
+//        if let sticker = makeSticker(from: oldState) {
+//            addSticker(sticker)
+//        }
         
-        removeSticker(id: oldState.id)
-        if let sticker = ZLBaseStickerView.initWithState(oldState) {
+        if let newStateID = newState?.id { removeSticker(id: newStateID) }
+
+        guard let oldState = oldState else { return }
+
+        if let sticker = stickerMap[oldState.id] {
+            sticker.applyState(oldState)
+            stickersContainer.addSubview(sticker)
+            sticker.refreshEditingState()
+        } else if let sticker = makeStickerView(from: oldState) as? EditableStickerView {
             addSticker(sticker)
         }
     }
     
     private func redoSticker(_ oldState: ZLBaseStickertState?, _ newState: ZLBaseStickertState?) {
-        guard let newState else {
-            removeSticker(id: oldState?.id)
-            return
-        }
+//        guard let newState else {
+//            removeSticker(id: oldState?.id)
+//            return
+//        }
+//
+//        removeSticker(id: newState.id)
+//        if let sticker = makeSticker(from: newState) {
+//            addSticker(sticker)
+//        }
         
-        removeSticker(id: newState.id)
-        if let sticker = ZLBaseStickerView.initWithState(newState) {
+        if let oldStateID = oldState?.id { removeSticker(id: oldStateID) }
+
+        guard let newState = newState else { return }
+
+        if let sticker = stickerMap[newState.id] {
+            sticker.applyState(newState)
+            stickersContainer.addSubview(sticker)
+            sticker.refreshEditingState()
+        } else if let sticker = makeStickerView(from: newState) as? EditableStickerView {
             addSticker(sticker)
         }
     }
+    
+    private func makeStickerView(from state: ZLBaseStickertState) -> ZLBaseStickerView? {
+//        if let imgState = state as? ZLImageStickerState {
+//            let sticker = EditableStickerView(
+//                image: imgState.image,
+//                originScale: imgState.originScale,
+//                originAngle: imgState.originAngle,
+//                originFrame: imgState.originFrame
+//            )
+//            // 恢复旋转/缩放
+//            sticker.gesScale = imgState.gesScale
+//            sticker.id = imgState.id
+//            sticker.gesRotation = imgState.gesRotation
+//            sticker.updateTransform()
+//            return sticker
+//        }
+        
+        let ddd = EditableStickerView.initWithState(state)
+        ddd?.id = state.id
+        return ddd
+        
+//        return ZLBaseStickerView.initWithState(state)
+    }
+
     
     private func undoOrRedoFilter(_ filter: ZLFilter?) {
         guard let filter else { return }

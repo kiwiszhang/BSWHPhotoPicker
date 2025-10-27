@@ -47,7 +47,8 @@ protocol ZLEditorManagerDelegate: AnyObject {
 class ZLEditorManager {
     private(set) var actions: [ZLEditorAction] = []
     private(set) var redoActions: [ZLEditorAction] = []
-    
+    private var stickerMap: [String: EditableStickerView] = [:]
+
     weak var delegate: ZLEditorManagerDelegate?
     
     init(actions: [ZLEditorAction] = []) {
