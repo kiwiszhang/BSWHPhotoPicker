@@ -162,11 +162,12 @@ extension ZLEditImageViewController {
         editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
     }
 
-    public func addImageSticker01(state: ImageStickerModel) {
+    public func addImageSticker01(state: ImageStickerModel) -> EditableStickerView {
         let imageSticker = EditableStickerView(image: UIImage(named: state.image)!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX, y: state.originFrameY, width: state.originFrameWidth, height: state.originFrameHeight))
         addSticker(imageSticker)
         view.layoutIfNeeded()
         editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
+        return imageSticker
     }
     
     /// 添加文字贴纸(固定为ZLTextSticker类型，如果ZLTextStickerView不适用，可以自定义，使用addCustomSticker方法)
@@ -212,21 +213,26 @@ extension ZLEditImageViewController {
 }
 
 // MARK: - 模型定义
-public struct ImageStickerModel: Codable {
-    let image:String
-    let originScale:Double
-    let originAngle:Double
-    let originFrameX:Double
-    let originFrameY:Double
-    let originFrameWidth:Double
-    let originFrameHeight:Double
-    let gesScale:Double
-    let gesRotation:Double
-    let overlayRectX:Double?
-    let overlayRectY:Double?
-    let overlayRectWidth:Double?
-    let overlayRectHeight:Double?
-    let isCircle:Bool?
+public class ImageStickerModel: Codable {
+    public var image:String = ""
+    public var originScale:Double = 0.0
+    public var originAngle:Double = 0.0
+    public var originFrameX:Double = 0.0
+    public var originFrameY:Double = 0.0
+    public var originFrameWidth:Double = 0.0
+    public var originFrameHeight:Double = 0.0
+    public var gesScale:Double = 0.0
+    public var gesRotation:Double = 0.0
+    public var overlayRectX:Double? = nil
+    public var overlayRectY:Double? = nil
+    public var overlayRectWidth:Double? = nil
+    public var overlayRectHeight:Double? = nil
+    public var isCircle:Bool? = nil
+    
+    public var imageData: Data? = nil // 用 Data 保存图片
+    public var stickerImage: UIImage? {
+        UIImage(data: imageData ?? Data())
+    }
 }
 
 

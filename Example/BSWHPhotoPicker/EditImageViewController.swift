@@ -90,12 +90,15 @@ class EditImageViewController: ZLEditImageViewController {
         menuButton.addTarget(self, action: #selector(onClickMenu(_:)), for: .touchUpInside)
 
 
-//        StickerManager.shared.attachTapGestures(in: view, vc: self)
         
-        let items = StickerManager.shared.loadLocalJSON(fileName: jsonFiles[0], type: [ImageStickerModel].self)
+//        let items = StickerManager.shared.loadLocalJSON(fileName: jsonFiles[0], type: [ImageStickerModel].self)
+        let items = StickerManager.shared.loadLocalJSON(fileName: jsonFiles[1], type: [ImageStickerModel].self)
+        StickerManager.shared.modelMap.removeAll()
         for state in items! {
-            addImageSticker01(state: state)
+            let sticker = addImageSticker01(state: state)
+            StickerManager.shared.modelMap[sticker.id] = state
         }
+        StickerManager.shared.attachTapGestures(in: view, vc: self)
     }
 
 

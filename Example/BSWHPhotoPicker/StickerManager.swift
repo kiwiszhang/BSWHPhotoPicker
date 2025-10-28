@@ -19,7 +19,7 @@ final class StickerManager: NSObject {
     private var currentStickerModel: ImageStickerModel?
     private var baseView:UIView?
 
-    private var modelMap: [String: ImageStickerModel] = [:]
+    var modelMap: [String: ImageStickerModel] = [:]
 
     static let shared = StickerManager()
     private override init() {}
@@ -39,11 +39,11 @@ final class StickerManager: NSObject {
         }
     }
 
-    func makeStickerStates(from fileName: String) -> [ZLImageStickerState] {
-        modelMap.removeAll()
-        guard let items = loadLocalJSON(fileName: fileName, type: [ImageStickerModel].self) else { return [] }
-        var result: [ZLImageStickerState] = []
-
+//    func makeStickerStates(from fileName: String) -> [ZLImageStickerState] {
+//        modelMap.removeAll()
+//        guard let items = loadLocalJSON(fileName: fileName, type: [ImageStickerModel].self) else { return [] }
+//        var result: [ZLImageStickerState] = []
+//
 //        for item in items {
 //            let uuid = UUID().uuidString
 //            let imageSticker = ZLImageStickerState(
@@ -64,8 +64,8 @@ final class StickerManager: NSObject {
 //            result.append(imageSticker)
 //            modelMap[uuid] = item
 //        }
-        return result
-    }
+//        return result
+//    }
 
     func attachTapGestures(in view: UIView,vc:UIViewController) {
         controller = vc
@@ -78,12 +78,16 @@ final class StickerManager: NSObject {
         
         func traverse(_ view: UIView) {
             for sub in view.subviews {
-                if let stickerView = sub as? ZLImageStickerView {
+                if let stickerView = sub as? EditableStickerView {
                     
                     // 1️⃣ 绑定模型（如果能拿到 id）
                     let uuid = stickerView.id
                     if let model = modelMap[uuid] {
                         stickerView.stickerModel = model
+                    }
+                    
+                    if let image = stickerView.stickerModel?.stickerImage {
+                        stickerView.updateImage(image, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image)
                     }
                     
                     // 2️⃣ 如果是贴纸背景，加手势
@@ -138,7 +142,7 @@ extension StickerManager: PHPickerViewControllerDelegate {
         if provider.canLoadObject(ofClass: UIImage.self) {
             provider.loadObject(ofClass: UIImage.self) { [weak self] image, _ in
                 guard let self = self,
-                let newImage = image as? UIImage,
+                let newImage:UIImage = image as? UIImage,
                 let stickerView = self.currentStickerView else { return }
                 DispatchQueue.main.async {
                     
@@ -154,6 +158,9 @@ extension StickerManager: PHPickerViewControllerDelegate {
                         UIImage(named: "Christmas05-sticker-bg01")
                     ]
                     if validStickerNames.contains(stickerView.image) {
+                        if let imageData = newImage.pngData() {
+                            stickerView.stickerModel?.imageData = imageData
+                        }
                         stickerView.updateImage(newImage, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image)
                     }
                 }
@@ -166,6 +173,7 @@ extension StickerManager: PHPickerViewControllerDelegate {
 // MARK: - 关联属性扩展
 private var stickerIDKey: UInt8 = 0
 private var stickerModelKey: UInt8 = 0
+private var stickerImageKey: UInt8 = 0
 extension ZLImageStickerView {
     var stickerID: String? {
         get { objc_getAssociatedObject(self, &stickerIDKey) as? String }
@@ -177,37 +185,37 @@ extension ZLImageStickerView {
     }
     
     func updateImage(_ newImage: UIImage,stickerModel:ImageStickerModel,withBaseImage baseImage: UIImage? = nil) {
-//        let finalImage: UIImage
-//        if let base = baseImage {
-//            let size = base.size
-//            finalImage = UIGraphicsImageRenderer(size: size).image { _ in
-//                base.draw(in: CGRect(origin: .zero, size: size))
-//                let overlayRect = CGRect(
-//                    x: size.width * (stickerModel.overlayRectX ?? 0),
-//                    y: size.height * (stickerModel.overlayRectY ?? 0),
-//                    width: size.width * (stickerModel.overlayRectWidth ?? 0.8),
-//                    height: size.height * (stickerModel.overlayRectHeight ?? 0.8)
-//                )
-//                let isCircle = stickerModel.isCircle ?? false
-//                if isCircle {
-//                    // 添加圆形裁剪区域
-//                    let path = UIBezierPath(ovalIn: overlayRect)
-//                    path.addClip()
-//                }
-//                newImage.draw(in: overlayRect, blendMode: .normal, alpha: 1.0)
-//            }
-//        } else {
-//            finalImage = newImage
-//        }
-//        
-//        if let imageView = self.subviews.first(where: { $0 is UIImageView }) as? UIImageView {
-//            imageView.image = finalImage
-//            imageView.setNeedsDisplay()
-//        } else {
-//            self.image = finalImage
-//        }
-//        self.setNeedsLayout()
-//        self.layoutIfNeeded()
+        let finalImage: UIImage
+        if let base = baseImage {
+            let size = base.size
+            finalImage = UIGraphicsImageRenderer(size: size).image { _ in
+                base.draw(in: CGRect(origin: .zero, size: size))
+                let overlayRect = CGRect(
+                    x: size.width * (stickerModel.overlayRectX ?? 0),
+                    y: size.height * (stickerModel.overlayRectY ?? 0),
+                    width: size.width * (stickerModel.overlayRectWidth ?? 0.8),
+                    height: size.height * (stickerModel.overlayRectHeight ?? 0.8)
+                )
+                let isCircle = stickerModel.isCircle ?? false
+                if isCircle {
+                    // 添加圆形裁剪区域
+                    let path = UIBezierPath(ovalIn: overlayRect)
+                    path.addClip()
+                }
+                newImage.draw(in: overlayRect, blendMode: .normal, alpha: 1.0)
+            }
+        } else {
+            finalImage = newImage
+        }
+        
+        if let imageView = self.subviews.first(where: { $0 is UIImageView }) as? UIImageView {
+            imageView.image = finalImage
+            imageView.setNeedsDisplay()
+        } else {
+            self.image = finalImage
+        }
+        self.setNeedsLayout()
+        self.layoutIfNeeded()
     }
 }
 

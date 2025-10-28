@@ -66,9 +66,9 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     var firstLayout = true
     
-    let originScale: CGFloat
+    var originScale: CGFloat
     
-    let originAngle: CGFloat
+    var originAngle: CGFloat
     
     var maxGesScale: CGFloat
     
@@ -224,7 +224,7 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         startTimer()
     }
     
-    @objc func pinchAction(_ ges: UIPinchGestureRecognizer) {
+    @objc public func pinchAction(_ ges: UIPinchGestureRecognizer) {
         guard gesIsEnabled else { return }
         
         let scale = min(maxGesScale, gesScale * ges.scale)
@@ -250,7 +250,8 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         }
     }
     
-    @objc func rotationAction(_ ges: UIRotationGestureRecognizer) {
+    
+    @objc public func rotationAction(_ ges: UIRotationGestureRecognizer) {
         guard gesIsEnabled else { return }
         
         gesRotation += ges.rotation
@@ -308,7 +309,7 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         }
     }
     
-    func updateTransform() {
+    public func updateTransform() {
         var transform = originTransform
         
         let direction = direction(for: originAngle)

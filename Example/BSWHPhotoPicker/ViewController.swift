@@ -107,7 +107,7 @@ extension ViewController: UICollectionViewDataSource {
 extension ViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let stickerArr = StickerManager.shared.makeStickerStates(from: jsonFiles[indexPath.row])
+//        let stickerArr = StickerManager.shared.makeStickerStates(from: jsonFiles[indexPath.row])
 //        let controller = EditImageViewController(image: itemsImages[indexPath.row], editModel: .init(stickers: stickerArr))
         let controller = EditImageViewController(image: itemsImages[indexPath.row])
         controller.modalPresentationStyle = .fullScreen

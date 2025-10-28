@@ -22,7 +22,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  BSWHPhotoPicker: eb76b1e91fa69e10b9ac36997de185e13895e8f9
+  BSWHPhotoPicker: 3eb4c67722e0c0a8ab1cde07d18d8e82fa8bfc7e
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
 

@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
   s.author           = { 'caoguangming' => '48467160+caoguangming@users.noreply.github.com' }
   s.source           = { :git => 'https://github.com/caoguangming/BSWHPhotoPicker.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '10.0'
+  s.ios.deployment_target = '15.0'
   s.swift_versions        = ['5.0', '5.1', '5.2']
 
   s.source_files = 'BSWHPhotoPicker/Classes/**/*'
