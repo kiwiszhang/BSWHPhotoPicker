@@ -78,6 +78,8 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     var totalTranslationPoint: CGPoint = .zero
     
+    var isBgImage: Bool = false
+    
     var gesTranslationPoint: CGPoint = .zero
     
     var gesRotation: CGFloat = 0
@@ -136,9 +138,11 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         gesScale: CGFloat = 1,
         gesRotation: CGFloat = 0,
         totalTranslationPoint: CGPoint = .zero,
+        isBgImage:Bool = false,
         showBorder: Bool = false
     ) {
         self.id = id
+        self.isBgImage = isBgImage
         self.originScale = originScale
         self.originAngle = originAngle
         self.originFrame = originFrame

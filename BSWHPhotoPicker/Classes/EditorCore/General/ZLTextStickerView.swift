@@ -66,7 +66,8 @@ class ZLTextStickerView: ZLBaseStickerView {
             originFrame: originFrame,
             gesScale: gesScale,
             gesRotation: gesRotation,
-            totalTranslationPoint: totalTranslationPoint
+            totalTranslationPoint: totalTranslationPoint,
+            isBgImage: isBgImage
         )
     }
     

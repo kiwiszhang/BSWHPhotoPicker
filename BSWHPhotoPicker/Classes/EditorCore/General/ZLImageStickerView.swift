@@ -48,7 +48,8 @@ open class ZLImageStickerView: ZLBaseStickerView {
             originFrame: originFrame,
             gesScale: gesScale,
             gesRotation: gesRotation,
-            totalTranslationPoint: totalTranslationPoint
+            totalTranslationPoint: totalTranslationPoint,
+            isBgImage: isBgImage
         )
     }
     
@@ -66,6 +67,7 @@ open class ZLImageStickerView: ZLBaseStickerView {
             gesScale: state.gesScale,
             gesRotation: state.gesRotation,
             totalTranslationPoint: state.totalTranslationPoint,
+            isBgImage:state.isBgImage,
             showBorder: false
         )
     }
@@ -79,6 +81,7 @@ open class ZLImageStickerView: ZLBaseStickerView {
         gesScale: CGFloat = 1,
         gesRotation: CGFloat = 0,
         totalTranslationPoint: CGPoint = .zero,
+        isBgImage:Bool = false,
         showBorder: Bool = true
     ) {
         self.image = image
@@ -90,6 +93,7 @@ open class ZLImageStickerView: ZLBaseStickerView {
             gesScale: gesScale,
             gesRotation: gesRotation,
             totalTranslationPoint: totalTranslationPoint,
+            isBgImage: isBgImage,
             showBorder: showBorder
         )
         

@@ -163,7 +163,7 @@ extension ZLEditImageViewController {
     }
 
     public func addImageSticker01(state: ImageStickerModel) -> EditableStickerView {
-        let imageSticker = EditableStickerView(image: UIImage(named: state.image)!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX, y: state.originFrameY, width: state.originFrameWidth, height: state.originFrameHeight))
+        let imageSticker = EditableStickerView(image: UIImage(named: state.image)!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX, y: state.originFrameY, width: state.originFrameWidth, height: state.originFrameHeight),isBgImage: state.isBgImage)
         addSticker(imageSticker)
         view.layoutIfNeeded()
         editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
@@ -251,6 +251,7 @@ public class EditableStickerView: ZLImageStickerView {
             gesScale: state.gesScale,
             gesRotation: state.gesRotation,
             totalTranslationPoint: state.totalTranslationPoint,
+            isBgImage: state.isBgImage,
             showBorder: false
         )
 
@@ -272,6 +273,7 @@ public class EditableStickerView: ZLImageStickerView {
         gesScale: CGFloat = 1,
         gesRotation: CGFloat = 0,
         totalTranslationPoint: CGPoint = .zero,
+        isBgImage:Bool = false,
         showBorder: Bool = false
     ) {
         super.init(
@@ -283,6 +285,7 @@ public class EditableStickerView: ZLImageStickerView {
             gesScale: gesScale,
             gesRotation: gesRotation,
             totalTranslationPoint: totalTranslationPoint,
+            isBgImage: isBgImage,
             showBorder: showBorder
         )
         borderView.layer.borderWidth = borderWidth
@@ -330,11 +333,11 @@ public class EditableStickerView: ZLImageStickerView {
     }
 
     // MARK: - 初始化
-    init(image: UIImage, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect) {
+    init(image: UIImage, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect,isBgImage:Bool) {
         super.init(image: image,
                    originScale: originScale,
                    originAngle: originAngle,
-                   originFrame: originFrame)
+                   originFrame: originFrame,isBgImage:isBgImage)
         setupResizeButtonLocal()
         enableTapSelection()
     }

@@ -35,7 +35,7 @@ public class ZLBaseStickertState: NSObject {
     let gesScale: CGFloat
     let gesRotation: CGFloat
     let totalTranslationPoint: CGPoint
-    
+    var isBgImage:Bool
     public init(
         id: String,
         image: UIImage,
@@ -44,7 +44,8 @@ public class ZLBaseStickertState: NSObject {
         originFrame: CGRect,
         gesScale: CGFloat,
         gesRotation: CGFloat,
-        totalTranslationPoint: CGPoint
+        totalTranslationPoint: CGPoint,
+        isBgImage:Bool
     ) {
         self.id = id
         self.image = image
@@ -54,6 +55,7 @@ public class ZLBaseStickertState: NSObject {
         self.gesScale = gesScale
         self.gesRotation = gesRotation
         self.totalTranslationPoint = totalTranslationPoint
+        self.isBgImage = isBgImage
         super.init()
     }
 }
@@ -78,7 +80,8 @@ public class ZLTextStickerState: ZLBaseStickertState {
         originFrame: CGRect,
         gesScale: CGFloat,
         gesRotation: CGFloat,
-        totalTranslationPoint: CGPoint
+        totalTranslationPoint: CGPoint,
+        isBgImage:Bool
     ) {
         self.text = text
         self.textColor = textColor
@@ -92,7 +95,8 @@ public class ZLTextStickerState: ZLBaseStickertState {
             originFrame: originFrame,
             gesScale: gesScale,
             gesRotation: gesRotation,
-            totalTranslationPoint: totalTranslationPoint
+            totalTranslationPoint: totalTranslationPoint,
+            isBgImage: isBgImage
         )
     }
 }

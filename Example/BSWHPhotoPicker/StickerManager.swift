@@ -39,38 +39,10 @@ final class StickerManager: NSObject {
         }
     }
 
-//    func makeStickerStates(from fileName: String) -> [ZLImageStickerState] {
-//        modelMap.removeAll()
-//        guard let items = loadLocalJSON(fileName: fileName, type: [ImageStickerModel].self) else { return [] }
-//        var result: [ZLImageStickerState] = []
-//
-//        for item in items {
-//            let uuid = UUID().uuidString
-//            let imageSticker = ZLImageStickerState(
-//                id: uuid,
-//                image: UIImage(named: item.image)!,
-//                originScale: item.originScale,
-//                originAngle: item.originAngle,
-//                originFrame: CGRect(
-//                    x: item.originFrameX.w,
-//                    y: item.originFrameY.h,
-//                    width: item.originFrameWidth == -1 ? UIScreen.main.bounds.width : item.originFrameWidth.w,
-//                    height: item.originFrameHeight.h
-//                ),
-//                gesScale: item.gesScale,
-//                gesRotation: item.gesRotation,
-//                totalTranslationPoint: .zero
-//            )
-//            result.append(imageSticker)
-//            modelMap[uuid] = item
-//        }
-//        return result
-//    }
-
     func attachTapGestures(in view: UIView,vc:UIViewController) {
         controller = vc
         attachGesturesAndModels(in: view, modelMap: StickerManager.shared.modelMap)
-        setupTapGestureForStickersPeriodically()
+//        setupTapGestureForStickersPeriodically()
     }
     // ✅ 递归扫描并绑定可点击贴纸
     func attachGesturesAndModels(in rootView: UIView, modelMap: [String: ImageStickerModel]) {
@@ -91,11 +63,11 @@ final class StickerManager: NSObject {
                     }
                     
                     // 2️⃣ 如果是贴纸背景，加手势
-                    if stickerView.stickerModel?.isBgImage == true {
-                        let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
-                        stickerView.addGestureRecognizer(tap)
-                        stickerView.isUserInteractionEnabled = true
-                    }
+//                    if stickerView.stickerModel?.isBgImage == true {
+//                        let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
+//                        stickerView.addGestureRecognizer(tap)
+//                        stickerView.isUserInteractionEnabled = true
+//                    }
                     
                 } else {
                     traverse(sub)
@@ -114,7 +86,7 @@ final class StickerManager: NSObject {
     }
     
 // MARK: - 点击事件处理
-    @objc private func stickerTapped(_ sender: UITapGestureRecognizer) {
+    @objc func stickerTapped(_ sender: UITapGestureRecognizer) {
         guard let stickerView = sender.view as? ZLImageStickerView else { return }
         currentStickerView = stickerView
 

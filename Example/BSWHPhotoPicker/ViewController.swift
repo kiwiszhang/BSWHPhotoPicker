@@ -29,7 +29,8 @@ class ViewController: UIViewController {
         originFrame: CGRect(x: 194, y: 370, width: 157, height: 240),
         gesScale: 1,
         gesRotation: 0,
-        totalTranslationPoint: .zero
+        totalTranslationPoint: .zero,
+        isBgImage: false
     )
     
     private lazy var textSticker: ZLTextStickerState = {
@@ -62,7 +63,8 @@ class ViewController: UIViewController {
             originFrame: CGRect(x: 0, y: 0, width: 200, height: 50),
             gesScale: 1,
             gesRotation: 0,
-            totalTranslationPoint: .zero
+            totalTranslationPoint: .zero,
+            isBgImage: false
         )
     }()
 
