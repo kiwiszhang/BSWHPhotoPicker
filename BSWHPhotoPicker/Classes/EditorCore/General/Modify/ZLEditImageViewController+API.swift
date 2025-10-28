@@ -270,7 +270,7 @@ public class EditableStickerView: ZLImageStickerView {
         gesScale: CGFloat = 1,
         gesRotation: CGFloat = 0,
         totalTranslationPoint: CGPoint = .zero,
-        showBorder: Bool = true
+        showBorder: Bool = false
     ) {
         super.init(
             id: id,
@@ -283,6 +283,11 @@ public class EditableStickerView: ZLImageStickerView {
             totalTranslationPoint: totalTranslationPoint,
             showBorder: showBorder
         )
+        borderView.layer.borderWidth = borderWidth
+        borderView.layer.borderColor = UIColor.clear.cgColor
+        if showBorder {
+            startTimer()
+        }
 
         setupResizeButtonLocal()
         enableTapSelection()
@@ -304,9 +309,14 @@ public class EditableStickerView: ZLImageStickerView {
     private var panStartTransform: CGAffineTransform = .identity
     private var panStartTouchPoint: CGPoint = .zero
 
-    // 标志：按钮在 superview 层级上（overlay）
-    private var overlaySuperview: UIView? { superview }
-
+    private var overlaySuperview: UIView? {
+        var view = superview
+        while let parent = view?.superview {
+            view = parent
+        }
+        return view
+    }
+    
     // MARK: - 编辑状态
     public var isEditingCustom: Bool = false {
         didSet {
@@ -374,7 +384,9 @@ public class EditableStickerView: ZLImageStickerView {
             overlay.addSubview(resizeButton)
         }
         updateResizeButtonPosition()
+        overlay.bringSubviewToFront(resizeButton)
     }
+
 
     private func updateResizeButtonPosition() {
         guard let overlay = overlaySuperview else { return }
@@ -442,7 +454,7 @@ public class EditableStickerView: ZLImageStickerView {
             panStartTransform = originTransform
             panStartTouchPoint = ges.location(in: superview)
             setOperation(true)
-
+            resizeButton.isHidden = false
         case .changed:
             guard let superview = superview else { return }
             let currentPoint = ges.location(in: superview)
@@ -480,8 +492,27 @@ public class EditableStickerView: ZLImageStickerView {
             break
         }
     }
-
-
+    
+    // MARK: - 控制边框和按钮显示/隐藏
+    @objc public override func hideBorder() {
+        super.hideBorder() // 隐藏边框
+        resizeButton.isHidden = true // 同步隐藏按钮
+    }
+    
+    public override func startTimer() {
+        cleanTimer()
+        borderView.layer.borderColor = UIColor.white.cgColor
+        resizeButton.isHidden = false // 显示按钮
+        
+        // 使用 ZLWeakProxy 避免循环引用
+        timer = Timer.scheduledTimer(timeInterval: 2,
+                                     target: ZLWeakProxy(target: self),
+                                     selector: #selector(hideBorder),
+                                     userInfo: nil,
+                                     repeats: false)
+        RunLoop.current.add(timer!, forMode: .common)
+    }
+    
     public func refreshResizeButtonPosition() {
         syncResizeButtonToOverlay()
         updateResizeButtonPosition()

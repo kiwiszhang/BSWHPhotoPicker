@@ -70,7 +70,7 @@ final class StickerManager: NSObject {
     func attachTapGestures(in view: UIView,vc:UIViewController) {
         controller = vc
         attachGesturesAndModels(in: view, modelMap: StickerManager.shared.modelMap)
-        setupTapGestureForStickersPeriodically()
+//        setupTapGestureForStickersPeriodically()
     }
     // ✅ 递归扫描并绑定可点击贴纸
     func attachGesturesAndModels(in rootView: UIView, modelMap: [String: ImageStickerModel]) {

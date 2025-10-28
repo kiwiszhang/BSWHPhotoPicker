@@ -136,7 +136,7 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         gesScale: CGFloat = 1,
         gesRotation: CGFloat = 0,
         totalTranslationPoint: CGPoint = .zero,
-        showBorder: Bool = true
+        showBorder: Bool = false
     ) {
         self.id = id
         self.originScale = originScale
@@ -150,9 +150,10 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         self.totalTranslationPoint = totalTranslationPoint
         
         borderView.layer.borderWidth = borderWidth
-        hideBorder()
+//        hideBorder()
         if showBorder {
-            startTimer()
+//            startTimer()
+            borderView.layer.borderColor = UIColor.clear.cgColor
         }
         
         addGestureRecognizer(tapGes)
@@ -331,18 +332,18 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         delegate?.stickerOnOperation(self, panGes: panGes)
     }
     
-    @objc private func hideBorder() {
+    @objc public func hideBorder() {
         borderView.layer.borderColor = UIColor.clear.cgColor
     }
     
-    func startTimer() {
+    public func startTimer() {
         cleanTimer()
         borderView.layer.borderColor = UIColor.white.cgColor
         timer = Timer.scheduledTimer(timeInterval: 2, target: ZLWeakProxy(target: self), selector: #selector(hideBorder), userInfo: nil, repeats: false)
         RunLoop.current.add(timer!, forMode: .common)
     }
     
-    private func cleanTimer() {
+    public func cleanTimer() {
         timer?.invalidate()
         timer = nil
     }
