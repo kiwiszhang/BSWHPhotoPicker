@@ -397,23 +397,37 @@ public class EditableStickerView: ZLImageStickerView {
             let currentDistance = hypot(currentVector.x, currentVector.y)
             let currentAngle = atan2(currentVector.y, currentVector.x)
 
+            // 差值
             let angleDiff = currentAngle - initialAngle
             let scale = initialDistance > 0 ? currentDistance / initialDistance : 1.0
 
+            // 应用变换
             transform = initialTransform.rotated(by: angleDiff).scaledBy(x: scale, y: scale)
             updateResizeButtonPosition()
 
+            // ✅ 实时同步状态（方便撤销/重做）
+            gesRotation = atan2(transform.b, transform.a)
+            gesScale = sqrt(transform.a * transform.a + transform.c * transform.c)
+
         case .ended, .cancelled:
+            // 累计变换
             originTransform = transform
             initialTransform = originTransform
+
+            // ✅ 最终同步状态
+            gesRotation = atan2(transform.b, transform.a)
+            gesScale = sqrt(transform.a * transform.a + transform.c * transform.c)
+
             updateResizeButtonPosition()
             setOperation(false)
+
         default:
             break
         }
     }
 
-    // MARK: - 平移 (优化后更平滑)
+
+    // MARK: - 平移 (带平滑 & 状态同步)
     @objc override func panAction(_ ges: UIPanGestureRecognizer) {
         guard gesIsEnabled else { return }
 
@@ -443,14 +457,24 @@ public class EditableStickerView: ZLImageStickerView {
             transform = panStartTransform.translatedBy(x: localDx, y: localDy)
             updateResizeButtonPosition()
 
+            // ✅ 实时同步 gesTranslationPoint
+            gesTranslationPoint = CGPoint(x: dx / originScale, y: dy / originScale)
+
         case .ended, .cancelled:
             originTransform = transform
+
+            // ✅ 累加平移
+            totalTranslationPoint.x += gesTranslationPoint.x * originScale
+            totalTranslationPoint.y += gesTranslationPoint.y * originScale
+
+            gesTranslationPoint = .zero
             setOperation(false)
 
         default:
             break
         }
     }
+
 
     public func refreshResizeButtonPosition() {
         syncResizeButtonToOverlay()
