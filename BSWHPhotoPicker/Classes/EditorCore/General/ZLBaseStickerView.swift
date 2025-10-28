@@ -122,7 +122,7 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         if let state = state as? ZLTextStickerState {
             return ZLTextStickerView(state: state)
         } else if let state = state as? ZLImageStickerState {
-            return ZLImageStickerView(state: state)
+            return EditableStickerView(state: state)
         } else {
             return nil
         }

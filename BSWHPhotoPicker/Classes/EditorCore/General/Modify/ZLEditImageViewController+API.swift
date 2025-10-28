@@ -232,6 +232,56 @@ public struct ImageStickerModel: Codable {
 
 public class EditableStickerView: ZLImageStickerView {
 
+    // MARK: - 通过状态恢复贴纸（支持撤销/重做）
+    public convenience init(state: ZLImageStickerState) {
+        self.init(
+            id: state.id,
+            image: state.image,
+            originScale: state.originScale,
+            originAngle: state.originAngle,
+            originFrame: state.originFrame,
+            gesScale: state.gesScale,
+            gesRotation: state.gesRotation,
+            totalTranslationPoint: state.totalTranslationPoint,
+            showBorder: false
+        )
+
+        // 初始化后同步 originTransform
+        self.originTransform = self.transform
+
+        // 刷新按钮位置（让右下角按钮在正确位置）
+        self.refreshResizeButtonPosition()
+    }
+
+    // 👇 如果你已有自定义 init(image:originScale:originAngle:originFrame:)
+    // 建议保留这个 designated initializer 以便其他地方也能使用
+    public override init(
+        id: String = UUID().uuidString,
+        image: UIImage,
+        originScale: CGFloat,
+        originAngle: CGFloat,
+        originFrame: CGRect,
+        gesScale: CGFloat = 1,
+        gesRotation: CGFloat = 0,
+        totalTranslationPoint: CGPoint = .zero,
+        showBorder: Bool = true
+    ) {
+        super.init(
+            id: id,
+            image: image,
+            originScale: originScale,
+            originAngle: originAngle,
+            originFrame: originFrame,
+            gesScale: gesScale,
+            gesRotation: gesRotation,
+            totalTranslationPoint: totalTranslationPoint,
+            showBorder: showBorder
+        )
+
+        setupResizeButtonLocal()
+        enableTapSelection()
+    }
+    
     // MARK: - UI
     private var resizeButton: UIButton!
 
@@ -356,8 +406,6 @@ public class EditableStickerView: ZLImageStickerView {
         case .ended, .cancelled:
             originTransform = transform
             initialTransform = originTransform
-            gesRotation = 0
-            gesScale = 1
             updateResizeButtonPosition()
             setOperation(false)
         default:
@@ -427,5 +475,26 @@ public class EditableStickerView: ZLImageStickerView {
         return true
     }
 }
+
+//public extension EditableStickerView {
+//    func applyState(_ state: ZLBaseStickertState) {
+//        // 恢复基础 transform
+//        self.originTransform = CGAffineTransform.identity
+//        self.gesScale = state.gesScale
+//        self.gesRotation = state.gesRotation
+//        self.frame = state.originFrame
+//
+//        // 将 originTransform 累积
+//        self.originTransform = self.transform
+//
+//        // 刷新按钮位置
+//        self.refreshResizeButtonPosition()
+//    }
+//    
+//    func refreshEditingState() {
+//        self.isEditingCustom = true
+//        self.layoutIfNeeded()
+//    }
+//}
 
 

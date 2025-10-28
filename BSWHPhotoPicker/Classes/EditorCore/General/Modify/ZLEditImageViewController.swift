@@ -1375,77 +1375,66 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
     }
     
     private func undoSticker(_ oldState: ZLBaseStickertState?, _ newState: ZLBaseStickertState?) {
-//        guard let oldState else {
-//            removeSticker(id: newState?.id)
-//            return
-//        }
-//        
-//        removeSticker(id: oldState.id)
-//        if let sticker = makeSticker(from: oldState) {
-//            addSticker(sticker)
-//        }
+        guard let oldState else {
+            removeSticker(id: newState?.id)
+            return
+        }
         
-        if let newStateID = newState?.id { removeSticker(id: newStateID) }
-
-        guard let oldState = oldState else { return }
-
-//        if let sticker = stickerMap[oldState.id] {
-//            sticker.applyState(oldState)
-//            stickersContainer.addSubview(sticker)
-//            sticker.refreshEditingState()
-//        } else
-        if let sticker = makeStickerView(from: oldState) as? EditableStickerView {
+        removeSticker(id: oldState.id)
+        if let sticker = EditableStickerView.initWithState(oldState) {
             addSticker(sticker)
         }
     }
     
     private func redoSticker(_ oldState: ZLBaseStickertState?, _ newState: ZLBaseStickertState?) {
-//        guard let newState else {
-//            removeSticker(id: oldState?.id)
-//            return
-//        }
-//
-//        removeSticker(id: newState.id)
-//        if let sticker = makeSticker(from: newState) {
-//            addSticker(sticker)
-//        }
+        guard let newState else {
+            removeSticker(id: oldState?.id)
+            return
+        }
         
-        if let oldStateID = oldState?.id { removeSticker(id: oldStateID) }
-
-        guard let newState = newState else { return }
-
-//        if let sticker = stickerMap[newState.id] {
-//            sticker.applyState(newState)
-//            stickersContainer.addSubview(sticker)
-//            sticker.refreshEditingState()
-//        } else
-        if let sticker = makeStickerView(from: newState) as? EditableStickerView {
+        removeSticker(id: newState.id)
+        if let sticker = EditableStickerView.initWithState(newState) {
             addSticker(sticker)
         }
     }
     
-    private func makeStickerView(from state: ZLBaseStickertState) -> ZLBaseStickerView? {
-//        if let imgState = state as? ZLImageStickerState {
-//            let sticker = EditableStickerView(
-//                image: imgState.image,
-//                originScale: imgState.originScale,
-//                originAngle: imgState.originAngle,
-//                originFrame: imgState.originFrame
-//            )
-//            // 恢复旋转/缩放
-//            sticker.gesScale = imgState.gesScale
-//            sticker.id = imgState.id
-//            sticker.gesRotation = imgState.gesRotation
-//            sticker.updateTransform()
-//            return sticker
+//    private func undoSticker(_ oldState: ZLBaseStickertState?, _ newState: ZLBaseStickertState?) {
+//        // 移除 redo 的贴纸
+//        if let newState = newState {
+//            removeSticker(id: newState.id)
 //        }
-        
-        let ddd = EditableStickerView.initWithState(state)
-        ddd?.id = state.id
-        return ddd
-        
-//        return ZLBaseStickerView.initWithState(state)
-    }
+//
+//        guard let oldState = oldState else { return }
+//
+//        // 尝试从 map 取现有贴纸
+//        if let sticker = stickerMap[oldState.id] {
+//            sticker.applyState(oldState)                  // 恢复状态
+//            stickersContainer.addSubview(sticker)        // 确保在 container 中
+//            sticker.refreshEditingState()                // 编辑状态
+////            sticker.refreshResizeButtonPosition()       // 刷新按钮位置
+//        } else if let sticker = ZLBaseStickerView.initWithState(oldState) as? EditableStickerView {
+//            addSticker(sticker)
+//        }
+//    }
+//    
+//    private func redoSticker(_ oldState: ZLBaseStickertState?, _ newState: ZLBaseStickertState?) {
+//        // 移除 undo 的贴纸
+//        if let oldState = oldState {
+//            removeSticker(id: oldState.id)
+//        }
+//
+//        guard let newState = newState else { return }
+//
+//        // 尝试从 map 取现有贴纸
+//        if let sticker = stickerMap[newState.id] {
+//            sticker.applyState(newState)                  // 恢复状态
+//            stickersContainer.addSubview(sticker)
+//            sticker.refreshEditingState()
+////            sticker.refreshResizeButtonPosition()
+//        } else if let sticker = ZLBaseStickerView.initWithState(newState) as? EditableStickerView {
+//            addSticker(sticker)
+//        }
+//    }
 
     
     private func undoOrRedoFilter(_ filter: ZLFilter?) {

@@ -39,7 +39,7 @@ open class ZLImageStickerView: ZLBaseStickerView {
     }()
     
     // Convert all states to model.
-    override var state: ZLImageStickerState {
+    public override var state: ZLImageStickerState {
         return ZLImageStickerState(
             id: id,
             image: image,
@@ -56,7 +56,7 @@ open class ZLImageStickerView: ZLBaseStickerView {
         zl_debugPrint("ZLImageStickerView deinit")
     }
     
-    convenience init(state: ZLImageStickerState) {
+    public convenience init(state: ZLImageStickerState) {
         self.init(
             id: state.id,
             image: state.image,
