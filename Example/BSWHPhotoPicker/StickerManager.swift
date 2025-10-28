@@ -70,7 +70,7 @@ final class StickerManager: NSObject {
     func attachTapGestures(in view: UIView,vc:UIViewController) {
         controller = vc
         attachGesturesAndModels(in: view, modelMap: StickerManager.shared.modelMap)
-//        setupTapGestureForStickersPeriodically()
+        setupTapGestureForStickersPeriodically()
     }
     // ✅ 递归扫描并绑定可点击贴纸
     func attachGesturesAndModels(in rootView: UIView, modelMap: [String: ImageStickerModel]) {
@@ -91,7 +91,7 @@ final class StickerManager: NSObject {
                     }
                     
                     // 2️⃣ 如果是贴纸背景，加手势
-                    if stickerView.image.isStickerBackground() {
+                    if stickerView.stickerModel?.isBgImage == true {
                         let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
                         stickerView.addGestureRecognizer(tap)
                         stickerView.isUserInteractionEnabled = true
@@ -108,7 +108,7 @@ final class StickerManager: NSObject {
 
     func setupTapGestureForStickersPeriodically() {
         // 每次视图出现后，每隔 0.5s 检查一次贴纸状态
-        Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
+        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { [weak self] _ in
             self?.attachGesturesAndModels(in: self?.baseView ?? UIView(), modelMap: StickerManager.shared.modelMap)
         }
     }
@@ -146,18 +146,7 @@ extension StickerManager: PHPickerViewControllerDelegate {
                 let stickerView = self.currentStickerView else { return }
                 DispatchQueue.main.async {
                     
-                    let validStickerNames = [
-                        UIImage(named: "Christmas00-sticker-bg00"),
-                        UIImage(named: "Christmas01-sticker-bg00"),
-                        UIImage(named: "Christmas01-sticker-bg01"),
-                        UIImage(named: "Christmas02-sticker-bg00"),
-                        UIImage(named: "Christmas02-sticker-bg01"),
-                        UIImage(named: "Christmas03-sticker-bg00"),
-                        UIImage(named: "Christmas03-sticker-bg01"),
-                        UIImage(named: "Christmas05-sticker-bg00"),
-                        UIImage(named: "Christmas05-sticker-bg01")
-                    ]
-                    if validStickerNames.contains(stickerView.image) {
+                    if stickerView.stickerModel?.isBgImage == true {
                         if let imageData = newImage.pngData() {
                             stickerView.stickerModel?.imageData = imageData
                         }
@@ -219,9 +208,3 @@ extension ZLImageStickerView {
     }
 }
 
-
-extension UIImage {
-    func isStickerBackground(in names: [String] = ["Christmas00-sticker-bg00", "Christmas00-sticker-bg01","Christmas01-sticker-bg00","Christmas01-sticker-bg01","Christmas01-sticker-bg02","Christmas02-sticker-bg00","Christmas02-sticker-bg01","Christmas03-sticker-bg00","Christmas03-sticker-bg01","Christmas04-sticker-bg00","Christmas04-sticker-bg01","Christmas05-sticker-bg00","Christmas05-sticker-bg01","Christmas06-sticker-bg00"]) -> Bool {
-        names.contains { UIImage(named: $0)?.isEqual(self) == true }
-    }
-}

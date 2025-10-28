@@ -229,6 +229,8 @@ public class ImageStickerModel: Codable {
     public var overlayRectHeight:Double? = nil
     public var isCircle:Bool? = nil
     
+    public var isBgImage:Bool = false
+
     public var imageData: Data? = nil // 用 Data 保存图片
     public var stickerImage: UIImage? {
         UIImage(data: imageData ?? Data())
@@ -536,26 +538,4 @@ public class EditableStickerView: ZLImageStickerView {
         return true
     }
 }
-
-//public extension EditableStickerView {
-//    func applyState(_ state: ZLBaseStickertState) {
-//        // 恢复基础 transform
-//        self.originTransform = CGAffineTransform.identity
-//        self.gesScale = state.gesScale
-//        self.gesRotation = state.gesRotation
-//        self.frame = state.originFrame
-//
-//        // 将 originTransform 累积
-//        self.originTransform = self.transform
-//
-//        // 刷新按钮位置
-//        self.refreshResizeButtonPosition()
-//    }
-//    
-//    func refreshEditingState() {
-//        self.isEditingCustom = true
-//        self.layoutIfNeeded()
-//    }
-//}
-
 

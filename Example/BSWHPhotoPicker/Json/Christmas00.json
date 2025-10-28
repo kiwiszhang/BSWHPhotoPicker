@@ -1,4 +1,20 @@
-[
+[{
+    "image": "Christmas00-sticker-bg00",
+    "originScale": 1,
+    "originAngle": 0,
+    "originFrameX": 142,
+    "originFrameY": 165,
+    "originFrameWidth": 236,
+    "originFrameHeight": 289,
+    "gesScale": 1,
+    "gesRotation": 0,
+    "overlayRectX": 0.2,
+    "overlayRectY": 0.15,
+    "overlayRectWidth": 0.7,
+    "overlayRectHeight": 0.58,
+    "isCircle": false,
+    "isBgImage": true,
+},
     {
         "image": "Christmas00-sticker01",
         "originScale": 1,
@@ -9,6 +25,7 @@
         "originFrameHeight": 240,
         "gesScale": 1,
         "gesRotation": 0,
+        "isBgImage": false,
     }
 ]
 

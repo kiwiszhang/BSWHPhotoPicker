@@ -91,8 +91,8 @@ class EditImageViewController: ZLEditImageViewController {
 
 
         
-//        let items = StickerManager.shared.loadLocalJSON(fileName: jsonFiles[0], type: [ImageStickerModel].self)
-        let items = StickerManager.shared.loadLocalJSON(fileName: jsonFiles[1], type: [ImageStickerModel].self)
+        let items = StickerManager.shared.loadLocalJSON(fileName: jsonFiles[0], type: [ImageStickerModel].self)
+//        let items = StickerManager.shared.loadLocalJSON(fileName: jsonFiles[1], type: [ImageStickerModel].self)
         StickerManager.shared.modelMap.removeAll()
         for state in items! {
             let sticker = addImageSticker01(state: state)
