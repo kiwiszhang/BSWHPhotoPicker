@@ -95,7 +95,6 @@ class EditImageViewController: ZLEditImageViewController {
 
         
         let items = StickerManager.shared.loadLocalJSON(fileName: jsonFiles[index], type: [ImageStickerModel].self)
-//        let items = StickerManager.shared.loadLocalJSON(fileName: jsonFiles[1], type: [ImageStickerModel].self)
         StickerManager.shared.modelMap.removeAll()
         for state in items! {
             let sticker = addImageSticker01(state: state)
@@ -117,6 +116,8 @@ class EditImageViewController: ZLEditImageViewController {
         let tap = UITapGestureRecognizer(target: StickerManager.shared, action: #selector(StickerManager.shared.stickerTapped(_:)))
         sticker.addGestureRecognizer(tap)
         sticker.isUserInteractionEnabled = true
+        sticker.updateImage((sticker.stickerModel?.stickerImage)!, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
+
     }
 
 
