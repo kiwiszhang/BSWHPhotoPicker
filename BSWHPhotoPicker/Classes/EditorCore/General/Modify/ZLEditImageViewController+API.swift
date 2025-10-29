@@ -254,16 +254,10 @@ public class EditableStickerView: ZLImageStickerView {
             isBgImage: state.isBgImage,
             showBorder: false
         )
-
-        // 初始化后同步 originTransform
-        self.originTransform = self.transform
-
-        // 刷新按钮位置（让右下角按钮在正确位置）
         self.refreshResizeButtonPosition()
     }
 
-    // 👇 如果你已有自定义 init(image:originScale:originAngle:originFrame:)
-    // 建议保留这个 designated initializer 以便其他地方也能使用
+    // MARK: - 初始化
     public override init(
         id: String = UUID().uuidString,
         image: UIImage,
@@ -273,7 +267,7 @@ public class EditableStickerView: ZLImageStickerView {
         gesScale: CGFloat = 1,
         gesRotation: CGFloat = 0,
         totalTranslationPoint: CGPoint = .zero,
-        isBgImage:Bool = false,
+        isBgImage: Bool = false,
         showBorder: Bool = false
     ) {
         super.init(
@@ -293,11 +287,23 @@ public class EditableStickerView: ZLImageStickerView {
         if showBorder {
             startTimer()
         }
-
         setupResizeButtonLocal()
         enableTapSelection()
     }
-    
+
+    init(image: UIImage, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect, isBgImage: Bool) {
+        super.init(image: image,
+                   originScale: originScale,
+                   originAngle: originAngle,
+                   originFrame: originFrame,
+                   isBgImage: isBgImage)
+        setupResizeButtonLocal()
+        enableTapSelection()
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
     // MARK: - UI
     private var resizeButton: UIButton!
 
@@ -321,7 +327,11 @@ public class EditableStickerView: ZLImageStickerView {
         }
         return view
     }
-    
+
+    // MARK: - 双指手势状态
+    private var gestureScale: CGFloat = 1
+    private var gestureRotation: CGFloat = 0
+
     // MARK: - 编辑状态
     public var isEditingCustom: Bool = false {
         didSet {
@@ -331,19 +341,6 @@ public class EditableStickerView: ZLImageStickerView {
             }
         }
     }
-
-    // MARK: - 初始化
-    init(image: UIImage, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect,isBgImage:Bool) {
-        super.init(image: image,
-                   originScale: originScale,
-                   originAngle: originAngle,
-                   originFrame: originFrame,isBgImage:isBgImage)
-        setupResizeButtonLocal()
-        enableTapSelection()
-    }
-
-    @available(*, unavailable)
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     // MARK: - Setup UI
     private func setupResizeButtonLocal() {
@@ -365,6 +362,7 @@ public class EditableStickerView: ZLImageStickerView {
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         addGestureRecognizer(tap)
         isUserInteractionEnabled = true
+        addGestureRecognizersForEditing()
     }
 
     @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
@@ -392,14 +390,13 @@ public class EditableStickerView: ZLImageStickerView {
         overlay.bringSubviewToFront(resizeButton)
     }
 
-
     private func updateResizeButtonPosition() {
         guard let overlay = overlaySuperview else { return }
         let bottomRightInOverlay = self.convert(CGPoint(x: bounds.width, y: bounds.height), to: overlay)
         resizeButton.center = bottomRightInOverlay
     }
 
-    // MARK: - Resize Pan (旋转 + 缩放)
+    // MARK: - Resize Pan (右下按钮旋转+缩放)
     @objc private func handleResizePan(_ gesture: UIPanGestureRecognizer) {
         guard let overlay = overlaySuperview else { return }
 
@@ -420,40 +417,30 @@ public class EditableStickerView: ZLImageStickerView {
             let currentDistance = hypot(currentVector.x, currentVector.y)
             let currentAngle = atan2(currentVector.y, currentVector.x)
 
-            // 差值
             let angleDiff = currentAngle - initialAngle
             let scale = initialDistance > 0 ? currentDistance / initialDistance : 1.0
 
-            // 应用变换
             transform = initialTransform.rotated(by: angleDiff).scaledBy(x: scale, y: scale)
             updateResizeButtonPosition()
 
-            // ✅ 实时同步状态（方便撤销/重做）
             gesRotation = atan2(transform.b, transform.a)
             gesScale = sqrt(transform.a * transform.a + transform.c * transform.c)
 
         case .ended, .cancelled:
-            // 累计变换
             originTransform = transform
             initialTransform = originTransform
 
-            // ✅ 最终同步状态
             gesRotation = atan2(transform.b, transform.a)
             gesScale = sqrt(transform.a * transform.a + transform.c * transform.c)
-
             updateResizeButtonPosition()
             setOperation(false)
-
-        default:
-            break
+        default: break
         }
     }
 
-
-    // MARK: - 平移 (带平滑 & 状态同步)
+    // MARK: - 平移
     @objc override func panAction(_ ges: UIPanGestureRecognizer) {
         guard gesIsEnabled else { return }
-
         switch ges.state {
         case .began:
             panStartTransform = originTransform
@@ -463,53 +450,93 @@ public class EditableStickerView: ZLImageStickerView {
         case .changed:
             guard let superview = superview else { return }
             let currentPoint = ges.location(in: superview)
-
-            // 位移量（全局坐标）
             let dx = currentPoint.x - panStartTouchPoint.x
             let dy = currentPoint.y - panStartTouchPoint.y
 
-            // 将位移量映射到当前旋转角度的局部坐标中
             let rotation = atan2(panStartTransform.b, panStartTransform.a)
             let cosA = cos(rotation)
             let sinA = sin(rotation)
-
-            // 修正后位移，使旋转后方向仍然正确
             let localDx = dx * cosA + dy * sinA
             let localDy = dy * cosA - dx * sinA
 
             transform = panStartTransform.translatedBy(x: localDx, y: localDy)
             updateResizeButtonPosition()
-
-            // ✅ 实时同步 gesTranslationPoint
             gesTranslationPoint = CGPoint(x: dx / originScale, y: dy / originScale)
-
         case .ended, .cancelled:
             originTransform = transform
-
-            // ✅ 累加平移
             totalTranslationPoint.x += gesTranslationPoint.x * originScale
             totalTranslationPoint.y += gesTranslationPoint.y * originScale
-
             gesTranslationPoint = .zero
             setOperation(false)
-
-        default:
-            break
+        default: break
         }
     }
-    
+
+    // MARK: - 双指旋转 + 缩放
+    private func addGestureRecognizersForEditing() {
+        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
+        pinch.delegate = self
+        addGestureRecognizer(pinch)
+
+        let rotation = UIRotationGestureRecognizer(target: self, action: #selector(handleRotation(_:)))
+        rotation.delegate = self
+        addGestureRecognizer(rotation)
+    }
+
+    @objc private func handlePinch(_ gesture: UIPinchGestureRecognizer) {
+        switch gesture.state {
+        case .began:
+            gestureScale = 1
+            initialTransform = originTransform
+            setOperation(true)
+        case .changed:
+            gestureScale = gesture.scale
+            applyGestureTransform()
+        case .ended, .cancelled:
+            originTransform = transform
+            gestureScale = 1
+            setOperation(false)
+        default: break
+        }
+    }
+
+    @objc private func handleRotation(_ gesture: UIRotationGestureRecognizer) {
+        switch gesture.state {
+        case .began:
+            gestureRotation = 0
+            initialTransform = originTransform
+            setOperation(true)
+        case .changed:
+            gestureRotation = gesture.rotation
+            applyGestureTransform()
+        case .ended, .cancelled:
+            originTransform = transform
+            gestureRotation = 0
+            setOperation(false)
+        default: break
+        }
+    }
+
+    private func applyGestureTransform() {
+        transform = initialTransform
+            .rotated(by: gestureRotation)
+            .scaledBy(x: gestureScale, y: gestureScale)
+        updateResizeButtonPosition()
+
+        gesRotation = atan2(transform.b, transform.a)
+        gesScale = sqrt(transform.a * transform.a + transform.c * transform.c)
+    }
+
     // MARK: - 控制边框和按钮显示/隐藏
     @objc public override func hideBorder() {
-        super.hideBorder() // 隐藏边框
-        resizeButton.isHidden = true // 同步隐藏按钮
+        super.hideBorder()
+        resizeButton.isHidden = true
     }
-    
+
     public override func startTimer() {
         cleanTimer()
         borderView.layer.borderColor = UIColor.white.cgColor
-        resizeButton.isHidden = false // 显示按钮
-        
-        // 使用 ZLWeakProxy 避免循环引用
+        resizeButton.isHidden = false
         timer = Timer.scheduledTimer(timeInterval: 2,
                                      target: ZLWeakProxy(target: self),
                                      selector: #selector(hideBorder),
@@ -517,7 +544,7 @@ public class EditableStickerView: ZLImageStickerView {
                                      repeats: false)
         RunLoop.current.add(timer!, forMode: .common)
     }
-    
+
     public func refreshResizeButtonPosition() {
         syncResizeButtonToOverlay()
         updateResizeButtonPosition()
@@ -541,4 +568,5 @@ public class EditableStickerView: ZLImageStickerView {
         return true
     }
 }
+
 

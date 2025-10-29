@@ -1398,6 +1398,9 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
         removeSticker(id: newState.id)
         if let sticker = EditableStickerView.initWithState(newState) {
             addSticker(sticker)
+            if newState.isBgImage == true {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "stickerImageAddTap"), object: ["sticker":sticker])
+            }
         }
     }
     
