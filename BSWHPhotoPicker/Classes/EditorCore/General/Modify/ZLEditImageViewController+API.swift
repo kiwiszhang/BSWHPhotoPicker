@@ -240,7 +240,7 @@ public class ImageStickerModel: Codable {
 
 public class EditableStickerView: ZLImageStickerView {
 
-    // MARK: - 通过状态恢复贴纸（支持撤销/重做）
+    // MARK: - 状态恢复
     public convenience init(state: ZLImageStickerState) {
         self.init(
             id: state.id,
@@ -284,19 +284,14 @@ public class EditableStickerView: ZLImageStickerView {
         )
         borderView.layer.borderWidth = borderWidth
         borderView.layer.borderColor = UIColor.clear.cgColor
-        if showBorder {
-            startTimer()
-        }
+        if showBorder { startTimer() }
+
         setupResizeButtonLocal()
         enableTapSelection()
     }
 
     init(image: UIImage, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect, isBgImage: Bool) {
-        super.init(image: image,
-                   originScale: originScale,
-                   originAngle: originAngle,
-                   originFrame: originFrame,
-                   isBgImage: isBgImage)
+        super.init(image: image, originScale: originScale, originAngle: originAngle, originFrame: originFrame, isBgImage: isBgImage)
         setupResizeButtonLocal()
         enableTapSelection()
     }
@@ -307,38 +302,25 @@ public class EditableStickerView: ZLImageStickerView {
     // MARK: - UI
     private var resizeButton: UIButton!
 
-    // MARK: - gesture / state
+    // MARK: - Gesture / 状态
     private var initialTouchPoint: CGPoint = .zero
-    private var initialTransform: CGAffineTransform = .identity
-
-    // 起始向量/角度/距离（中心 -> 手指）
-    private var initialVector: CGPoint = .zero
-    private var initialDistance: CGFloat = 0
-    private var initialAngle: CGFloat = 0
-
-    // 平移用状态
     private var panStartTransform: CGAffineTransform = .identity
     private var panStartTouchPoint: CGPoint = .zero
 
-    private var overlaySuperview: UIView? {
-        var view = superview
-        while let parent = view?.superview {
-            view = parent
-        }
-        return view
-    }
-
-    // MARK: - 双指手势状态
     private var gestureScale: CGFloat = 1
     private var gestureRotation: CGFloat = 0
+
+    private var overlaySuperview: UIView? {
+        var view = superview
+        while let parent = view?.superview { view = parent }
+        return view
+    }
 
     // MARK: - 编辑状态
     public var isEditingCustom: Bool = false {
         didSet {
             resizeButton.isHidden = !isEditingCustom
-            if isEditingCustom {
-                overlaySuperview?.bringSubviewToFront(resizeButton)
-            }
+            if isEditingCustom { overlaySuperview?.bringSubviewToFront(resizeButton) }
         }
     }
 
@@ -396,7 +378,44 @@ public class EditableStickerView: ZLImageStickerView {
         resizeButton.center = bottomRightInOverlay
     }
 
-    // MARK: - Resize Pan (右下按钮旋转+缩放)
+    // MARK: - 更新 Transform (统一处理平移 + 旋转 + 缩放)
+    public override func updateTransform() {
+        var t = CGAffineTransform.identity
+        // 平移
+        t = t.translatedBy(x: totalTranslationPoint.x + gesTranslationPoint.x,
+                           y: totalTranslationPoint.y + gesTranslationPoint.y)
+        // 旋转
+        t = t.rotated(by: originAngle + gesRotation)
+        // 缩放
+        t = t.scaledBy(x: originScale * gesScale, y: originScale * gesScale)
+        transform = t
+        updateResizeButtonPosition()
+    }
+
+    // MARK: - 平移
+    @objc override func panAction(_ ges: UIPanGestureRecognizer) {
+        guard gesIsEnabled else { return }
+        let currentPoint = ges.location(in: superview)
+        let dx = currentPoint.x - panStartTouchPoint.x
+        let dy = currentPoint.y - panStartTouchPoint.y
+
+        switch ges.state {
+        case .began:
+            panStartTouchPoint = currentPoint
+            setOperation(true)
+        case .changed:
+            gesTranslationPoint = CGPoint(x: dx, y: dy)
+            updateTransform()
+        case .ended, .cancelled:
+            totalTranslationPoint.x += dx
+            totalTranslationPoint.y += dy
+            gesTranslationPoint = .zero
+            setOperation(false)
+        default: break
+        }
+    }
+
+    // MARK: - 右下按钮旋转+缩放
     @objc private func handleResizePan(_ gesture: UIPanGestureRecognizer) {
         guard let overlay = overlaySuperview else { return }
 
@@ -406,67 +425,31 @@ public class EditableStickerView: ZLImageStickerView {
         switch gesture.state {
         case .began:
             initialTouchPoint = touchPoint
-            initialTransform = originTransform
-            initialVector = CGPoint(x: touchPoint.x - centerInOverlay.x, y: touchPoint.y - centerInOverlay.y)
-            initialDistance = hypot(initialVector.x, initialVector.y)
-            initialAngle = atan2(initialVector.y, initialVector.x)
+//            initialTransform = transform
             setOperation(true)
-
         case .changed:
-            let currentVector = CGPoint(x: touchPoint.x - centerInOverlay.x, y: touchPoint.y - centerInOverlay.y)
-            let currentDistance = hypot(currentVector.x, currentVector.y)
-            let currentAngle = atan2(currentVector.y, currentVector.x)
+            let dx = touchPoint.x - centerInOverlay.x
+            let dy = touchPoint.y - centerInOverlay.y
+            let distance = hypot(dx, dy)
+            let angle = atan2(dy, dx)
 
-            let angleDiff = currentAngle - initialAngle
-            let scale = initialDistance > 0 ? currentDistance / initialDistance : 1.0
+            let startDx = initialTouchPoint.x - centerInOverlay.x
+            let startDy = initialTouchPoint.y - centerInOverlay.y
+            let startDistance = hypot(startDx, startDy)
+            let startAngle = atan2(startDy, startDx)
 
-            transform = initialTransform.rotated(by: angleDiff).scaledBy(x: scale, y: scale)
-            updateResizeButtonPosition()
+            let scale = startDistance > 0 ? distance / startDistance : 1
+            let rotation = angle - startAngle
 
-            gesRotation = atan2(transform.b, transform.a)
-            gesScale = sqrt(transform.a * transform.a + transform.c * transform.c)
-
+            gesScale = scale
+            gesRotation = rotation
+            updateTransform()
         case .ended, .cancelled:
-            originTransform = transform
-            initialTransform = originTransform
-
-            gesRotation = atan2(transform.b, transform.a)
-            gesScale = sqrt(transform.a * transform.a + transform.c * transform.c)
-            updateResizeButtonPosition()
-            setOperation(false)
-        default: break
-        }
-    }
-
-    // MARK: - 平移
-    @objc override func panAction(_ ges: UIPanGestureRecognizer) {
-        guard gesIsEnabled else { return }
-        switch ges.state {
-        case .began:
-            panStartTransform = originTransform
-            panStartTouchPoint = ges.location(in: superview)
-            setOperation(true)
-            resizeButton.isHidden = false
-        case .changed:
-            guard let superview = superview else { return }
-            let currentPoint = ges.location(in: superview)
-            let dx = currentPoint.x - panStartTouchPoint.x
-            let dy = currentPoint.y - panStartTouchPoint.y
-
-            let rotation = atan2(panStartTransform.b, panStartTransform.a)
-            let cosA = cos(rotation)
-            let sinA = sin(rotation)
-            let localDx = dx * cosA + dy * sinA
-            let localDy = dy * cosA - dx * sinA
-
-            transform = panStartTransform.translatedBy(x: localDx, y: localDy)
-            updateResizeButtonPosition()
-            gesTranslationPoint = CGPoint(x: dx / originScale, y: dy / originScale)
-        case .ended, .cancelled:
-            originTransform = transform
-            totalTranslationPoint.x += gesTranslationPoint.x * originScale
-            totalTranslationPoint.y += gesTranslationPoint.y * originScale
-            gesTranslationPoint = .zero
+            originScale *= gesScale
+            originAngle += gesRotation
+            gesScale = 1
+            gesRotation = 0
+            updateTransform()
             setOperation(false)
         default: break
         }
@@ -487,14 +470,14 @@ public class EditableStickerView: ZLImageStickerView {
         switch gesture.state {
         case .began:
             gestureScale = 1
-            initialTransform = originTransform
             setOperation(true)
         case .changed:
             gestureScale = gesture.scale
-            applyGestureTransform()
+            gesScale = gestureScale
+            updateTransform()
         case .ended, .cancelled:
-            originTransform = transform
-            gestureScale = 1
+            originScale *= gesScale
+            gesScale = 1
             setOperation(false)
         default: break
         }
@@ -504,30 +487,20 @@ public class EditableStickerView: ZLImageStickerView {
         switch gesture.state {
         case .began:
             gestureRotation = 0
-            initialTransform = originTransform
             setOperation(true)
         case .changed:
             gestureRotation = gesture.rotation
-            applyGestureTransform()
+            gesRotation = gestureRotation
+            updateTransform()
         case .ended, .cancelled:
-            originTransform = transform
-            gestureRotation = 0
+            originAngle += gesRotation
+            gesRotation = 0
             setOperation(false)
         default: break
         }
     }
 
-    private func applyGestureTransform() {
-        transform = initialTransform
-            .rotated(by: gestureRotation)
-            .scaledBy(x: gestureScale, y: gestureScale)
-        updateResizeButtonPosition()
-
-        gesRotation = atan2(transform.b, transform.a)
-        gesScale = sqrt(transform.a * transform.a + transform.c * transform.c)
-    }
-
-    // MARK: - 控制边框和按钮显示/隐藏
+    // MARK: - 控制边框和按钮
     @objc public override func hideBorder() {
         super.hideBorder()
         resizeButton.isHidden = true
@@ -555,9 +528,7 @@ public class EditableStickerView: ZLImageStickerView {
         super.removeFromSuperview()
     }
 
-    deinit {
-        resizeButton.removeFromSuperview()
-    }
+    deinit { resizeButton.removeFromSuperview() }
 
     // MARK: - UIGestureRecognizerDelegate
     public override func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,

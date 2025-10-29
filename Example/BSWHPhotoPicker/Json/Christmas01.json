@@ -13,6 +13,7 @@
     "overlayRectWidth": 0.78,
     "overlayRectHeight": 0.8,
     "isCircle": false,
+    "isBgImage": true,
   },
     {
       "image": "Christmas02-sticker-bg01",
@@ -29,6 +30,7 @@
       "overlayRectWidth": 0.78,
       "overlayRectHeight": 0.8,
       "isCircle": false,
+      "isBgImage": true,
     },
 {
   "image": "Christmas01-sticker-bg00",
@@ -45,6 +47,7 @@
   "overlayRectWidth": 0.7,
   "overlayRectHeight": 0.7,
   "isCircle": true,
+  "isBgImage": true,
 },
 {
   "image": "Christmas01-sticker-bg01",
@@ -61,6 +64,7 @@
   "overlayRectWidth": 0.7,
   "overlayRectHeight": 0.7,
   "isCircle": false,
+  "isBgImage": true,
 },
 {
     "image": "Christmas01-sticker00",
@@ -72,6 +76,7 @@
     "originFrameHeight": 100,
     "gesScale": 1,
     "gesRotation": 0,
+    "isBgImage": false,
   },
   {
     "image": "Christmas01-sticker01",
@@ -83,6 +88,7 @@
     "originFrameHeight": 87,
     "gesScale": 1,
     "gesRotation": 0,
+    "isBgImage": false,
   },
   {
     "image": "Christmas01-sticker02",
@@ -94,6 +100,7 @@
     "originFrameHeight": 100,
     "gesScale": 1,
     "gesRotation": 0,
+    "isBgImage": false,
   },
   {
     "image": "Christmas01-sticker03",
@@ -105,5 +112,6 @@
     "originFrameHeight": 95,
     "gesScale": 1,
     "gesRotation": 0,
+    "isBgImage": false,
   }]
 

@@ -14,6 +14,7 @@
   "overlayRectWidth": 0.78,
   "overlayRectHeight": 0.8,
   "isCircle": false,
+  "isBgImage": true,
 },
 {
   "image": "Christmas02-sticker-bg01",
@@ -30,6 +31,7 @@
   "overlayRectWidth": 0.78,
   "overlayRectHeight": 0.8,
   "isCircle": false,
+  "isBgImage": true,
 },
 {
   "image": "Christmas01-sticker-bg01",
@@ -46,6 +48,7 @@
   "overlayRectWidth": 0.7,
   "overlayRectHeight": 0.7,
   "isCircle": false,
+  "isBgImage": true,
 },
 {
     "image": "Christmas04-sticker00",
@@ -57,5 +60,6 @@
     "originFrameHeight": 73,
     "gesScale": 1,
     "gesRotation": 0,
+    "isBgImage": false,
   }]
 

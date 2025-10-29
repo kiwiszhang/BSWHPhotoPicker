@@ -112,6 +112,7 @@ extension ViewController: UICollectionViewDelegate {
 //        let stickerArr = StickerManager.shared.makeStickerStates(from: jsonFiles[indexPath.row])
 //        let controller = EditImageViewController(image: itemsImages[indexPath.row], editModel: .init(stickers: stickerArr))
         let controller = EditImageViewController(image: itemsImages[indexPath.row])
+        controller.index = indexPath.row
         controller.modalPresentationStyle = .fullScreen
         self.present(controller, animated: true)
     }

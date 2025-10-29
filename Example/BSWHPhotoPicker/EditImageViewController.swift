@@ -14,6 +14,8 @@ import PhotosUI
 class EditImageViewController: ZLEditImageViewController {
     private let jsonFiles:[String] = ["Christmas00","Christmas01","Christmas02","Christmas03","Christmas04","Christmas05","Christmas06"]
 
+    var index = 0
+    
     let backButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("返回", for: .normal)
@@ -92,7 +94,7 @@ class EditImageViewController: ZLEditImageViewController {
 
 
         
-        let items = StickerManager.shared.loadLocalJSON(fileName: jsonFiles[0], type: [ImageStickerModel].self)
+        let items = StickerManager.shared.loadLocalJSON(fileName: jsonFiles[index], type: [ImageStickerModel].self)
 //        let items = StickerManager.shared.loadLocalJSON(fileName: jsonFiles[1], type: [ImageStickerModel].self)
         StickerManager.shared.modelMap.removeAll()
         for state in items! {
