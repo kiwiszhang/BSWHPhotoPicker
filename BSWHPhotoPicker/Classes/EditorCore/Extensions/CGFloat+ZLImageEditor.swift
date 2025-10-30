@@ -31,3 +31,49 @@ extension ZLImageEditorWrapper where Base == CGFloat {
         return base / 180 * .pi
     }
 }
+
+/// 屏幕适配
+public extension CGFloat {
+    //屏幕宽高
+    var w: CGFloat {
+        let standardWidth: CGFloat = 375
+        let screenWidth = UIScreen.main.bounds.width
+        return self * (screenWidth / standardWidth)
+    }
+
+    var h: CGFloat {
+        let standardHeight: CGFloat = 812
+        let screenHeight = UIScreen.main.bounds.height
+        return self * (screenHeight / standardHeight)
+    }
+}
+
+public extension Double {
+    //屏幕宽高
+    var w: CGFloat {
+        let standardWidth: CGFloat = 375
+        let screenWidth = UIScreen.main.bounds.width
+        return self * (screenWidth / standardWidth)
+    }
+
+    var h: CGFloat {
+        let standardHeight: CGFloat = 812
+        let screenHeight = UIScreen.main.bounds.height
+        return self * (screenHeight / standardHeight)
+    }
+}
+
+public extension Int {
+    //屏幕宽高
+    var w: CGFloat {
+        let standardWidth: CGFloat = 375
+        let screenWidth = UIScreen.main.bounds.width
+        return CGFloat(self) * (screenWidth / standardWidth)
+    }
+
+    var h: CGFloat {
+        let standardHeight: CGFloat = 812
+        let screenHeight = UIScreen.main.bounds.height
+        return CGFloat(self) * (screenHeight / standardHeight)
+    }
+}

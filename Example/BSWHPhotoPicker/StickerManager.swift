@@ -16,7 +16,6 @@ import BSWHPhotoPicker
 final class StickerManager: NSObject {
     private weak var controller: UIViewController?
     private weak var currentStickerView: ZLImageStickerView?
-    private var currentStickerModel: ImageStickerModel?
     private var baseView:UIView?
 
     var modelMap: [String: ImageStickerModel] = [:]
@@ -42,35 +41,43 @@ final class StickerManager: NSObject {
     func attachTapGestures(in view: UIView,vc:UIViewController) {
         controller = vc
         attachGesturesAndModels(in: view, modelMap: StickerManager.shared.modelMap)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(addTap(_:)), name: Notification.Name(rawValue: "stickerImageAddTap"), object: nil)
     }
-    // ✅ 递归扫描并绑定可点击贴纸
+    // 递归扫描并绑定可点击贴纸
     func attachGesturesAndModels(in rootView: UIView, modelMap: [String: ImageStickerModel]) {
         baseView = rootView
         
         func traverse(_ view: UIView) {
             for sub in view.subviews {
                 if let stickerView = sub as? EditableStickerView {
-                    
-                    // 1️⃣ 绑定模型（如果能拿到 id）
                     let uuid = stickerView.id
                     if let model = modelMap[uuid] {
                         stickerView.stickerModel = model
                     }
-                    
                     if let image = stickerView.stickerModel?.stickerImage {
                         stickerView.updateImage(image, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image)
                     }
-                    
                 } else {
                     traverse(sub)
                 }
             }
         }
-        
         traverse(rootView)
     }
     
 // MARK: - 点击事件处理
+    @objc func addTap(_ notification: Notification) {
+        let dict = notification.object as! [String:Any]
+        let sticker:EditableStickerView = dict["sticker"] as! EditableStickerView
+        sticker.stickerModel = StickerManager.shared.modelMap[sticker.id]
+        let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
+        sticker.addGestureRecognizer(tap)
+        sticker.isUserInteractionEnabled = true
+        let selectedImage: UIImage = sticker.stickerModel?.stickerImage ?? UIImage(named: "imageSticker")!
+        sticker.updateImage(selectedImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
+    }
+    
     @objc func stickerTapped(_ sender: UITapGestureRecognizer) {
         guard let stickerView = sender.view as? ZLImageStickerView else { return }
         currentStickerView = stickerView
@@ -88,7 +95,7 @@ final class StickerManager: NSObject {
         }
     }
 }
-
+/// 选择照片
 extension StickerManager: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)

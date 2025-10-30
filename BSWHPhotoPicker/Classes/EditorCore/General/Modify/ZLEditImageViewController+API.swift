@@ -163,7 +163,7 @@ extension ZLEditImageViewController {
     }
 
     public func addImageSticker01(state: ImageStickerModel) -> EditableStickerView {
-        let imageSticker = EditableStickerView(image: UIImage(named: state.image)!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX, y: state.originFrameY, width: state.originFrameWidth, height: state.originFrameHeight),isBgImage: state.isBgImage)
+        let imageSticker = EditableStickerView(image: UIImage(named: state.image)!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX.w, y: state.originFrameY.h, width: state.originFrameWidth.w, height: state.originFrameHeight.h),isBgImage: state.isBgImage)
         addSticker(imageSticker)
         view.layoutIfNeeded()
         editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
@@ -390,6 +390,7 @@ public class EditableStickerView: ZLImageStickerView {
         case .began:
             panStartTouchPoint = currentPoint
             setOperation(true)
+            resizeButton.isHidden = false
         case .changed:
             gesTranslationPoint = CGPoint(x: dx, y: dy)
             updateTransform01()
@@ -413,7 +414,7 @@ public class EditableStickerView: ZLImageStickerView {
         case .began:
             initialTouchPoint = touchPoint
             setOperation(true)
-            print("-----1-----")
+            resizeButton.isHidden = false
         case .changed:
             let dx = touchPoint.x - centerInOverlay.x
             let dy = touchPoint.y - centerInOverlay.y
@@ -431,16 +432,13 @@ public class EditableStickerView: ZLImageStickerView {
             gesScale = scale
             gesRotation = rotation
             updateTransform()
-            print("-----2-----")
         case .ended, .cancelled:
             originScale *= gesScale
             originAngle += gesRotation
             gesScale = 1
-//            gesRotation = 0
             gesRotation = originAngle
             updateTransform01()
             setOperation(false)
-            print("-----3-----")
         default: break
         }
     }
@@ -488,6 +486,7 @@ public class EditableStickerView: ZLImageStickerView {
         case .began:
             gestureScale = 1
             setOperation(true)
+            resizeButton.isHidden = false
         case .changed:
             gestureScale = gesture.scale
             gesScale = gestureScale
@@ -505,13 +504,13 @@ public class EditableStickerView: ZLImageStickerView {
         case .began:
             gestureRotation = 0
             setOperation(true)
+            resizeButton.isHidden = false
         case .changed:
             gestureRotation = gesture.rotation
             gesRotation = gestureRotation
             updateTransform()
         case .ended, .cancelled:
             originAngle += gesRotation
-//            gesRotation = 0
             gesRotation = originAngle
             setOperation(false)
         default: break

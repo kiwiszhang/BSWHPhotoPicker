@@ -53,7 +53,6 @@ class EditImageViewController: ZLEditImageViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(addTap(_:)), name: Notification.Name(rawValue: "stickerImageAddTap"), object: nil)
         view.addSubview(backButton)
         view.addSubview(nextButton)
         view.addSubview(lastButton)
@@ -99,7 +98,6 @@ class EditImageViewController: ZLEditImageViewController {
         for state in items! {
             let sticker = addImageSticker01(state: state)
             StickerManager.shared.modelMap[sticker.id] = state
-
             if state.isBgImage == true {
                 let tap = UITapGestureRecognizer(target: StickerManager.shared, action: #selector(StickerManager.shared.stickerTapped(_:)))
                 sticker.addGestureRecognizer(tap)
@@ -109,17 +107,6 @@ class EditImageViewController: ZLEditImageViewController {
         StickerManager.shared.attachTapGestures(in: view, vc: self)
     }
 
-    @objc func addTap(_ notification: Notification) {
-        let dict = notification.object as! [String:Any]
-        let sticker:EditableStickerView = dict["sticker"] as! EditableStickerView
-        sticker.stickerModel = StickerManager.shared.modelMap[sticker.id]
-        let tap = UITapGestureRecognizer(target: StickerManager.shared, action: #selector(StickerManager.shared.stickerTapped(_:)))
-        sticker.addGestureRecognizer(tap)
-        sticker.isUserInteractionEnabled = true
-        let selectedImage: UIImage = sticker.stickerModel?.stickerImage ?? UIImage(named: "imageSticker")!
-        sticker.updateImage(selectedImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
-
-    }
 
 
     @objc private func onClickNext(_ sender: UIButton) {
