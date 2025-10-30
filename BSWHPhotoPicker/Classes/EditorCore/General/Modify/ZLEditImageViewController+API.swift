@@ -254,6 +254,7 @@ public class EditableStickerView: ZLImageStickerView {
             isBgImage: state.isBgImage,
             showBorder: false
         )
+        
         self.refreshResizeButtonPosition()
     }
 
@@ -378,20 +379,6 @@ public class EditableStickerView: ZLImageStickerView {
         resizeButton.center = bottomRightInOverlay
     }
 
-    // MARK: - 更新 Transform (统一处理平移 + 旋转 + 缩放)
-    public override func updateTransform() {
-        var t = CGAffineTransform.identity
-        // 平移
-        t = t.translatedBy(x: totalTranslationPoint.x + gesTranslationPoint.x,
-                           y: totalTranslationPoint.y + gesTranslationPoint.y)
-        // 旋转
-        t = t.rotated(by: originAngle + gesRotation)
-        // 缩放
-        t = t.scaledBy(x: originScale * gesScale, y: originScale * gesScale)
-        transform = t
-        updateResizeButtonPosition()
-    }
-
     // MARK: - 平移
     @objc override func panAction(_ ges: UIPanGestureRecognizer) {
         guard gesIsEnabled else { return }
@@ -405,7 +392,7 @@ public class EditableStickerView: ZLImageStickerView {
             setOperation(true)
         case .changed:
             gesTranslationPoint = CGPoint(x: dx, y: dy)
-            updateTransform()
+            updateTransform01()
         case .ended, .cancelled:
             totalTranslationPoint.x += dx
             totalTranslationPoint.y += dy
@@ -425,8 +412,8 @@ public class EditableStickerView: ZLImageStickerView {
         switch gesture.state {
         case .began:
             initialTouchPoint = touchPoint
-//            initialTransform = transform
             setOperation(true)
+            print("-----1-----")
         case .changed:
             let dx = touchPoint.x - centerInOverlay.x
             let dy = touchPoint.y - centerInOverlay.y
@@ -444,17 +431,47 @@ public class EditableStickerView: ZLImageStickerView {
             gesScale = scale
             gesRotation = rotation
             updateTransform()
+            print("-----2-----")
         case .ended, .cancelled:
             originScale *= gesScale
             originAngle += gesRotation
             gesScale = 1
-            gesRotation = 0
-            updateTransform()
+//            gesRotation = 0
+            gesRotation = originAngle
+            updateTransform01()
             setOperation(false)
+            print("-----3-----")
         default: break
         }
     }
 
+    
+    // MARK: - 更新 Transform (统一处理平移 + 旋转 + 缩放)
+    public override func updateTransform() {
+        var t = CGAffineTransform.identity
+        // 平移
+        t = t.translatedBy(x: totalTranslationPoint.x + gesTranslationPoint.x,
+                           y: totalTranslationPoint.y + gesTranslationPoint.y)
+        // 旋转
+        t = t.rotated(by: gesRotation + originAngle)
+        // 缩放
+        t = t.scaledBy(x: originScale * gesScale, y: originScale * gesScale)
+        transform = t
+        updateResizeButtonPosition()
+    }
+    public func updateTransform01() {
+        var t = CGAffineTransform.identity
+        // 平移
+        t = t.translatedBy(x: totalTranslationPoint.x + gesTranslationPoint.x,
+                           y: totalTranslationPoint.y + gesTranslationPoint.y)
+        // 旋转
+        t = t.rotated(by: gesRotation)
+        // 缩放
+        t = t.scaledBy(x: originScale * gesScale, y: originScale * gesScale)
+        transform = t
+        updateResizeButtonPosition()
+        gesRotation = originAngle
+    }
     // MARK: - 双指旋转 + 缩放
     private func addGestureRecognizersForEditing() {
         let pinch = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
@@ -474,7 +491,7 @@ public class EditableStickerView: ZLImageStickerView {
         case .changed:
             gestureScale = gesture.scale
             gesScale = gestureScale
-            updateTransform()
+            updateTransform01()
         case .ended, .cancelled:
             originScale *= gesScale
             gesScale = 1
@@ -494,7 +511,8 @@ public class EditableStickerView: ZLImageStickerView {
             updateTransform()
         case .ended, .cancelled:
             originAngle += gesRotation
-            gesRotation = 0
+//            gesRotation = 0
+            gesRotation = originAngle
             setOperation(false)
         default: break
         }

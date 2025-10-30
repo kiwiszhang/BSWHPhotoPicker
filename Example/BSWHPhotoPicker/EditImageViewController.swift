@@ -116,7 +116,8 @@ class EditImageViewController: ZLEditImageViewController {
         let tap = UITapGestureRecognizer(target: StickerManager.shared, action: #selector(StickerManager.shared.stickerTapped(_:)))
         sticker.addGestureRecognizer(tap)
         sticker.isUserInteractionEnabled = true
-        sticker.updateImage((sticker.stickerModel?.stickerImage)!, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
+        let selectedImage: UIImage = sticker.stickerModel?.stickerImage ?? UIImage(named: "imageSticker")!
+        sticker.updateImage(selectedImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
 
     }
 

@@ -42,7 +42,6 @@ final class StickerManager: NSObject {
     func attachTapGestures(in view: UIView,vc:UIViewController) {
         controller = vc
         attachGesturesAndModels(in: view, modelMap: StickerManager.shared.modelMap)
-//        setupTapGestureForStickersPeriodically()
     }
     // ✅ 递归扫描并绑定可点击贴纸
     func attachGesturesAndModels(in rootView: UIView, modelMap: [String: ImageStickerModel]) {
@@ -62,13 +61,6 @@ final class StickerManager: NSObject {
                         stickerView.updateImage(image, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image)
                     }
                     
-                    // 2️⃣ 如果是贴纸背景，加手势
-//                    if stickerView.stickerModel?.isBgImage == true {
-//                        let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
-//                        stickerView.addGestureRecognizer(tap)
-//                        stickerView.isUserInteractionEnabled = true
-//                    }
-                    
                 } else {
                     traverse(sub)
                 }
@@ -76,13 +68,6 @@ final class StickerManager: NSObject {
         }
         
         traverse(rootView)
-    }
-
-    func setupTapGestureForStickersPeriodically() {
-        // 每次视图出现后，每隔 0.5s 检查一次贴纸状态
-        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { [weak self] _ in
-            self?.attachGesturesAndModels(in: self?.baseView ?? UIView(), modelMap: StickerManager.shared.modelMap)
-        }
     }
     
 // MARK: - 点击事件处理
