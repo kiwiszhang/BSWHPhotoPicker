@@ -144,7 +144,9 @@ class EditImageViewController: ZLEditImageViewController {
         let imageStickerAction = UIAlertAction(title: "添加图片贴纸", style: .default) { [weak self] _ in
             if let image = UIImage(named: "imageSticker") {
                 self?.switchOperation(type: .imageSticker)
-                self?.addImageSticker(image: image)
+                let state: ImageStickerModel = ImageStickerModel(image: "imageSticker",originFrame: CGRect(x: 40, y: 100, width: 120, height: 120),gesScale: 1,gesRotation: 0,isBgImage: false)
+//                self?.addImageSticker(image: image)
+                let _ = self?.addImageSticker01(state: state)
             }
         }
         

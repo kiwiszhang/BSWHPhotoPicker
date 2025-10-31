@@ -235,6 +235,40 @@ public class ImageStickerModel: Codable {
     public var stickerImage: UIImage? {
         UIImage(data: imageData ?? Data())
     }
+    
+    // MARK: - 初始化方法
+    public init(
+        image: String = "",
+        imageData: Data? = nil,
+        originScale: Double = 1.0,
+        originAngle: Double = 0.0,
+        originFrame: CGRect = .zero,
+        gesScale: Double = 1.0,
+        gesRotation: Double = 0.0,
+        overlayRect: CGRect? = nil,
+        isCircle: Bool? = nil,
+        isBgImage: Bool = false
+    ) {
+        self.image = image
+        self.imageData = imageData
+        self.originScale = originScale
+        self.originAngle = originAngle
+        self.originFrameX = originFrame.origin.x
+        self.originFrameY = originFrame.origin.y
+        self.originFrameWidth = originFrame.size.width
+        self.originFrameHeight = originFrame.size.height
+        self.gesScale = gesScale
+        self.gesRotation = gesRotation
+        self.isCircle = isCircle
+        self.isBgImage = isBgImage
+
+        if let rect = overlayRect {
+            self.overlayRectX = rect.origin.x
+            self.overlayRectY = rect.origin.y
+            self.overlayRectWidth = rect.size.width
+            self.overlayRectHeight = rect.size.height
+        }
+    }
 }
 
 
