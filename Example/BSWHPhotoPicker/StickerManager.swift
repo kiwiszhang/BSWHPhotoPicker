@@ -137,30 +137,53 @@ extension ZLImageStickerView {
         set { objc_setAssociatedObject(self, &stickerModelKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
-    func updateImage(_ newImage: UIImage,stickerModel:ImageStickerModel,withBaseImage baseImage: UIImage? = nil) {
+    func updateImage(_ newImage: UIImage, stickerModel: ImageStickerModel, withBaseImage baseImage: UIImage? = nil) {
         let finalImage: UIImage
         if let base = baseImage {
             let size = base.size
             finalImage = UIGraphicsImageRenderer(size: size).image { _ in
                 base.draw(in: CGRect(origin: .zero, size: size))
+                
                 let overlayRect = CGRect(
                     x: size.width * (stickerModel.overlayRectX ?? 0),
                     y: size.height * (stickerModel.overlayRectY ?? 0),
                     width: size.width * (stickerModel.overlayRectWidth ?? 0.8),
                     height: size.height * (stickerModel.overlayRectHeight ?? 0.8)
                 )
+                
                 let isCircle = stickerModel.isCircle ?? false
                 if isCircle {
-                    // 添加圆形裁剪区域
                     let path = UIBezierPath(ovalIn: overlayRect)
                     path.addClip()
                 }
-                newImage.draw(in: overlayRect, blendMode: .normal, alpha: 1.0)
+                
+                // ✅ 按比例绘制 newImage（不拉伸）
+                let imageSize = newImage.size
+                let rectAspect = overlayRect.width / overlayRect.height
+                let imageAspect = imageSize.width / imageSize.height
+                
+                var drawRect = overlayRect
+                if imageAspect > rectAspect {
+                    // 图片更宽，以宽为准
+                    let scale = overlayRect.width / imageSize.width
+                    let drawHeight = imageSize.height * scale
+                    let y = overlayRect.origin.y + (overlayRect.height - drawHeight) / 2
+                    drawRect = CGRect(x: overlayRect.origin.x, y: y, width: overlayRect.width, height: drawHeight)
+                } else {
+                    // 图片更高，以高为准
+                    let scale = overlayRect.height / imageSize.height
+                    let drawWidth = imageSize.width * scale
+                    let x = overlayRect.origin.x + (overlayRect.width - drawWidth) / 2
+                    drawRect = CGRect(x: x, y: overlayRect.origin.y, width: drawWidth, height: overlayRect.height)
+                }
+                
+                newImage.draw(in: drawRect, blendMode: .normal, alpha: 1.0)
             }
         } else {
             finalImage = newImage
         }
         
+        // ✅ 更新显示
         if let imageView = self.subviews.first(where: { $0 is UIImageView }) as? UIImageView {
             imageView.image = finalImage
             imageView.setNeedsDisplay()
@@ -170,5 +193,6 @@ extension ZLImageStickerView {
         self.setNeedsLayout()
         self.layoutIfNeeded()
     }
+
 }
 
