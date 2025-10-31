@@ -63,8 +63,11 @@ final class StickerManager: NSObject {
                     if let model = modelMap[uuid] {
                         stickerView.stickerModel = model
                     }
-                    if let image = stickerView.stickerModel?.stickerImage {
-                        stickerView.updateImage(image, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image)
+                    
+                    if stickerView.stickerModel?.isBgImage == true {
+                        if let image = stickerView.stickerModel?.stickerImage {
+                            stickerView.updateImage(image, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image)
+                        }
                     }
                 } else {
                     traverse(sub)
@@ -92,6 +95,8 @@ final class StickerManager: NSObject {
             let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
             sticker.addGestureRecognizer(tap)
             sticker.isUserInteractionEnabled = true
+            let selectedImage: UIImage = UIImage(named: "addImage")!
+            sticker.updateImage(selectedImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
         }
     }
 
@@ -103,7 +108,7 @@ final class StickerManager: NSObject {
         let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
         sticker.addGestureRecognizer(tap)
         sticker.isUserInteractionEnabled = true
-        let selectedImage: UIImage = sticker.stickerModel?.stickerImage ?? UIImage(named: "imageSticker")!
+        let selectedImage: UIImage = sticker.stickerModel?.stickerImage ?? UIImage(named: "addImage")!
         sticker.updateImage(selectedImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
     }
     
@@ -188,7 +193,7 @@ extension ZLImageStickerView {
                     path.addClip()
                 } else {
                     let path = UIBezierPath(rect: overlayRect)
-                    path.addClip() 
+                    path.addClip()
                 }
                 
                 let imageSize = newImage.size

@@ -233,7 +233,7 @@ public class ImageStickerModel: Codable {
 
     public var imageData: Data? = nil // 用 Data 保存图片
     public var stickerImage: UIImage? {
-        UIImage(data: imageData ?? Data())
+        UIImage(data: (imageData ?? UIImage(named: "addImage")?.pngData())!)
     }
     
     // MARK: - 初始化方法
