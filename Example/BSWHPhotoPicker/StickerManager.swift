@@ -21,7 +21,17 @@ final class StickerManager: NSObject {
     var modelMap: [String: ImageStickerModel] = [:]
 
     static let shared = StickerManager()
-    private override init() {}
+    private override init() {
+        super.init()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(duplicateSticker(_:)),
+            name: Notification.Name("duplicateSticker"),
+            object: nil
+        )
+        NotificationCenter.default.addObserver(self, selector: #selector(addTap(_:)), name: Notification.Name(rawValue: "stickerImageAddTap"), object: nil)
+    }
+
 
     // MARK: 加载本地 JSON
     func loadLocalJSON<T: Decodable>(fileName: String, type: T.Type) -> T? {
@@ -41,9 +51,6 @@ final class StickerManager: NSObject {
     func attachTapGestures(in view: UIView,vc:EditImageViewController) {
         controller = vc
         attachGesturesAndModels(in: view, modelMap: StickerManager.shared.modelMap)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(addTap(_:)), name: Notification.Name(rawValue: "stickerImageAddTap"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(duplicateSticker(_:)), name: Notification.Name(rawValue: "duplicateSticker"), object: nil)
     }
     // 递归扫描并绑定可点击贴纸
     func attachGesturesAndModels(in rootView: UIView, modelMap: [String: ImageStickerModel]) {
@@ -161,9 +168,11 @@ extension ZLImageStickerView {
     
     func updateImage(_ newImage: UIImage, stickerModel: ImageStickerModel, withBaseImage baseImage: UIImage? = nil) {
         let finalImage: UIImage
+        
         if let base = baseImage {
             let size = base.size
             finalImage = UIGraphicsImageRenderer(size: size).image { _ in
+                // 绘制底图
                 base.draw(in: CGRect(origin: .zero, size: size))
                 
                 let overlayRect = CGRect(
@@ -177,35 +186,35 @@ extension ZLImageStickerView {
                 if isCircle {
                     let path = UIBezierPath(ovalIn: overlayRect)
                     path.addClip()
+                } else {
+                    let path = UIBezierPath(rect: overlayRect)
+                    path.addClip() 
                 }
                 
-                // ✅ 按比例绘制 newImage（不拉伸）
                 let imageSize = newImage.size
                 let rectAspect = overlayRect.width / overlayRect.height
                 let imageAspect = imageSize.width / imageSize.height
                 
-                var drawRect = overlayRect
+                var drawRect = CGRect.zero
                 if imageAspect > rectAspect {
-                    // 图片更宽，以宽为准
-                    let scale = overlayRect.width / imageSize.width
-                    let drawHeight = imageSize.height * scale
-                    let y = overlayRect.origin.y + (overlayRect.height - drawHeight) / 2
-                    drawRect = CGRect(x: overlayRect.origin.x, y: y, width: overlayRect.width, height: drawHeight)
-                } else {
-                    // 图片更高，以高为准
                     let scale = overlayRect.height / imageSize.height
                     let drawWidth = imageSize.width * scale
-                    let x = overlayRect.origin.x + (overlayRect.width - drawWidth) / 2
+                    let x = overlayRect.origin.x - (drawWidth - overlayRect.width) / 2
                     drawRect = CGRect(x: x, y: overlayRect.origin.y, width: drawWidth, height: overlayRect.height)
+                } else {
+                    let scale = overlayRect.width / imageSize.width
+                    let drawHeight = imageSize.height * scale
+                    let y = overlayRect.origin.y - (drawHeight - overlayRect.height) / 2
+                    drawRect = CGRect(x: overlayRect.origin.x, y: y, width: overlayRect.width, height: drawHeight)
                 }
                 
+                // 绘制 newImage（超出 overlayRect 会被裁剪）
                 newImage.draw(in: drawRect, blendMode: .normal, alpha: 1.0)
             }
         } else {
             finalImage = newImage
         }
         
-        // ✅ 更新显示
         if let imageView = self.subviews.first(where: { $0 is UIImageView }) as? UIImageView {
             imageView.image = finalImage
             imageView.setNeedsDisplay()
@@ -215,6 +224,7 @@ extension ZLImageStickerView {
         self.setNeedsLayout()
         self.layoutIfNeeded()
     }
+
 
 }
 
