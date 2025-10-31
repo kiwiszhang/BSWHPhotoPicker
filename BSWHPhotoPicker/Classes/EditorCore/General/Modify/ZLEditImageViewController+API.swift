@@ -254,7 +254,6 @@ public class EditableStickerView: ZLImageStickerView {
             isBgImage: state.isBgImage,
             showBorder: false
         )
-        
         self.refreshResizeButtonPosition()
     }
 
@@ -310,6 +309,8 @@ public class EditableStickerView: ZLImageStickerView {
 
     private var gestureScale: CGFloat = 1
     private var gestureRotation: CGFloat = 0
+    private var isPanGes: Bool = true
+    private var isMultiTouchActive = false
 
     private var overlaySuperview: UIView? {
         var view = superview
@@ -382,6 +383,7 @@ public class EditableStickerView: ZLImageStickerView {
     // MARK: - 平移
     @objc override func panAction(_ ges: UIPanGestureRecognizer) {
         guard gesIsEnabled else { return }
+        guard !isMultiTouchActive else { return }
         let currentPoint = ges.location(in: superview)
         let dx = currentPoint.x - panStartTouchPoint.x
         let dy = currentPoint.y - panStartTouchPoint.y
@@ -393,7 +395,9 @@ public class EditableStickerView: ZLImageStickerView {
             resizeButton.isHidden = false
         case .changed:
             gesTranslationPoint = CGPoint(x: dx, y: dy)
-            updateTransform01()
+            if isPanGes {
+                updateTransform01()
+            }
         case .ended, .cancelled:
             totalTranslationPoint.x += dx
             totalTranslationPoint.y += dy
@@ -406,7 +410,8 @@ public class EditableStickerView: ZLImageStickerView {
     // MARK: - 右下按钮旋转+缩放
     @objc private func handleResizePan(_ gesture: UIPanGestureRecognizer) {
         guard let overlay = overlaySuperview else { return }
-
+        guard !isMultiTouchActive else { return }
+        
         let centerInOverlay = self.convert(CGPoint(x: bounds.midX, y: bounds.midY), to: overlay)
         let touchPoint = gesture.location(in: overlay)
 
@@ -450,10 +455,10 @@ public class EditableStickerView: ZLImageStickerView {
         // 平移
         t = t.translatedBy(x: totalTranslationPoint.x + gesTranslationPoint.x,
                            y: totalTranslationPoint.y + gesTranslationPoint.y)
-        // 旋转
-        t = t.rotated(by: gesRotation + originAngle)
         // 缩放
         t = t.scaledBy(x: originScale * gesScale, y: originScale * gesScale)
+        // 旋转
+        t = t.rotated(by: gesRotation + originAngle)
         transform = t
         updateResizeButtonPosition()
     }
@@ -470,6 +475,18 @@ public class EditableStickerView: ZLImageStickerView {
         updateResizeButtonPosition()
         gesRotation = originAngle
     }
+    public func updateTransform02() {
+        var t = CGAffineTransform.identity
+        // 平移
+        t = t.translatedBy(x: totalTranslationPoint.x,
+                           y: totalTranslationPoint.y)
+        // 旋转
+        t = t.rotated(by: gesRotation)
+        // 缩放
+        t = t.scaledBy(x: originScale * gesScale, y: originScale * gesScale)
+        transform = t
+        updateResizeButtonPosition()
+    }
     // MARK: - 双指旋转 + 缩放
     private func addGestureRecognizersForEditing() {
         let pinch = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
@@ -484,17 +501,21 @@ public class EditableStickerView: ZLImageStickerView {
     @objc private func handlePinch(_ gesture: UIPinchGestureRecognizer) {
         switch gesture.state {
         case .began:
+            isMultiTouchActive = true
             gestureScale = 1
             setOperation(true)
             resizeButton.isHidden = false
+            isPanGes = false
         case .changed:
             gestureScale = gesture.scale
             gesScale = gestureScale
-            updateTransform01()
+            updateTransform02()
         case .ended, .cancelled:
+            isMultiTouchActive = false
             originScale *= gesScale
             gesScale = 1
             setOperation(false)
+            isPanGes = true
         default: break
         }
     }
@@ -502,17 +523,21 @@ public class EditableStickerView: ZLImageStickerView {
     @objc private func handleRotation(_ gesture: UIRotationGestureRecognizer) {
         switch gesture.state {
         case .began:
+            isMultiTouchActive = true
             gestureRotation = 0
             setOperation(true)
             resizeButton.isHidden = false
+            isPanGes = false
         case .changed:
             gestureRotation = gesture.rotation
             gesRotation = gestureRotation
             updateTransform()
         case .ended, .cancelled:
+            isMultiTouchActive = false
             originAngle += gesRotation
             gesRotation = originAngle
             setOperation(false)
+            isPanGes = true
         default: break
         }
     }
