@@ -58,6 +58,8 @@ class EditImageViewController: ZLEditImageViewController {
         view.addSubview(lastButton)
         view.addSubview(menuButton)
         
+
+        
         nextButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview()
             make.bottom.equalTo(-40)
@@ -106,9 +108,6 @@ class EditImageViewController: ZLEditImageViewController {
         }
         StickerManager.shared.attachTapGestures(in: view, vc: self)
     }
-
-
-
     @objc private func onClickNext(_ sender: UIButton) {
         if canRedo {
             redoAction()

@@ -14,7 +14,7 @@ import BSWHPhotoPicker
 
 // MARK: - StickerManager
 final class StickerManager: NSObject {
-    private weak var controller: UIViewController?
+    private weak var controller: EditImageViewController?
     private weak var currentStickerView: ZLImageStickerView?
     private var baseView:UIView?
 
@@ -38,11 +38,12 @@ final class StickerManager: NSObject {
         }
     }
 
-    func attachTapGestures(in view: UIView,vc:UIViewController) {
+    func attachTapGestures(in view: UIView,vc:EditImageViewController) {
         controller = vc
         attachGesturesAndModels(in: view, modelMap: StickerManager.shared.modelMap)
         
         NotificationCenter.default.addObserver(self, selector: #selector(addTap(_:)), name: Notification.Name(rawValue: "stickerImageAddTap"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(duplicateSticker(_:)), name: Notification.Name(rawValue: "duplicateSticker"), object: nil)
     }
     // 递归扫描并绑定可点击贴纸
     func attachGesturesAndModels(in rootView: UIView, modelMap: [String: ImageStickerModel]) {
@@ -67,6 +68,27 @@ final class StickerManager: NSObject {
     }
     
 // MARK: - 点击事件处理
+    @objc func duplicateSticker(_ notification: Notification){
+        let dict = notification.object as! [String:Any]
+        let stickerOld:EditableStickerView = dict["sticker"] as! EditableStickerView
+        let stateTmp:ImageStickerModel = StickerManager.shared.modelMap[stickerOld.id]!;
+        let state = stateTmp.deepCopy()
+        state?.originFrameX = state!.originFrameX + stickerOld.totalTranslationPoint.x + 35
+        state?.originFrameY = state!.originFrameY + stickerOld.totalTranslationPoint.y + 35
+        state?.originAngle = stickerOld.originAngle
+        state?.originScale = stickerOld.originScale
+        state?.gesRotation = stickerOld.gesRotation
+        let sticker = controller!.addImageSticker01(state: state!)
+        sticker.stickerModel = state
+        StickerManager.shared.modelMap[sticker.id] = state
+        if state!.isBgImage == true {
+            let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
+            sticker.addGestureRecognizer(tap)
+            sticker.isUserInteractionEnabled = true
+        }
+    }
+
+    
     @objc func addTap(_ notification: Notification) {
         let dict = notification.object as! [String:Any]
         let sticker:EditableStickerView = dict["sticker"] as! EditableStickerView

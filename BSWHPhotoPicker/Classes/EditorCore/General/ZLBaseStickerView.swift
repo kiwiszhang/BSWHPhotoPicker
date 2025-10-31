@@ -66,9 +66,9 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     var firstLayout = true
     
-    var originScale: CGFloat
+    public var originScale: CGFloat
     
-    var originAngle: CGFloat
+    public var originAngle: CGFloat
     
     var maxGesScale: CGFloat
     
@@ -76,21 +76,21 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     var timer: Timer?
     
-    var totalTranslationPoint: CGPoint = .zero
+    public var totalTranslationPoint: CGPoint = .zero
     
     var isBgImage: Bool = false
     
     var gesTranslationPoint: CGPoint = .zero
     
-    var gesRotation: CGFloat = 0
+    public var gesRotation: CGFloat = 0
     
-    var gesScale: CGFloat = 1
+    public var gesScale: CGFloat = 1
     
     var onOperation = false
     
     var gesIsEnabled = true
     
-    var originFrame: CGRect
+    public var originFrame: CGRect
     
     lazy var tapGes = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
     

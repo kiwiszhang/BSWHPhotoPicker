@@ -163,7 +163,7 @@ extension ZLEditImageViewController {
     }
 
     public func addImageSticker01(state: ImageStickerModel) -> EditableStickerView {
-        let imageSticker = EditableStickerView(image: UIImage(named: state.image)!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX.w, y: state.originFrameY.h, width: state.originFrameWidth.w, height: state.originFrameHeight.h),isBgImage: state.isBgImage)
+        let imageSticker = EditableStickerView(image: UIImage(named: state.image)!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX.w, y: state.originFrameY.h, width: state.originFrameWidth.w, height: state.originFrameHeight.h),gesRotation: state.gesRotation,isBgImage: state.isBgImage)
         addSticker(imageSticker)
         view.layoutIfNeeded()
         editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
@@ -271,6 +271,13 @@ public class ImageStickerModel: Codable {
     }
 }
 
+ public extension ImageStickerModel {
+    func deepCopy() -> ImageStickerModel? {
+        guard let data = try? JSONEncoder().encode(self) else { return nil }
+        return try? JSONDecoder().decode(ImageStickerModel.self, from: data)
+    }
+}
+
 
 public class EditableStickerView: ZLImageStickerView {
 
@@ -320,15 +327,13 @@ public class EditableStickerView: ZLImageStickerView {
         borderView.layer.borderColor = UIColor.clear.cgColor
         if showBorder { startTimer() }
 
-        setupResizeButtonLocal()
-        setupLeftTopButtonLocal()
+        addButton()
         enableTapSelection()
     }
 
-    init(image: UIImage, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect, isBgImage: Bool) {
-        super.init(image: image, originScale: originScale, originAngle: originAngle, originFrame: originFrame, isBgImage: isBgImage)
-        setupResizeButtonLocal()
-        setupLeftTopButtonLocal()
+    init(image: UIImage, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect,gesRotation:CGFloat, isBgImage: Bool) {
+        super.init(image: image, originScale: originScale, originAngle: originAngle, originFrame: originFrame,gesRotation: gesRotation, isBgImage: isBgImage)
+        addButton()
         enableTapSelection()
     }
 
@@ -338,7 +343,8 @@ public class EditableStickerView: ZLImageStickerView {
     // MARK: - UI
     private var resizeButton: UIButton!
     private var leftTopButton: UIButton!
-
+    private var rightTopButton: UIButton!
+    
     // MARK: - Gesture / 状态
     private var initialTouchPoint: CGPoint = .zero
     private var panStartTransform: CGAffineTransform = .identity
@@ -360,12 +366,30 @@ public class EditableStickerView: ZLImageStickerView {
         didSet {
             resizeButton.isHidden = !isEditingCustom
             leftTopButton.isHidden = !isEditingCustom
-            if isEditingCustom { overlaySuperview?.bringSubviewToFront(resizeButton)
+            rightTopButton.isHidden = !isEditingCustom
+            if isEditingCustom {
+                overlaySuperview?.bringSubviewToFront(resizeButton)
                 overlaySuperview?.bringSubviewToFront(leftTopButton)
+                overlaySuperview?.bringSubviewToFront(rightTopButton)
             }
         }
     }
 
+    private func addButton() {
+        setupResizeButtonLocal()
+        setupLeftTopButtonLocal()
+        setupRightTopButtonLocal()
+    }
+    private func hiddenButton() {
+        resizeButton.isHidden = false
+        leftTopButton.isHidden = false
+        rightTopButton.isHidden = false
+    }
+    private func showButton() {
+        resizeButton.isHidden = true
+        leftTopButton.isHidden = true
+        rightTopButton.isHidden = true
+    }
     // MARK: - Setup UI
     private func setupResizeButtonLocal() {
         let size: CGFloat = 36
@@ -395,11 +419,29 @@ public class EditableStickerView: ZLImageStickerView {
         leftTopButton.addTarget(self, action: #selector(handleLeftTopButtonTap), for: .touchUpInside)
     }
 
+    private func setupRightTopButtonLocal() {
+        let size: CGFloat = 36
+        rightTopButton = UIButton(type: .custom)
+        rightTopButton.frame = CGRect(x: 0, y: 0, width: size, height: size)
+        rightTopButton.layer.cornerRadius = size / 2
+        rightTopButton.backgroundColor = UIColor.black.withAlphaComponent(0.35)
+        rightTopButton.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
+        rightTopButton.tintColor = .white
+        rightTopButton.isHidden = true
+        rightTopButton.addTarget(self, action: #selector(handleRightTopButtonTap), for: .touchUpInside)
+    }
+
+    @objc private func handleRightTopButtonTap() {
+        hideBorder()
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "duplicateSticker"), object: ["sticker":self])
+    }
+    
     @objc private func handleLeftTopButtonTap() {
         UIView.animate(withDuration: 0.2, animations: {
             self.alpha = 0
             self.leftTopButton.alpha = 0
             self.resizeButton.alpha = 0
+            self.rightTopButton.alpha = 0
         }) { _ in
             self.removeFromSuperview()
         }
@@ -437,9 +479,14 @@ public class EditableStickerView: ZLImageStickerView {
             leftTopButton.removeFromSuperview()
             overlay.addSubview(leftTopButton)
         }
+        if rightTopButton.superview != overlay {
+            rightTopButton.removeFromSuperview()
+            overlay.addSubview(rightTopButton)
+        }
         updateResizeButtonPosition()
         overlay.bringSubviewToFront(resizeButton)
         overlay.bringSubviewToFront(leftTopButton)
+        overlay.bringSubviewToFront(rightTopButton)
     }
 
     private func updateResizeButtonPosition() {
@@ -449,6 +496,9 @@ public class EditableStickerView: ZLImageStickerView {
         
         let topLeftInOverlay = self.convert(CGPoint(x: 0, y: 0), to: overlay)
         leftTopButton.center = topLeftInOverlay
+        
+        let topRightInOverlay = self.convert(CGPoint(x: bounds.width, y: 0), to: overlay)
+        rightTopButton.center = topRightInOverlay
     }
 
     // MARK: - 平移
@@ -463,8 +513,7 @@ public class EditableStickerView: ZLImageStickerView {
         case .began:
             panStartTouchPoint = currentPoint
             setOperation(true)
-            resizeButton.isHidden = false
-            leftTopButton.isHidden = false
+            hiddenButton()
         case .changed:
             gesTranslationPoint = CGPoint(x: dx, y: dy)
             if isPanGes {
@@ -491,8 +540,7 @@ public class EditableStickerView: ZLImageStickerView {
         case .began:
             initialTouchPoint = touchPoint
             setOperation(true)
-            resizeButton.isHidden = false
-            leftTopButton.isHidden = false
+            hiddenButton()
         case .changed:
             let dx = touchPoint.x - centerInOverlay.x
             let dy = touchPoint.y - centerInOverlay.y
@@ -577,8 +625,7 @@ public class EditableStickerView: ZLImageStickerView {
             isMultiTouchActive = true
             gestureScale = 1
             setOperation(true)
-            resizeButton.isHidden = false
-            leftTopButton.isHidden = false
+            hiddenButton()
             isPanGes = false
         case .changed:
             gestureScale = gesture.scale
@@ -600,8 +647,7 @@ public class EditableStickerView: ZLImageStickerView {
             isMultiTouchActive = true
             gestureRotation = 0
             setOperation(true)
-            resizeButton.isHidden = false
-            leftTopButton.isHidden = false
+            hiddenButton()
             isPanGes = false
         case .changed:
             gestureRotation = gesture.rotation
@@ -620,15 +666,13 @@ public class EditableStickerView: ZLImageStickerView {
     // MARK: - 控制边框和按钮
     @objc public override func hideBorder() {
         super.hideBorder()
-        resizeButton.isHidden = true
-        leftTopButton.isHidden = true
+        showButton()
     }
 
     public override func startTimer() {
         cleanTimer()
         borderView.layer.borderColor = UIColor.white.cgColor
-        resizeButton.isHidden = false
-        leftTopButton.isHidden = false
+        hiddenButton()
         timer = Timer.scheduledTimer(timeInterval: 2,
                                      target: ZLWeakProxy(target: self),
                                      selector: #selector(hideBorder),
@@ -645,12 +689,14 @@ public class EditableStickerView: ZLImageStickerView {
     public override func removeFromSuperview() {
         resizeButton.removeFromSuperview()
         leftTopButton.removeFromSuperview()
+        rightTopButton.removeFromSuperview()
         super.removeFromSuperview()
     }
 
     deinit {
         resizeButton.removeFromSuperview()
         leftTopButton.removeFromSuperview()
+        rightTopButton.removeFromSuperview()
     }
 
     // MARK: - UIGestureRecognizerDelegate
