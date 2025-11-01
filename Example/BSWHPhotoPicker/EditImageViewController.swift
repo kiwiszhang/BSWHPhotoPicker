@@ -93,21 +93,9 @@ class EditImageViewController: ZLEditImageViewController {
         lastButton.addTarget(self, action: #selector(onClickLast(_:)), for: .touchUpInside)
         menuButton.addTarget(self, action: #selector(onClickMenu(_:)), for: .touchUpInside)
 
-
-        
-        let items = StickerManager.shared.loadLocalJSON(fileName: jsonFiles[index], type: [ImageStickerModel].self)
-        StickerManager.shared.modelMap.removeAll()
-        for state in items! {
-            let sticker = addImageSticker01(state: state)
-            StickerManager.shared.modelMap[sticker.id] = state
-            if state.isBgImage == true {
-                let tap = UITapGestureRecognizer(target: StickerManager.shared, action: #selector(StickerManager.shared.stickerTapped(_:)))
-                sticker.addGestureRecognizer(tap)
-                sticker.isUserInteractionEnabled = true
-            }
-        }
-        StickerManager.shared.attachTapGestures(in: view, vc: self)
+        StickerManager.shared.initCurrentTemplate(jsonName: jsonFiles[index], currentVC: self)
     }
+    
     @objc private func onClickNext(_ sender: UIButton) {
         if canRedo {
             redoAction()

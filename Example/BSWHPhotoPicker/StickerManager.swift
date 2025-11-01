@@ -14,10 +14,8 @@ import BSWHPhotoPicker
 
 // MARK: - StickerManager
 final class StickerManager: NSObject {
-    private weak var controller: EditImageViewController?
+    weak var controller: EditImageViewController?
     private weak var currentStickerView: ZLImageStickerView?
-    private var baseView:UIView?
-
     var modelMap: [String: ImageStickerModel] = [:]
 
     static let shared = StickerManager()
@@ -32,6 +30,25 @@ final class StickerManager: NSObject {
         NotificationCenter.default.addObserver(self, selector: #selector(addTap(_:)), name: Notification.Name(rawValue: "stickerImageAddTap"), object: nil)
     }
 
+    /// 使用本地Json加载模版
+    func initCurrentTemplate(jsonName:String,currentVC:EditImageViewController){
+        let items = StickerManager.shared.loadLocalJSON(fileName: jsonName, type: [ImageStickerModel].self)
+        StickerManager.shared.modelMap.removeAll()
+        controller = currentVC
+        for state in items! {
+            let sticker = currentVC.addImageSticker01(state: state)
+            sticker.stickerModel = state
+            StickerManager.shared.modelMap[sticker.id] = state
+            if state.isBgImage == true {
+                let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
+                sticker.addGestureRecognizer(tap)
+                sticker.isUserInteractionEnabled = true
+                if let image = sticker.stickerModel?.stickerImage {
+                    sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
+                }
+            }
+        }
+    }
 
     // MARK: 加载本地 JSON
     func loadLocalJSON<T: Decodable>(fileName: String, type: T.Type) -> T? {
@@ -48,35 +65,6 @@ final class StickerManager: NSObject {
         }
     }
 
-    func attachTapGestures(in view: UIView,vc:EditImageViewController) {
-        controller = vc
-        attachGesturesAndModels(in: view, modelMap: StickerManager.shared.modelMap)
-    }
-    // 递归扫描并绑定可点击贴纸
-    func attachGesturesAndModels(in rootView: UIView, modelMap: [String: ImageStickerModel]) {
-        baseView = rootView
-        
-        func traverse(_ view: UIView) {
-            for sub in view.subviews {
-                if let stickerView = sub as? EditableStickerView {
-                    let uuid = stickerView.id
-                    if let model = modelMap[uuid] {
-                        stickerView.stickerModel = model
-                    }
-                    
-                    if stickerView.stickerModel?.isBgImage == true {
-                        if let image = stickerView.stickerModel?.stickerImage {
-                            stickerView.updateImage(image, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image)
-                        }
-                    }
-                } else {
-                    traverse(sub)
-                }
-            }
-        }
-        traverse(rootView)
-    }
-    
 // MARK: - 点击事件处理
     @objc func duplicateSticker(_ notification: Notification){
         let dict = notification.object as! [String:Any]
