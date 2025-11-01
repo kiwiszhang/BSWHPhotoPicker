@@ -367,6 +367,7 @@ public class EditableStickerView: ZLImageStickerView {
             resizeButton.isHidden = !isEditingCustom
             leftTopButton.isHidden = !isEditingCustom
             rightTopButton.isHidden = !isEditingCustom
+            borderView.layer.borderColor = isEditingCustom == true ?  UIColor.white.cgColor : UIColor.clear.cgColor
             if isEditingCustom {
                 overlaySuperview?.bringSubviewToFront(resizeButton)
                 overlaySuperview?.bringSubviewToFront(leftTopButton)
@@ -380,7 +381,7 @@ public class EditableStickerView: ZLImageStickerView {
         setupLeftTopButtonLocal()
         setupRightTopButtonLocal()
     }
-    private func hiddenButton() {
+    public func hiddenButton() {
         resizeButton.isHidden = false
         leftTopButton.isHidden = false
         rightTopButton.isHidden = false
@@ -455,8 +456,10 @@ public class EditableStickerView: ZLImageStickerView {
     }
 
     @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
+        setOperation(true)
         isEditingCustom.toggle()
         syncResizeButtonToOverlay()
+        setOperation(false)
     }
 
     public override func didMoveToSuperview() {

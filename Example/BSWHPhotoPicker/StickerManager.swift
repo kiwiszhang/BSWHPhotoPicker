@@ -113,19 +113,37 @@ final class StickerManager: NSObject {
     }
     
     @objc func stickerTapped(_ sender: UITapGestureRecognizer) {
-        guard let stickerView = sender.view as? ZLImageStickerView else { return }
+        guard let stickerView = sender.view as? EditableStickerView else { return }
         currentStickerView = stickerView
 
-        PHPhotoLibrary.requestAuthorization { status in
-            guard status == .authorized || status == .limited else { return }
-            DispatchQueue.main.async {
-                var config = PHPickerConfiguration(photoLibrary: .shared())
-                config.filter = .images
-                config.selectionLimit = 1
-                let picker = PHPickerViewController(configuration: config)
-                picker.delegate = self
-                self.controller?.present(picker, animated: true)
+        let size = CGSize(width: stickerView.stickerModel!.originFrameWidth, height: stickerView.stickerModel!.originFrameHeight)
+        let overlayRect = CGRect(
+            x: size.width * (stickerView.stickerModel!.overlayRectX ?? 0),
+            y: size.height * (stickerView.stickerModel!.overlayRectY ?? 0),
+            width: size.width * (stickerView.stickerModel!.overlayRectWidth ?? 0.8),
+            height: size.height * (stickerView.stickerModel!.overlayRectHeight ?? 0.8)
+        )
+        
+        let point = sender.location(in: stickerView)
+        
+        if overlayRect.contains(point) {
+            print("👉 点击在 overlay 区域内")
+            PHPhotoLibrary.requestAuthorization { status in
+                guard status == .authorized || status == .limited else { return }
+                DispatchQueue.main.async {
+                    var config = PHPickerConfiguration(photoLibrary: .shared())
+                    config.filter = .images
+                    config.selectionLimit = 1
+                    let picker = PHPickerViewController(configuration: config)
+                    picker.delegate = self
+                    self.controller?.present(picker, animated: true)
+                }
             }
+        } else {
+            print("👉 点击在 overlay 区域外")
+            stickerView.setOperation(true)
+            stickerView.isEditingCustom = !stickerView.isEditingCustom
+            stickerView.setOperation(false)
         }
     }
 }

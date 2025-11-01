@@ -224,9 +224,10 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     @objc func tapAction(_ ges: UITapGestureRecognizer) {
         guard gesIsEnabled else { return }
-        
+        setOperation(true)
         delegate?.stickerDidTap(self)
-        startTimer()
+//        startTimer()
+        setOperation(false)
     }
     
     @objc public func pinchAction(_ ges: UIPinchGestureRecognizer) {
@@ -301,7 +302,7 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         }
     }
     
-    func setOperation(_ isOn: Bool) {
+    public func setOperation(_ isOn: Bool) {
         if isOn, !onOperation {
             onOperation = true
             cleanTimer()
