@@ -71,15 +71,15 @@ final class StickerManager: NSObject {
         let stickerOld:EditableStickerView = dict["sticker"] as! EditableStickerView
         let stateTmp:ImageStickerModel = StickerManager.shared.modelMap[stickerOld.id]!;
         let state = stateTmp.deepCopy()
-        state?.originFrameX = state!.originFrameX + stickerOld.totalTranslationPoint.x + 35
-        state?.originFrameY = state!.originFrameY + stickerOld.totalTranslationPoint.y + 35
-        state?.originAngle = stickerOld.originAngle
-        state?.originScale = stickerOld.originScale
-        state?.gesRotation = stickerOld.gesRotation
-        let sticker = controller!.addImageSticker01(state: state!)
+        state.originFrameX = state.originFrameX + stickerOld.totalTranslationPoint.x + 35
+        state.originFrameY = state.originFrameY + stickerOld.totalTranslationPoint.y + 35
+        state.originAngle = stickerOld.originAngle
+        state.originScale = stickerOld.originScale
+        state.gesRotation = stickerOld.gesRotation
+        let sticker = controller!.addImageSticker01(state: state)
         sticker.stickerModel = state
         StickerManager.shared.modelMap[sticker.id] = state
-        if state!.isBgImage == true {
+        if state.isBgImage == true {
             let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
             sticker.addGestureRecognizer(tap)
             sticker.isUserInteractionEnabled = true

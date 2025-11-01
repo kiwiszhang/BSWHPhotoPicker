@@ -271,10 +271,35 @@ public class ImageStickerModel: Codable {
     }
 }
 
- public extension ImageStickerModel {
-    func deepCopy() -> ImageStickerModel? {
-        guard let data = try? JSONEncoder().encode(self) else { return nil }
-        return try? JSONDecoder().decode(ImageStickerModel.self, from: data)
+public extension ImageStickerModel {
+    func deepCopy() -> ImageStickerModel {
+        let copy = ImageStickerModel(
+            image: self.image,
+            imageData: self.imageData != nil ? Data(self.imageData!) : nil,
+            originScale: self.originScale,
+            originAngle: self.originAngle,
+            originFrame: CGRect(
+                x: self.originFrameX,
+                y: self.originFrameY,
+                width: self.originFrameWidth,
+                height: self.originFrameHeight
+            ),
+            gesScale: self.gesScale,
+            gesRotation: self.gesRotation,
+            overlayRect: {
+                if
+                    let x = self.overlayRectX,
+                    let y = self.overlayRectY,
+                    let w = self.overlayRectWidth,
+                    let h = self.overlayRectHeight {
+                    return CGRect(x: x, y: y, width: w, height: h)
+                }
+                return nil
+            }(),
+            isCircle: self.isCircle,
+            isBgImage: self.isBgImage
+        )
+        return copy
     }
 }
 
