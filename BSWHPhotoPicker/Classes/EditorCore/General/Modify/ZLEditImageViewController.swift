@@ -1378,6 +1378,7 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
         if oldState.isMember(of: ZLTextStickerState.self) {
             if let sticker = ZLBaseStickerView.initWithState(oldState) {
                 addSticker(sticker)
+                sticker.hideBorder()
             }
         }else{
             if let sticker = EditableStickerView.initWithState(oldState) {
@@ -1399,6 +1400,7 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
         if newState.isMember(of: ZLTextStickerState.self) {
             if let sticker = ZLBaseStickerView.initWithState(newState) {
                 addSticker(sticker)
+                sticker.hideBorder()
             }
         }else{
             if let sticker = EditableStickerView.initWithState(newState) {
