@@ -83,7 +83,7 @@ final class StickerManager: NSObject {
             let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
             sticker.addGestureRecognizer(tap)
             sticker.isUserInteractionEnabled = true
-            let selectedImage: UIImage = UIImage(named: "addImage")!
+            let selectedImage: UIImage = UIImage(named: (sticker.stickerModel?.bgAddImageType)!)!
             sticker.updateImage(selectedImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
         }
     }
@@ -96,7 +96,7 @@ final class StickerManager: NSObject {
         let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
         sticker.addGestureRecognizer(tap)
         sticker.isUserInteractionEnabled = true
-        let selectedImage: UIImage = sticker.stickerModel?.stickerImage ?? UIImage(named: "addImage")!
+        let selectedImage: UIImage = sticker.stickerModel?.stickerImage ?? UIImage(named: (sticker.stickerModel?.bgAddImageType)!)!
         sticker.updateImage(selectedImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
     }
     
@@ -193,12 +193,19 @@ extension ZLImageStickerView {
                     height: size.height * (stickerModel.overlayRectHeight ?? 0.8)
                 )
                 
-                let isCircle = stickerModel.isCircle ?? false
-                if isCircle {
+                let imageType = stickerModel.imageType?.rawValue
+                if imageType == "circle" {
                     let path = UIBezierPath(ovalIn: overlayRect)
                     path.addClip()
-                } else {
+                } else if imageType == "square" {
                     let path = UIBezierPath(rect: overlayRect)
+                    path.addClip()
+                } else if imageType == "rectangle" {
+                    let cornerRadius = min(overlayRect.width, overlayRect.height) * 0.1
+                    let path = UIBezierPath(roundedRect: overlayRect, cornerRadius: cornerRadius)
+                    path.addClip()
+                } else if imageType == "ellipse" {
+                    let path = UIBezierPath(ovalIn: overlayRect)
                     path.addClip()
                 }
                 

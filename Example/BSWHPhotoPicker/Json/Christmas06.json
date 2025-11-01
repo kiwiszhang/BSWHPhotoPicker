@@ -13,8 +13,9 @@
   "overlayRectY": 0.05,
   "overlayRectWidth": 0.78,
   "overlayRectHeight": 0.75,
-  "isCircle": false,
+  "imageType": "square",
   "isBgImage": true,
+  "bgAddImageType":"addGrayImage"
 },
 {
   "image": "Christmas02-sticker-bg01",
@@ -30,8 +31,9 @@
   "overlayRectY": 0.05,
   "overlayRectWidth": 0.78,
   "overlayRectHeight": 0.75,
-  "isCircle": false,
+  "imageType": "square",
   "isBgImage": true,
+  "bgAddImageType":"addGrayImage"
 },
 {
     "image": "Christmas06-sticker00",

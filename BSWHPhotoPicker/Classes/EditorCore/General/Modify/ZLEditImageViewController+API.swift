@@ -163,7 +163,7 @@ extension ZLEditImageViewController {
     }
 
     public func addImageSticker01(state: ImageStickerModel) -> EditableStickerView {
-        let imageSticker = EditableStickerView(image: UIImage(named: state.image)!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX.w, y: state.originFrameY.h, width: state.originFrameWidth.w, height: state.originFrameHeight.h),gesRotation: state.gesRotation,isBgImage: state.isBgImage)
+        let imageSticker = EditableStickerView(image: UIImage(named: state.image)!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX.w, y: state.originFrameY.h, width: state.originFrameWidth.w, height: state.originFrameHeight.h),gesRotation: state.gesRotation,isBgImage: state.isBgImage,bgAddImageType: state.isBgImage == true ? state.bgAddImageType! : "addGrayImage")
         addSticker(imageSticker)
         view.layoutIfNeeded()
         editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
@@ -212,28 +212,49 @@ extension ZLEditImageViewController {
     }
 }
 
+public enum ImageAddType:String,Codable {
+    /// 方形
+    case square = "square"
+    /// 圆形
+    case circle = "circle"
+    /// 圆角方形
+    case rectangle = "rectangle"
+    /// 椭圆
+    case ellipse = "ellipse"
+    /// 异形
+    case IrregularShape = "IrregularShape"
+}
+
 // MARK: - 模型定义
 public class ImageStickerModel: Codable {
+    /// 贴图的图片
     public var image:String = ""
+    /// 初始缩放和旋转
     public var originScale:Double = 0.0
     public var originAngle:Double = 0.0
+    /// 位置大小
     public var originFrameX:Double = 0.0
     public var originFrameY:Double = 0.0
     public var originFrameWidth:Double = 0.0
     public var originFrameHeight:Double = 0.0
+    /// 缩放和旋转
     public var gesScale:Double = 0.0
     public var gesRotation:Double = 0.0
+    /// 贴图上添加照片的照片位置大小
     public var overlayRectX:Double? = nil
     public var overlayRectY:Double? = nil
     public var overlayRectWidth:Double? = nil
     public var overlayRectHeight:Double? = nil
-    public var isCircle:Bool? = nil
-    
+    /// 添加的照片显示类型
+    public var imageType:ImageAddType? = .square
+    /// 是否是可以添加照片的贴图
     public var isBgImage:Bool = false
-
+    /// 贴图上添加照片的照片
     public var imageData: Data? = nil // 用 Data 保存图片
+    /// 可添加照片贴图中间加号图片类型
+    public var bgAddImageType: String? = "addGrayImage"
     public var stickerImage: UIImage? {
-        UIImage(data: (imageData ?? UIImage(named: "addImage")?.pngData())!)
+        UIImage(data: (imageData ?? UIImage(named: bgAddImageType!)?.pngData())!)
     }
     
     // MARK: - 初始化方法
@@ -246,8 +267,9 @@ public class ImageStickerModel: Codable {
         gesScale: Double = 1.0,
         gesRotation: Double = 0.0,
         overlayRect: CGRect? = nil,
-        isCircle: Bool? = nil,
-        isBgImage: Bool = false
+        imageType: ImageAddType? = nil,
+        isBgImage: Bool = false,
+        bgAddImageType:String = "addGrayImage"
     ) {
         self.image = image
         self.imageData = imageData
@@ -259,9 +281,9 @@ public class ImageStickerModel: Codable {
         self.originFrameHeight = originFrame.size.height
         self.gesScale = gesScale
         self.gesRotation = gesRotation
-        self.isCircle = isCircle
+        self.imageType = imageType
         self.isBgImage = isBgImage
-
+        self.bgAddImageType = bgAddImageType
         if let rect = overlayRect {
             self.overlayRectX = rect.origin.x
             self.overlayRectY = rect.origin.y
@@ -296,7 +318,7 @@ public extension ImageStickerModel {
                 }
                 return nil
             }(),
-            isCircle: self.isCircle,
+            imageType: self.imageType,
             isBgImage: self.isBgImage
         )
         return copy
@@ -334,6 +356,7 @@ public class EditableStickerView: ZLImageStickerView {
         gesRotation: CGFloat = 0,
         totalTranslationPoint: CGPoint = .zero,
         isBgImage: Bool = false,
+        bgAddImageType:String = "addGrayImage",
         showBorder: Bool = false
     ) {
         super.init(
@@ -346,6 +369,7 @@ public class EditableStickerView: ZLImageStickerView {
             gesRotation: gesRotation,
             totalTranslationPoint: totalTranslationPoint,
             isBgImage: isBgImage,
+            bgAddImageType: bgAddImageType,
             showBorder: showBorder
         )
         borderView.layer.borderWidth = borderWidth
@@ -356,8 +380,8 @@ public class EditableStickerView: ZLImageStickerView {
         enableTapSelection()
     }
 
-    init(image: UIImage, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect,gesRotation:CGFloat, isBgImage: Bool) {
-        super.init(image: image, originScale: originScale, originAngle: originAngle, originFrame: originFrame,gesRotation: gesRotation, isBgImage: isBgImage)
+    init(image: UIImage, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect,gesRotation:CGFloat, isBgImage: Bool,bgAddImageType:String) {
+        super.init(image: image, originScale: originScale, originAngle: originAngle, originFrame: originFrame,gesRotation: gesRotation, isBgImage: isBgImage,bgAddImageType:bgAddImageType)
         addButton()
         enableTapSelection()
     }

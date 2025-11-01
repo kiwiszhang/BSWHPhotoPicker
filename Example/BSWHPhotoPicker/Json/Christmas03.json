@@ -13,8 +13,9 @@
   "overlayRectY": 0.05,
   "overlayRectWidth": 0.85,
   "overlayRectHeight": 0.9,
-  "isCircle": false,
+  "imageType": "rectangle",
   "isBgImage": true,
+  "bgAddImageType":"addWhiteImage"
 },
 {
   "image": "Christmas03-sticker-bg00",
@@ -30,8 +31,9 @@
   "overlayRectY": 0.05,
   "overlayRectWidth": 0.85,
   "overlayRectHeight": 0.9,
-  "isCircle": false,
+  "imageType": "rectangle",
   "isBgImage": true,
+  "bgAddImageType":"addWhiteImage"
 },
 {
   "image": "Christmas03-sticker-bg01",
@@ -47,8 +49,9 @@
   "overlayRectY": 0.05,
   "overlayRectWidth": 0.85,
   "overlayRectHeight": 0.9,
-  "isCircle": false,
+  "imageType": "rectangle",
   "isBgImage": true,
+  "bgAddImageType":"addWhiteImage"
 },
 {
     "image": "Christmas03-sticker00",
