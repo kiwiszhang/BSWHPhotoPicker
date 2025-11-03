@@ -16,7 +16,7 @@
   "imageType": "IrregularShape",
   "imageMask": "wedding-sticker-bg00",
   "isBgImage": true,
-  "bgAddImageType":"addGrayImage"
+  "bgAddImageType":"addWhiteImage"
 },
 {
     "image": "wedding-sticker00",

@@ -201,7 +201,9 @@ extension ZLImageStickerView {
         
         // MARK: - 不规则形状
         if imageTypeRaw == "IrregularShape" {
-            if let base = UIImage(named: stickerModel.image),
+            if !stickerModel.image.isEmpty,
+               !stickerModel.imageMask!.isEmpty,
+               let base = UIImage(named: stickerModel.image),
                let frame = UIImage(named: stickerModel.imageMask!) {
                 
                 finalImage = overlayImageWithFrame(newImage, baseImage: base, frameImage: frame)
