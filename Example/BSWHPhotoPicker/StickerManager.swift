@@ -28,6 +28,7 @@ final class StickerManager: NSObject {
             object: nil
         )
         NotificationCenter.default.addObserver(self, selector: #selector(addTap(_:)), name: Notification.Name(rawValue: "stickerImageAddTap"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(duplicateTextSticker(_:)), name: Notification.Name(rawValue: "duplicateTextSticker"), object: nil)
     }
 
     /// 使用本地Json加载模版
@@ -88,6 +89,22 @@ final class StickerManager: NSObject {
         }
     }
 
+    @objc func duplicateTextSticker(_ notification: Notification) {
+        let dict = notification.object as! [String:Any]
+        let stickerOld:EditableTextStickerView = dict["sticker"] as! EditableTextStickerView
+        let newPoint = CGPoint(x: stickerOld.state.totalTranslationPoint.x + 35, y: stickerOld.state.totalTranslationPoint.y + 35)
+        let _ = controller!.addTextStickersView01(stickerOld.text,
+                                                  textColor: stickerOld.textColor,
+                                                  font: stickerOld.font ?? UIFont.systemFont(ofSize: 32),
+                                                  image: stickerOld.image,
+                                                  style: stickerOld.style,
+                                                  originFrame: stickerOld.state.originFrame,
+                                                  originScale: stickerOld.state.originScale,
+                                                  originAngle: stickerOld.state.originAngle,
+                                                  gesScale: stickerOld.state.gesScale,
+                                                  gesRotation: stickerOld.state.gesRotation,
+                                                  totalTranslationPoint: newPoint)
+    }
     
     @objc func addTap(_ notification: Notification) {
         let dict = notification.object as! [String:Any]
