@@ -178,14 +178,30 @@ extension ZLImageStickerView {
     }
     
     func updateImage(_ newImage: UIImage, stickerModel: ImageStickerModel, withBaseImage baseImage: UIImage? = nil) {
-        let finalImage: UIImage
         
-        if let base = baseImage {
+        let imageTypeRaw = stickerModel.imageType?.rawValue
+        var finalImage: UIImage?
+        
+        // MARK: - 不规则形状
+        if imageTypeRaw == "IrregularShape" {
+            if let base = UIImage(named: stickerModel.image),
+               let frame = UIImage(named: stickerModel.imageMask!) {
+                
+                finalImage = overlayImageWithFrame(newImage, baseImage: base, frameImage: frame)
+            }
+        } else {
+            // MARK: - 常规形状
+            guard let base = baseImage else {
+                finalImage = newImage
+                return
+            }
+            
             let size = base.size
             finalImage = UIGraphicsImageRenderer(size: size).image { _ in
                 // 绘制底图
                 base.draw(in: CGRect(origin: .zero, size: size))
                 
+                // overlayRect
                 let overlayRect = CGRect(
                     x: size.width * (stickerModel.overlayRectX ?? 0),
                     y: size.height * (stickerModel.overlayRectY ?? 0),
@@ -193,27 +209,28 @@ extension ZLImageStickerView {
                     height: size.height * (stickerModel.overlayRectHeight ?? 0.8)
                 )
                 
-                let imageType = stickerModel.imageType?.rawValue
-                if imageType == "circle" {
-                    let path = UIBezierPath(ovalIn: overlayRect)
-                    path.addClip()
-                } else if imageType == "square" {
-                    let path = UIBezierPath(rect: overlayRect)
-                    path.addClip()
-                } else if imageType == "rectangle" {
-                    let cornerRadius = min(overlayRect.width, overlayRect.height) * 0.1
-                    let path = UIBezierPath(roundedRect: overlayRect, cornerRadius: cornerRadius)
-                    path.addClip()
-                } else if imageType == "ellipse" {
-                    let path = UIBezierPath(ovalIn: overlayRect)
-                    path.addClip()
-                }
+                // 裁剪路径
+                let path: UIBezierPath = {
+                    switch imageTypeRaw {
+                    case "circle", "ellipse":
+                        return UIBezierPath(ovalIn: overlayRect)
+                    case "square":
+                        return UIBezierPath(rect: overlayRect)
+                    case "rectangle":
+                        let cornerRadius = min(overlayRect.width, overlayRect.height) * 0.1
+                        return UIBezierPath(roundedRect: overlayRect, cornerRadius: cornerRadius)
+                    default:
+                        return UIBezierPath(rect: overlayRect)
+                    }
+                }()
+                path.addClip()
                 
+                // 计算绘制区域，保持比例填充 overlayRect
                 let imageSize = newImage.size
                 let rectAspect = overlayRect.width / overlayRect.height
                 let imageAspect = imageSize.width / imageSize.height
                 
-                var drawRect = CGRect.zero
+                let drawRect: CGRect
                 if imageAspect > rectAspect {
                     let scale = overlayRect.height / imageSize.height
                     let drawWidth = imageSize.width * scale
@@ -226,22 +243,98 @@ extension ZLImageStickerView {
                     drawRect = CGRect(x: overlayRect.origin.x, y: y, width: overlayRect.width, height: drawHeight)
                 }
                 
-                // 绘制 newImage（超出 overlayRect 会被裁剪）
+                // 绘制 newImage
                 newImage.draw(in: drawRect, blendMode: .normal, alpha: 1.0)
             }
-        } else {
-            finalImage = newImage
         }
         
-        if let imageView = self.subviews.first(where: { $0 is UIImageView }) as? UIImageView {
+        // MARK: - 更新 UIImageView 或 self.image
+        if let imageView = self.subviews.compactMap({ $0 as? UIImageView }).first {
             imageView.image = finalImage
             imageView.setNeedsDisplay()
-        } else {
+        } else if let finalImage = finalImage {
             self.image = finalImage
         }
+        
         self.setNeedsLayout()
         self.layoutIfNeeded()
     }
+
+    
+    func overlayImageWithFrame(_ newImage: UIImage, baseImage: UIImage, frameImage: UIImage) -> UIImage {
+    let size = baseImage.size
+    
+    guard let baseCG = baseImage.cgImage else { return baseImage }
+    
+    // 1. 生成二值化 alpha mask（反转并翻转上下，使 mask 与 UIKit 坐标系对齐）
+    let width = baseCG.width
+    let height = baseCG.height
+    let bitsPerComponent = 8
+    let bytesPerRow = width
+    var alphaData = [UInt8](repeating: 0, count: width * height)
+    
+    let colorSpace = CGColorSpaceCreateDeviceGray()
+    guard let context = CGContext(data: &alphaData,
+                                  width: width,
+                                  height: height,
+                                  bitsPerComponent: bitsPerComponent,
+                                  bytesPerRow: bytesPerRow,
+                                  space: colorSpace,
+                                  bitmapInfo: 0) else { return baseImage }
+    
+    // 绘制 baseCG 到灰度 context
+    context.draw(baseCG, in: CGRect(x: 0, y: 0, width: width, height: height))
+    
+    // 二值化 alpha 并上下翻转 alphaData
+    var flippedAlpha = [UInt8](repeating: 0, count: width * height)
+    for y in 0..<height {
+        for x in 0..<width {
+            let index = y * width + x
+            let flippedIndex = (height - 1 - y) * width + x
+            // alpha > 0 -> 0 可绘制，alpha = 0 -> 255 不可绘制
+            flippedAlpha[flippedIndex] = alphaData[index] > 0 ? 0 : 255
+        }
+    }
+    
+    // 生成 mask
+    guard let maskProvider = CGDataProvider(data: NSData(bytes: &flippedAlpha, length: flippedAlpha.count)) else { return baseImage }
+    guard let mask = CGImage(maskWidth: width,
+                             height: height,
+                             bitsPerComponent: bitsPerComponent,
+                             bitsPerPixel: bitsPerComponent,
+                             bytesPerRow: bytesPerRow,
+                             provider: maskProvider,
+                             decode: nil,
+                             shouldInterpolate: false) else { return baseImage }
+    
+    // 2. 使用 UIGraphicsImageRenderer 绘制
+    return UIGraphicsImageRenderer(size: size).image { ctx in
+        let cgContext = ctx.cgContext
+        
+        // 绘制底图
+        baseImage.draw(in: CGRect(origin: .zero, size: size))
+        
+        // 使用 mask 绘制 newImage（坐标系正常，不翻转）
+        cgContext.saveGState()
+        cgContext.clip(to: CGRect(origin: .zero, size: size), mask: mask)
+        
+        // 缩放 newImage 填充整个区域
+        let scaleW = size.width / newImage.size.width
+        let scaleH = size.height / newImage.size.height
+        let scale = max(scaleW, scaleH)
+        let newWidth = newImage.size.width * scale
+        let newHeight = newImage.size.height * scale
+        let originX = (size.width - newWidth) / 2
+        let originY = (size.height - newHeight) / 2
+        let imageRect = CGRect(x: originX, y: originY, width: newWidth, height: newHeight)
+        
+        newImage.draw(in: imageRect)
+        cgContext.restoreGState()
+        
+        // 叠加金框
+        frameImage.draw(in: CGRect(origin: .zero, size: size))
+    }
+}
 
 
 }

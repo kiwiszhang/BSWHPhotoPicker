@@ -12,7 +12,7 @@ import SnapKit
 import PhotosUI
 
 class EditImageViewController: ZLEditImageViewController {
-    private let jsonFiles:[String] = ["Christmas00","Christmas01","Christmas02","Christmas03","Christmas04","Christmas05","Christmas06"]
+    private let jsonFiles:[String] = ["Christmas00","Christmas01","Christmas02","Christmas03","Christmas04","Christmas05","Christmas06","Wedding00"]
 
     var index = 0
     

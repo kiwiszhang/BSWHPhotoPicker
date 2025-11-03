@@ -16,9 +16,9 @@ import BSWHPhotoPicker
 class ViewController: UIViewController {
 
     private var collectionView: UICollectionView!
-    private let items:[UIImage] = [UIImage(named: "1")!,UIImage(named: "2")!,UIImage(named: "3")!,UIImage(named: "4")!,UIImage(named: "5")!,UIImage(named: "6")!,UIImage(named: "7")!]
-    private let itemsImages:[UIImage] = [UIImage(named: "Christmas00-bg")!,UIImage(named: "Christmas01-bg")!,UIImage(named: "Christmas02-bg")!,UIImage(named: "Christmas03-bg")!,UIImage(named: "Christmas04-bg")!,UIImage(named: "Christmas05-bg")!,UIImage(named: "Christmas06-bg")!]
-    private let jsonFiles:[String] = ["Christmas00","Christmas01","Christmas02","Christmas03","Christmas04","Christmas05","Christmas06"]
+    private let items:[UIImage] = [UIImage(named: "1")!,UIImage(named: "2")!,UIImage(named: "3")!,UIImage(named: "4")!,UIImage(named: "5")!,UIImage(named: "6")!,UIImage(named: "7")!,UIImage(named: "8")!]
+    private let itemsImages:[UIImage] = [UIImage(named: "Christmas00-bg")!,UIImage(named: "Christmas01-bg")!,UIImage(named: "Christmas02-bg")!,UIImage(named: "Christmas03-bg")!,UIImage(named: "Christmas04-bg")!,UIImage(named: "Christmas05-bg")!,UIImage(named: "Christmas06-bg")!,UIImage(named: "wedding01-bg")!]
+    private let jsonFiles:[String] = ["Christmas00","Christmas01","Christmas02","Christmas03","Christmas04","Christmas05","Christmas06","Wedding00"]
 
     
     private lazy var imageSticker:ZLImageStickerState = ZLImageStickerState(

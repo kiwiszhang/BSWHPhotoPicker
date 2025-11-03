@@ -247,6 +247,8 @@ public class ImageStickerModel: Codable {
     public var overlayRectHeight:Double? = nil
     /// 添加的照片显示类型
     public var imageType:ImageAddType? = .square
+    /// 异形显示的遮罩图片
+    public var imageMask:String? = "addGrayImage"
     /// 是否是可以添加照片的贴图
     public var isBgImage:Bool = false
     /// 贴图上添加照片的照片
