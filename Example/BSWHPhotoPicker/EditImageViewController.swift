@@ -133,7 +133,9 @@ class EditImageViewController: ZLEditImageViewController {
                 self?.switchOperation(type: .imageSticker)
                 let state: ImageStickerModel = ImageStickerModel(image: "imageSticker",originFrame: CGRect(x: 40, y: 100, width: 120, height: 120),gesScale: 1,gesRotation: 0,isBgImage: false)
 //                self?.addImageSticker(image: image)
-                let _ = self?.addImageSticker01(state: state)
+                let sticker = self?.addImageSticker01(state: state)
+                sticker!.stickerModel = state
+                StickerManager.shared.modelMap[sticker!.id] = state
             }
         }
         

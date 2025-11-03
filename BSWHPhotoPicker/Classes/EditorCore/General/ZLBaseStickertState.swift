@@ -29,12 +29,12 @@ import UIKit
 public class ZLBaseStickertState: NSObject {
     let id: String
     let image: UIImage
-    let originScale: CGFloat
-    let originAngle: CGFloat
-    let originFrame: CGRect
-    let gesScale: CGFloat
-    let gesRotation: CGFloat
-    let totalTranslationPoint: CGPoint
+    public var originScale: CGFloat
+    public var originAngle: CGFloat
+    public var originFrame: CGRect
+    public var gesScale: CGFloat
+    public var gesRotation: CGFloat
+    public var totalTranslationPoint: CGPoint
     var isBgImage:Bool
     var bgAddImageType:String
     public init(

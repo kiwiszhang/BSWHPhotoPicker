@@ -26,7 +26,7 @@
 
 import UIKit
 
-class ZLTextStickerView: ZLBaseStickerView {
+public class ZLTextStickerView: ZLBaseStickerView {
     static let fontSize: CGFloat = 32
     
     private static let edgeInset: CGFloat = 10
@@ -38,22 +38,22 @@ class ZLTextStickerView: ZLBaseStickerView {
         return view
     }()
     
-    var text: String
+    public var text: String
     
-    var textColor: UIColor
+    public var textColor: UIColor
 
-    var font: UIFont?
+    public var font: UIFont?
     
-    var style: ZLInputTextStyle
+    public var style: ZLInputTextStyle
     
-    var image: UIImage {
+    public var image: UIImage {
         didSet {
             imageView.image = image
         }
     }
     
     // Convert all states to model.
-    override var state: ZLTextStickerState {
+    public override var state: ZLTextStickerState {
         return ZLTextStickerState(
             id: id,
             text: text,
@@ -140,11 +140,11 @@ class ZLTextStickerView: ZLBaseStickerView {
     override func tapAction(_ ges: UITapGestureRecognizer) {
         guard gesIsEnabled else { return }
         
-        if let timer = timer, timer.isValid {
-            delegate?.sticker(self, editText: text)
-        } else {
+//        if let timer = timer, timer.isValid {
+//            delegate?.sticker(self, editText: text)
+//        } else {
             super.tapAction(ges)
-        }
+//        }
     }
     
     func changeSize(to newSize: CGSize) {

@@ -915,14 +915,39 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     /// Add text sticker
-    func addTextStickersView(_ text: String, textColor: UIColor, font: UIFont, image: UIImage?, style: ZLInputTextStyle) {
+    public func addTextStickersView01(_ text: String, textColor: UIColor, font: UIFont, image: UIImage?, style: ZLInputTextStyle,originFrame:CGRect,originScale:CGFloat,originAngle:CGFloat,gesScale:CGFloat,gesRotation:CGFloat,totalTranslationPoint:CGPoint) {
         guard !text.isEmpty, let image = image else { return }
         
         let scale = mainScrollView.zoomScale
-        let size = ZLTextStickerView.calculateSize(image: image)
+        let size = EditableTextStickerView.calculateSize(image: image)
         let originFrame = getStickerOriginFrame(size)
         
-        let textSticker = ZLTextStickerView(
+        let textSticker = EditableTextStickerView(
+            text: text,
+            textColor: textColor,
+            font: font,
+            style: style,
+            image: image,
+            originScale: originScale,
+            originAngle: originAngle,
+            originFrame: originFrame,
+            gesScale: gesScale,
+            gesRotation: gesRotation,
+            totalTranslationPoint: totalTranslationPoint
+        )
+        addSticker(textSticker)
+        
+        editorManager.storeAction(.sticker(oldState: nil, newState: textSticker.state))
+    }
+    /// Add text sticker
+    public func addTextStickersView(_ text: String, textColor: UIColor, font: UIFont, image: UIImage?, style: ZLInputTextStyle) {
+        guard !text.isEmpty, let image = image else { return }
+        
+        let scale = mainScrollView.zoomScale
+        let size = EditableTextStickerView.calculateSize(image: image)
+        let originFrame = getStickerOriginFrame(size)
+        
+        let textSticker = EditableTextStickerView(
             text: text,
             textColor: textColor,
             font: font,
@@ -1376,8 +1401,10 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
         
         removeSticker(id: oldState.id)
         if oldState.isMember(of: ZLTextStickerState.self) {
-            if let sticker = ZLBaseStickerView.initWithState(oldState) {
+            if let sticker = EditableTextStickerView.initWithState(oldState) as? EditableTextStickerView {
                 addSticker(sticker)
+                sticker.enableTapSelection()
+                sticker.hideBorder()
             }
         }else{
             if let sticker = EditableStickerView.initWithState(oldState) {
@@ -1397,8 +1424,10 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
         
         removeSticker(id: newState.id)
         if newState.isMember(of: ZLTextStickerState.self) {
-            if let sticker = ZLBaseStickerView.initWithState(newState) {
+            if let sticker = EditableTextStickerView.initWithState(newState) as? EditableTextStickerView {
                 addSticker(sticker)
+                sticker.enableTapSelection()
+                sticker.hideBorder()
             }
         }else{
             if let sticker = EditableStickerView.initWithState(newState) {
