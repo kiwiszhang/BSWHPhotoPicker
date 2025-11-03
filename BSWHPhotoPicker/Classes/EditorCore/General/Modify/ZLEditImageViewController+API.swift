@@ -964,7 +964,7 @@ public class EditableTextStickerView: ZLTextStickerView {
         case .began:
             panStartTouchPoint = currentPoint
             setOperation(true)
-//            hiddenButton()
+            showButtons()
         case .changed:
             gesTranslationPoint = CGPoint(x: dx, y: dy)
             if isPanGes {
@@ -1124,7 +1124,19 @@ public class EditableTextStickerView: ZLTextStickerView {
     
     public override func hideBorder() {
         super.hideBorder()
+        hiddenButtons()
+    }
+    
+    public override func startTimer() {
+        cleanTimer()
+        borderView.layer.borderColor = UIColor.white.cgColor
         showButtons()
+        timer = Timer.scheduledTimer(timeInterval: 2,
+                                     target: ZLWeakProxy(target: self),
+                                     selector: #selector(hideBorder),
+                                     userInfo: nil,
+                                     repeats: false)
+        RunLoop.current.add(timer!, forMode: .common)
     }
     
     public override func removeFromSuperview() {
