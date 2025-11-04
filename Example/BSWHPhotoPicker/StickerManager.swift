@@ -282,80 +282,67 @@ extension ZLImageStickerView {
 
     
     func overlayImageWithFrame(_ newImage: UIImage, baseImage: UIImage, frameImage: UIImage) -> UIImage {
-    let size = baseImage.size
-    
-    guard let baseCG = baseImage.cgImage else { return baseImage }
-    
-    // 1. 生成二值化 alpha mask（反转并翻转上下，使 mask 与 UIKit 坐标系对齐）
-    let width = baseCG.width
-    let height = baseCG.height
-    let bitsPerComponent = 8
-    let bytesPerRow = width
-    var alphaData = [UInt8](repeating: 0, count: width * height)
-    
-    let colorSpace = CGColorSpaceCreateDeviceGray()
-    guard let context = CGContext(data: &alphaData,
-                                  width: width,
-                                  height: height,
-                                  bitsPerComponent: bitsPerComponent,
-                                  bytesPerRow: bytesPerRow,
-                                  space: colorSpace,
-                                  bitmapInfo: 0) else { return baseImage }
-    
-    // 绘制 baseCG 到灰度 context
-    context.draw(baseCG, in: CGRect(x: 0, y: 0, width: width, height: height))
-    
-    // 二值化 alpha 并上下翻转 alphaData
-    var flippedAlpha = [UInt8](repeating: 0, count: width * height)
-    for y in 0..<height {
-        for x in 0..<width {
-            let index = y * width + x
-            let flippedIndex = (height - 1 - y) * width + x
-            // alpha > 0 -> 0 可绘制，alpha = 0 -> 255 不可绘制
-            flippedAlpha[flippedIndex] = alphaData[index] > 0 ? 0 : 255
+        let size = baseImage.size
+        
+        guard let baseCG = baseImage.cgImage else { return baseImage }
+        
+        let width = baseCG.width
+        let height = baseCG.height
+        let bitsPerComponent = 8
+        let bytesPerRow = width
+        var alphaData = [UInt8](repeating: 0, count: width * height)
+        
+        let colorSpace = CGColorSpaceCreateDeviceGray()
+        guard let context = CGContext(data: &alphaData,
+                                      width: width,
+                                      height: height,
+                                      bitsPerComponent: bitsPerComponent,
+                                      bytesPerRow: bytesPerRow,
+                                      space: colorSpace,
+                                      bitmapInfo: 0) else { return baseImage }
+        context.draw(baseCG, in: CGRect(x: 0, y: 0, width: width, height: height))
+        
+        var flippedAlpha = [UInt8](repeating: 0, count: width * height)
+        for y in 0..<height {
+            for x in 0..<width {
+                let index = y * width + x
+                let flippedIndex = (height - 1 - y) * width + x
+                flippedAlpha[flippedIndex] = alphaData[index] > 0 ? 0 : 255
+            }
+        }
+        
+        guard let maskProvider = CGDataProvider(data: NSData(bytes: &flippedAlpha, length: flippedAlpha.count)) else { return baseImage }
+        guard let mask = CGImage(maskWidth: width,
+                                 height: height,
+                                 bitsPerComponent: bitsPerComponent,
+                                 bitsPerPixel: bitsPerComponent,
+                                 bytesPerRow: bytesPerRow,
+                                 provider: maskProvider,
+                                 decode: nil,
+                                 shouldInterpolate: false) else { return baseImage }
+        
+        return UIGraphicsImageRenderer(size: size).image { ctx in
+            let cgContext = ctx.cgContext
+            
+            baseImage.draw(in: CGRect(origin: .zero, size: size))
+            
+            cgContext.saveGState()
+            cgContext.clip(to: CGRect(origin: .zero, size: size), mask: mask)
+            
+            let scaleW = size.width / newImage.size.width
+            let scaleH = size.height / newImage.size.height
+            let scale = max(scaleW, scaleH)
+            let newWidth = newImage.size.width * scale
+            let newHeight = newImage.size.height * scale
+            let originX = (size.width - newWidth) / 2
+            let originY = (size.height - newHeight) / 2
+            let imageRect = CGRect(x: originX, y: originY, width: newWidth, height: newHeight)
+            
+            newImage.draw(in: imageRect)
+            cgContext.restoreGState()
+            
+            frameImage.draw(in: CGRect(origin: .zero, size: size))
         }
     }
-    
-    // 生成 mask
-    guard let maskProvider = CGDataProvider(data: NSData(bytes: &flippedAlpha, length: flippedAlpha.count)) else { return baseImage }
-    guard let mask = CGImage(maskWidth: width,
-                             height: height,
-                             bitsPerComponent: bitsPerComponent,
-                             bitsPerPixel: bitsPerComponent,
-                             bytesPerRow: bytesPerRow,
-                             provider: maskProvider,
-                             decode: nil,
-                             shouldInterpolate: false) else { return baseImage }
-    
-    // 2. 使用 UIGraphicsImageRenderer 绘制
-    return UIGraphicsImageRenderer(size: size).image { ctx in
-        let cgContext = ctx.cgContext
-        
-        // 绘制底图
-        baseImage.draw(in: CGRect(origin: .zero, size: size))
-        
-        // 使用 mask 绘制 newImage（坐标系正常，不翻转）
-        cgContext.saveGState()
-        cgContext.clip(to: CGRect(origin: .zero, size: size), mask: mask)
-        
-        // 缩放 newImage 填充整个区域
-        let scaleW = size.width / newImage.size.width
-        let scaleH = size.height / newImage.size.height
-        let scale = max(scaleW, scaleH)
-        let newWidth = newImage.size.width * scale
-        let newHeight = newImage.size.height * scale
-        let originX = (size.width - newWidth) / 2
-        let originY = (size.height - newHeight) / 2
-        let imageRect = CGRect(x: originX, y: originY, width: newWidth, height: newHeight)
-        
-        newImage.draw(in: imageRect)
-        cgContext.restoreGState()
-        
-        // 叠加金框
-        frameImage.draw(in: CGRect(origin: .zero, size: size))
-    }
-}
-
-
 }
 
