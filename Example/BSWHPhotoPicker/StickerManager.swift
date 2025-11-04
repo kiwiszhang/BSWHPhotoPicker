@@ -77,6 +77,7 @@ final class StickerManager: NSObject {
         state.originAngle = stickerOld.originAngle
         state.originScale = stickerOld.originScale
         state.gesRotation = stickerOld.gesRotation
+        state.imageMask = stickerOld.imageMask
         let sticker = controller!.addImageSticker01(state: state)
         sticker.stickerModel = state
         StickerManager.shared.modelMap[sticker.id] = state

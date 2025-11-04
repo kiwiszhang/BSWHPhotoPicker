@@ -163,7 +163,7 @@ extension ZLEditImageViewController {
     }
 
     public func addImageSticker01(state: ImageStickerModel) -> EditableStickerView {
-        let imageSticker = EditableStickerView(image: UIImage(named: state.image)!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX.w, y: state.originFrameY.h, width: state.originFrameWidth.w, height: state.originFrameHeight.h),gesRotation: state.gesRotation,isBgImage: state.isBgImage,bgAddImageType: state.isBgImage == true ? state.bgAddImageType! : "addGrayImage")
+        let imageSticker = EditableStickerView(image: UIImage(named: state.image)!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX.w, y: state.originFrameY.h, width: state.originFrameWidth.w, height: state.originFrameHeight.h),gesRotation: state.gesRotation,isBgImage: state.isBgImage,bgAddImageType: state.isBgImage == true ? state.bgAddImageType! : "addGrayImage",imageMask: state.imageMask ?? "")
         addSticker(imageSticker)
         view.layoutIfNeeded()
         editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
@@ -248,7 +248,7 @@ public class ImageStickerModel: Codable {
     /// 添加的照片显示类型
     public var imageType:ImageAddType? = .square
     /// 异形显示的遮罩图片
-    public var imageMask:String? = "addGrayImage"
+    public var imageMask:String? = ""
     /// 是否是可以添加照片的贴图
     public var isBgImage:Bool = false
     /// 贴图上添加照片的照片
@@ -342,6 +342,7 @@ public class EditableStickerView: ZLImageStickerView {
             gesRotation: state.gesRotation,
             totalTranslationPoint: state.totalTranslationPoint,
             isBgImage: state.isBgImage,
+            imageMask: state.imageMask,
             showBorder: false
         )
         self.refreshResizeButtonPosition()
@@ -359,7 +360,9 @@ public class EditableStickerView: ZLImageStickerView {
         totalTranslationPoint: CGPoint = .zero,
         isBgImage: Bool = false,
         bgAddImageType:String = "addGrayImage",
+        imageMask:String = "",
         showBorder: Bool = false
+        
     ) {
         super.init(
             id: id,
@@ -372,6 +375,7 @@ public class EditableStickerView: ZLImageStickerView {
             totalTranslationPoint: totalTranslationPoint,
             isBgImage: isBgImage,
             bgAddImageType: bgAddImageType,
+            imageMask: imageMask,
             showBorder: showBorder
         )
         borderView.layer.borderWidth = borderWidth
@@ -382,8 +386,8 @@ public class EditableStickerView: ZLImageStickerView {
         enableTapSelection()
     }
 
-    init(image: UIImage, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect,gesRotation:CGFloat, isBgImage: Bool,bgAddImageType:String) {
-        super.init(image: image, originScale: originScale, originAngle: originAngle, originFrame: originFrame,gesRotation: gesRotation, isBgImage: isBgImage,bgAddImageType:bgAddImageType)
+    init(image: UIImage, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect,gesRotation:CGFloat, isBgImage: Bool,bgAddImageType:String,imageMask:String) {
+        super.init(image: image, originScale: originScale, originAngle: originAngle, originFrame: originFrame,gesRotation: gesRotation, isBgImage: isBgImage,bgAddImageType:bgAddImageType,imageMask: imageMask)
         addButton()
         enableTapSelection()
     }

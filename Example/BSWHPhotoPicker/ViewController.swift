@@ -31,7 +31,8 @@ class ViewController: UIViewController {
         gesRotation: 0,
         totalTranslationPoint: .zero,
         isBgImage: false,
-        bgAddImageType: "addGrayImage"
+        bgAddImageType: "addGrayImage",
+        imageMask: ""
     )
     
     private lazy var textSticker: ZLTextStickerState = {
@@ -66,7 +67,8 @@ class ViewController: UIViewController {
             gesRotation: 0,
             totalTranslationPoint: .zero,
             isBgImage: false,
-            bgAddImageType: "addGrayImage"
+            bgAddImageType: "addGrayImage",
+            imageMask: ""
         )
     }()
 
