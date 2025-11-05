@@ -1,6 +1,6 @@
 [
 {
-  "image": "Christmas02-sticker-bg01",
+  "imageName": "Christmas02-sticker-bg01",
   "originScale": 1,
   "originAngle": 0,
   "originFrameX": 51,
@@ -18,7 +18,7 @@
   "bgAddImageType":"addGrayImage"
 },
 {
-  "image": "Christmas02-sticker-bg01",
+  "imageName": "Christmas02-sticker-bg01",
   "originScale": 1,
   "originAngle": 0,
   "originFrameX": 172,
@@ -36,7 +36,7 @@
   "bgAddImageType":"addGrayImage"
 },
 {
-  "image": "Christmas01-sticker-bg01",
+  "imageName": "Christmas01-sticker-bg01",
   "originScale": 1,
   "originAngle": 0,
   "originFrameX": 21,
@@ -54,7 +54,7 @@
   "bgAddImageType":"addGrayImage"
 },
 {
-    "image": "Christmas04-sticker00",
+    "imageName": "Christmas04-sticker00",
     "originScale": 1,
     "originAngle": 0,
     "originFrameX": 178,

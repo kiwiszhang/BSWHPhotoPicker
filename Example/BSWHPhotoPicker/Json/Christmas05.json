@@ -1,6 +1,6 @@
 [
 {
-  "image": "Christmas05-sticker-bg00",
+  "imageName": "Christmas05-sticker-bg00",
   "originScale": 1,
   "originAngle": 0,
   "originFrameX": 103,
@@ -18,7 +18,7 @@
   "bgAddImageType":"addGrayImage"
 },
 {
-    "image": "Christmas05-sticker04",
+    "imageName": "Christmas05-sticker04",
     "originScale": 1,
     "originAngle": 0,
     "originFrameX": 182,
@@ -30,7 +30,7 @@
     "isBgImage": false,
   },
 {
-  "image": "Christmas05-sticker-bg01",
+  "imageName": "Christmas05-sticker-bg01",
   "originScale": 1,
   "originAngle": 0,
   "originFrameX": -10,
@@ -48,7 +48,7 @@
   "bgAddImageType":"addWhiteImage"
 },
 {
-    "image": "Christmas05-sticker00",
+    "imageName": "Christmas05-sticker00",
     "originScale": 1,
     "originAngle": 0,
     "originFrameX": 13,
@@ -60,7 +60,7 @@
     "isBgImage": false,
   },
   {
-    "image": "Christmas05-sticker01",
+    "imageName": "Christmas05-sticker01",
     "originScale": 1,
     "originAngle": 0,
     "originFrameX": -15,
@@ -72,7 +72,7 @@
     "isBgImage": false,
   },
   {
-    "image": "Christmas05-sticker02",
+    "imageName": "Christmas05-sticker02",
     "originScale": 1,
     "originAngle": 0,
     "originFrameX": 129,
@@ -84,7 +84,7 @@
     "isBgImage": false,
   },
   {
-    "image": "Christmas05-sticker03",
+    "imageName": "Christmas05-sticker03",
     "originScale": 1,
     "originAngle": 0,
     "originFrameX": 20,

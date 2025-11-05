@@ -78,6 +78,7 @@ final class StickerManager: NSObject {
         state.originScale = stickerOld.originScale
         state.gesRotation = stickerOld.gesRotation
         state.imageMask = stickerOld.imageMask
+        state.image = stickerOld.image
         let sticker = controller!.addImageSticker01(state: state)
         sticker.stickerModel = state
         StickerManager.shared.modelMap[sticker.id] = state
@@ -202,9 +203,9 @@ extension ZLImageStickerView {
         
         // MARK: - 不规则形状
         if imageTypeRaw == "IrregularShape" {
-            if !stickerModel.image.isEmpty,
+            if !stickerModel.imageName.isEmpty,
                !stickerModel.imageMask!.isEmpty,
-               let base = UIImage(named: stickerModel.image),
+               let base = UIImage(named: stickerModel.imageName),
                let frame = UIImage(named: stickerModel.imageMask!) {
                 
                 finalImage = overlayImageWithFrame(newImage, baseImage: base, frameImage: frame)

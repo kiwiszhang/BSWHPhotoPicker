@@ -163,7 +163,7 @@ extension ZLEditImageViewController {
     }
 
     public func addImageSticker01(state: ImageStickerModel) -> EditableStickerView {
-        let imageSticker = EditableStickerView(image: UIImage(named: state.image)!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX.w, y: state.originFrameY.h, width: state.originFrameWidth.w, height: state.originFrameHeight.h),gesRotation: state.gesRotation,isBgImage: state.isBgImage,bgAddImageType: state.isBgImage == true ? state.bgAddImageType! : "addGrayImage",imageMask: state.imageMask ?? "")
+        let imageSticker = EditableStickerView(image: state.image ?? UIImage(named: state.imageName)!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX.w, y: state.originFrameY.h, width: state.originFrameWidth.w, height: state.originFrameHeight.h),gesRotation: state.gesRotation,isBgImage: state.isBgImage,bgAddImageType: state.isBgImage == true ? state.bgAddImageType! : "addGrayImage",imageMask: state.imageMask ?? "")
         addSticker(imageSticker)
         view.layoutIfNeeded()
         editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
@@ -228,7 +228,16 @@ public enum ImageAddType:String,Codable {
 // MARK: - 模型定义
 public class ImageStickerModel: Codable {
     /// 贴图的图片
-    public var image:String = ""
+    private var _image: UIImage?
+    public var image: UIImage? {
+        get {
+            return _image ?? UIImage(named: imageName)
+        }
+        set {
+            _image = newValue
+        }
+    }
+    public var imageName: String = ""
     /// 初始缩放和旋转
     public var originScale:Double = 0.0
     public var originAngle:Double = 0.0
@@ -259,9 +268,91 @@ public class ImageStickerModel: Codable {
         UIImage(data: (imageData ?? UIImage(named: bgAddImageType!)?.pngData())!)
     }
     
+    enum CodingKeys: String, CodingKey {
+        case imageName
+        case imageData
+        case originScale
+        case originAngle
+        case originFrameX
+        case originFrameY
+        case originFrameWidth
+        case originFrameHeight
+        case gesScale
+        case gesRotation
+        case overlayRectX
+        case overlayRectY
+        case overlayRectWidth
+        case overlayRectHeight
+        case imageType
+        case imageMask
+        case isBgImage
+        case bgAddImageType
+    }
+
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        imageName = try container.decode(String.self, forKey: .imageName)
+        
+        if let data = try container.decodeIfPresent(Data.self, forKey: .imageData) {
+            _image = UIImage(data: data)
+        } else {
+            _image = nil
+        }
+
+        originScale = try container.decodeIfPresent(Double.self, forKey: .originScale) ?? 1.0
+        originAngle = try container.decodeIfPresent(Double.self, forKey: .originAngle) ?? 0.0
+        originFrameX = try container.decodeIfPresent(Double.self, forKey: .originFrameX) ?? 0.0
+        originFrameY = try container.decodeIfPresent(Double.self, forKey: .originFrameY) ?? 0.0
+        originFrameWidth = try container.decodeIfPresent(Double.self, forKey: .originFrameWidth) ?? 0.0
+        originFrameHeight = try container.decodeIfPresent(Double.self, forKey: .originFrameHeight) ?? 0.0
+        gesScale = try container.decodeIfPresent(Double.self, forKey: .gesScale) ?? 1.0
+        gesRotation = try container.decodeIfPresent(Double.self, forKey: .gesRotation) ?? 0.0
+        overlayRectX = try container.decodeIfPresent(Double.self, forKey: .overlayRectX)
+        overlayRectY = try container.decodeIfPresent(Double.self, forKey: .overlayRectY)
+        overlayRectWidth = try container.decodeIfPresent(Double.self, forKey: .overlayRectWidth)
+        overlayRectHeight = try container.decodeIfPresent(Double.self, forKey: .overlayRectHeight)
+        imageType = try container.decodeIfPresent(ImageAddType.self, forKey: .imageType)
+        imageMask = try container.decodeIfPresent(String.self, forKey: .imageMask)
+        isBgImage = try container.decodeIfPresent(Bool.self, forKey: .isBgImage) ?? false
+        bgAddImageType = try container.decodeIfPresent(String.self, forKey: .bgAddImageType) ?? "addGrayImage"
+    }
+
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(imageName, forKey: .imageName)
+        
+        if let img = _image, let data = img.pngData() {
+            try container.encode(data, forKey: .imageData)
+        }
+        
+        try container.encode(originScale, forKey: .originScale)
+        try container.encode(originAngle, forKey: .originAngle)
+        try container.encode(originFrameX, forKey: .originFrameX)
+        try container.encode(originFrameY, forKey: .originFrameY)
+        try container.encode(originFrameWidth, forKey: .originFrameWidth)
+        try container.encode(originFrameHeight, forKey: .originFrameHeight)
+        try container.encode(gesScale, forKey: .gesScale)
+        try container.encode(gesRotation, forKey: .gesRotation)
+        try container.encodeIfPresent(overlayRectX, forKey: .overlayRectX)
+        try container.encodeIfPresent(overlayRectY, forKey: .overlayRectY)
+        try container.encodeIfPresent(overlayRectWidth, forKey: .overlayRectWidth)
+        try container.encodeIfPresent(overlayRectHeight, forKey: .overlayRectHeight)
+        try container.encodeIfPresent(imageType, forKey: .imageType)
+        try container.encodeIfPresent(imageMask, forKey: .imageMask)
+        try container.encode(isBgImage, forKey: .isBgImage)
+        try container.encode(bgAddImageType, forKey: .bgAddImageType)
+    }
+
+    
+    
     // MARK: - 初始化方法
     public init(
-        image: String = "",
+        image: UIImage? = nil,
+        imageName: String = "",
         imageData: Data? = nil,
         originScale: Double = 1.0,
         originAngle: Double = 0.0,
@@ -273,7 +364,8 @@ public class ImageStickerModel: Codable {
         isBgImage: Bool = false,
         bgAddImageType:String = "addGrayImage"
     ) {
-        self.image = image
+        self._image = image
+        self.imageName = imageName
         self.imageData = imageData
         self.originScale = originScale
         self.originAngle = originAngle
@@ -298,7 +390,7 @@ public class ImageStickerModel: Codable {
 public extension ImageStickerModel {
     func deepCopy() -> ImageStickerModel {
         let copy = ImageStickerModel(
-            image: self.image,
+            imageName: self.imageName,
             imageData: self.imageData != nil ? Data(self.imageData!) : nil,
             originScale: self.originScale,
             originAngle: self.originAngle,

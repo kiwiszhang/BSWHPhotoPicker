@@ -128,7 +128,7 @@ open class ZLEditImageViewController: UIViewController {
     }()
     
     // Show image.
-    open lazy var imageView: UIImageView = {
+    public lazy var imageView: UIImageView = {
         let view = UIImageView(image: originalImage)
         view.contentMode = .scaleAspectFit
         view.clipsToBounds = true
@@ -149,7 +149,7 @@ open class ZLEditImageViewController: UIViewController {
     
     var animateDismiss = true
     
-    var originalImage: UIImage
+    public var originalImage: UIImage
     
     // The frame after first layout, used in dismiss animation.
     var originalFrame: CGRect = .zero
@@ -918,7 +918,6 @@ open class ZLEditImageViewController: UIViewController {
     public func addTextStickersView01(_ text: String, textColor: UIColor, font: UIFont, image: UIImage?, style: ZLInputTextStyle,originFrame:CGRect,originScale:CGFloat,originAngle:CGFloat,gesScale:CGFloat,gesRotation:CGFloat,totalTranslationPoint:CGPoint) {
         guard !text.isEmpty, let image = image else { return }
         
-        let scale = mainScrollView.zoomScale
         let size = EditableTextStickerView.calculateSize(image: image)
         let originFrame = getStickerOriginFrame(size)
         

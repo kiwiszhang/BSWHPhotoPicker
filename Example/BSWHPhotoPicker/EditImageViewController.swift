@@ -113,7 +113,25 @@ class EditImageViewController: ZLEditImageViewController {
         /// 绘制
         let drawAction = UIAlertAction(title: "Draw", style: .default) { [weak self] _ in
             guard let `self` = self else { return }
-            self.switchOperation(type: .draw)
+//            self.switchOperation(type: .draw)
+            
+            let vc = DrawViewController()
+//            vc.bgImage = originalImage
+            vc.bgImageFrame  = imageView.frame
+            vc.modalPresentationStyle = .overFullScreen
+            vc.onDrawingExported = { [weak self] exportedImage,rect in
+                guard let self = self else { return }
+                
+                self.switchOperation(type: .imageSticker)
+                let state: ImageStickerModel = ImageStickerModel(image: exportedImage,originFrame: CGRect(x: rect.origin.x / (kkScreenWidth / 375.0), y: rect.origin.y / (kkScreenHeight / 812.0), width: rect.size.width / (kkScreenWidth / 375.0), height: rect.size.height / (kkScreenHeight / 812.0)),gesScale: 1,gesRotation: 0,isBgImage: false)
+                let sticker = self.addImageSticker01(state: state)
+                sticker.stickerModel = state
+                StickerManager.shared.modelMap[sticker.id] = state
+                
+            }
+            present(vc, animated: false)
+
+            
         }
         /// 马赛克
         let mosaicAction = UIAlertAction(title: "mosaic", style: .default) { [weak self] _ in
@@ -131,7 +149,7 @@ class EditImageViewController: ZLEditImageViewController {
         let imageStickerAction = UIAlertAction(title: "添加图片贴纸", style: .default) { [weak self] _ in
             if let image = UIImage(named: "imageSticker") {
                 self?.switchOperation(type: .imageSticker)
-                let state: ImageStickerModel = ImageStickerModel(image: "imageSticker",originFrame: CGRect(x: 40, y: 100, width: 120, height: 120),gesScale: 1,gesRotation: 0,isBgImage: false)
+                let state: ImageStickerModel = ImageStickerModel(imageName: "imageSticker",originFrame: CGRect(x: 40, y: 100, width: 120, height: 120),gesScale: 1,gesRotation: 0,isBgImage: false)
 //                self?.addImageSticker(image: image)
                 let sticker = self?.addImageSticker01(state: state)
                 sticker!.stickerModel = state
