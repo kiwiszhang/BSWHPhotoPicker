@@ -10,54 +10,30 @@ import UIKit
 import PencilKit
 
 class StrokeAwareCanvasView: PKCanvasView {
-    var onStrokeEnded: (() -> Void)?
-
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-        onStrokeEnded?()
-    }
-
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesCancelled(touches, with: event)
-        onStrokeEnded?()
+    var onStrokeBegan: (() -> Void)?
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        onStrokeBegan?()
     }
 }
 
 class DrawViewController: UIViewController, PKCanvasViewDelegate {
 
     private let canvas = StrokeAwareCanvasView()
-    private var history: [PKDrawing] = [PKDrawing()]
-    private var index = 0
-    private var isRestoring = false
-
-    let toolPicker = PKToolPicker()
+    private let toolPicker = PKToolPicker()
 
     var bgImage: UIImage? = nil
     var bgImageFrame: CGRect? = nil
-    var onDrawingExported: ((UIImage,CGRect) -> Void)?
+    var onDrawingExported: ((UIImage, CGRect) -> Void)?
 
-    // 保存按“笔画”粒度的撤销/重做快照（每个元素都是一个 PKDrawing）
-    private var undoStack: [PKDrawing] = []
-    private var redoStack: [PKDrawing] = []
-    // 用户刚执行完 undo / redo 后的标记
-    private var didUndoOrRedo = false
+    private var history: [PKDrawing] = [PKDrawing()]
+    private var index: Int = 0
+    private var isRestoring = false
+    private var blockHistoryUntilGestureBegan = false
 
-    // 防止程序性赋值导致 delegate 记录
-    private var isApplyingProgrammaticChange = false
-
-    // 记录上一次已知 drawing（用于比较 stroke 数量）
-    private var lastKnownDrawing: PKDrawing = PKDrawing()
-
-    private var drawingHistory: [PKDrawing] = [PKDrawing()]
-    private var currentIndex: Int = 0
-    private var isApplyingProgramChange = false
-
-
-    
-    // UI
     private lazy var backButton = makeButton("返回")
-    private lazy var undoButton = makeButton("上一步") // 撤销
-    private lazy var redoButton = makeButton("下一步") // 重做
+    private lazy var undoButton = makeButton("上一步")
+    private lazy var redoButton = makeButton("下一步")
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,20 +42,16 @@ class DrawViewController: UIViewController, PKCanvasViewDelegate {
         canvas.frame = bgImageFrame ?? .zero
         canvas.backgroundColor = .clear
         canvas.delegate = self
-        canvas.alwaysBounceVertical = false
         canvas.alwaysBounceHorizontal = false
+        canvas.alwaysBounceVertical = false
         view.addSubview(canvas)
 
         canvas.snp.makeConstraints { make in
             make.center.equalToSuperview()
-            make.size.equalTo(CGSize(width: bgImageFrame!.width, height: bgImageFrame!.height))
+            make.size.equalTo(CGSize(width: bgImageFrame?.width ?? 300, height: bgImageFrame?.height ?? 400))
         }
 
-        // 初始快照（保证有一个基础状态）
-        lastKnownDrawing = canvas.drawing
-        undoStack = []    // 初始状态不放入 undoStack（也可按需要放入）
-
-        // 布局按钮
+        // Buttons
         view.addSubview(backButton)
         view.addSubview(undoButton)
         view.addSubview(redoButton)
@@ -107,7 +79,6 @@ class DrawViewController: UIViewController, PKCanvasViewDelegate {
         undoButton.addTarget(self, action: #selector(onClickUndo(_:)), for: .touchUpInside)
         redoButton.addTarget(self, action: #selector(onClickRedo(_:)), for: .touchUpInside)
 
-        // Tool picker（延迟到主线程，确保 window 可用）
         DispatchQueue.main.async {
             if let window = self.view.window ?? UIApplication.shared.windows.first {
                 self.toolPicker.setVisible(true, forFirstResponder: self.canvas)
@@ -116,136 +87,106 @@ class DrawViewController: UIViewController, PKCanvasViewDelegate {
             }
         }
 
-//        updateUndoRedoButtonState()
-
-        (canvas as! StrokeAwareCanvasView).onStrokeEnded = { [weak self] in
-            guard let self else { return }
-            guard !self.isRestoring else { return } // 避免程序恢复误记
-
-            let current = self.canvas.drawing
-            let last = self.history[self.index]
-
-            // 没变化不记录
-            if current.dataRepresentation() == last.dataRepresentation() { return }
-
-            // 如果不是最新一步，截断未来分支
-            if self.index < self.history.count - 1 {
-                self.history.removeLast(self.history.count - self.index - 1)
+        canvas.onStrokeBegan = { [weak self] in
+            guard let self = self else { return }
+            if self.blockHistoryUntilGestureBegan {
+                if self.index < self.history.count - 1 {
+                    self.history = Array(self.history.prefix(self.index + 1))
+                }
+                self.blockHistoryUntilGestureBegan = false
             }
-
-            self.history.append(current)
-            self.index = self.history.count - 1
         }
-
-
     }
+    
+    private func updateUndoRedoButtonState() {
+        undoButton.isEnabled = index > 0
+        redoButton.isEnabled = index < history.count - 1
+
+        undoButton.alpha = undoButton.isEnabled ? 1.0 : 0.5
+        redoButton.alpha = redoButton.isEnabled ? 1.0 : 0.5
+    }
+    
     // MARK: - PKCanvasViewDelegate
     func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
-//        if isApplyingProgramChange { return }
-//
-//        let current = canvasView.drawing
-//        let last = drawingHistory[currentIndex]
-//
-//        // 检查是否新增笔画
-//        if current.strokes.count != last.strokes.count {
-//            // 如果不在最新一步，截断未来
-//            if currentIndex < drawingHistory.count - 1 {
-//                drawingHistory.removeLast(drawingHistory.count - currentIndex - 1)
-//            }
-//
-//            drawingHistory.append(current)
-//            currentIndex = drawingHistory.count - 1
-//        }
+        if isRestoring || blockHistoryUntilGestureBegan {
+            return
+        }
+
+        let current = canvasView.drawing
+        let last = history[index]
+        if current.dataRepresentation() == last.dataRepresentation() { return }
+
+        history.append(current)
+        index += 1
+        updateUndoRedoButtonState()
+
     }
 
-
-
-        // MARK: - Undo / Redo（按笔画粒度）
+    // MARK: - Undo / Redo
     @objc private func onClickUndo(_ sender: UIButton) {
         guard index > 0 else { return }
         index -= 1
-        restoreDrawing(history[index])
+        restore(history[index])
+        updateUndoRedoButtonState()
+
     }
 
     @objc private func onClickRedo(_ sender: UIButton) {
         guard index < history.count - 1 else { return }
         index += 1
-        restoreDrawing(history[index])
+        restore(history[index])
+        updateUndoRedoButtonState()
+
     }
 
-    private func restoreDrawing(_ drawing: PKDrawing) {
+    private func restore(_ drawing: PKDrawing) {
+        var newDrawing = PKDrawing()
+        for stroke in drawing.strokes {
+            newDrawing.strokes.append(stroke)
+        }
         isRestoring = true
-        canvas.drawing = drawing
+        canvas.drawing = newDrawing
+        canvas.undoManager?.removeAllActions()
         DispatchQueue.main.async { [weak self] in
-            self?.isRestoring = false
+            guard let self = self else { return }
+            self.isRestoring = false
+            self.blockHistoryUntilGestureBegan = true
+            self.updateUndoRedoButtonState()
         }
     }
 
 
-
-        // 用来在恢复 drawing 时屏蔽 delegate 的记录
-        private func applyDrawingProgrammatically(_ drawing: PKDrawing) {
-            isApplyingProgrammaticChange = true
-            canvas.drawing = drawing
-            // 为了保险起见，把上一次的 lastKnownDrawing 也更新为同一个（delegate 也会早早返回）
-            lastKnownDrawing = drawing
-
-            // 使用 dispatch async 确保 delegate 在赋值完成后处理完再取消屏蔽
-            DispatchQueue.main.async { [weak self] in
-                self?.isApplyingProgrammaticChange = false
-            }
+    // MARK: - Export
+    @objc private func onClickBack(_ sender: UIButton) {
+        guard let (img, rect) = canvas.drawing.exportTrimmedImageWithFrame() else {
+            dismiss(animated: true)
+            return
         }
-
-        private func updateUndoRedoButtonState() {
-            undoButton.isEnabled = !undoStack.isEmpty
-            redoButton.isEnabled = !redoStack.isEmpty
-            undoButton.alpha = undoButton.isEnabled ? 1.0 : 0.5
-            redoButton.alpha = redoButton.isEnabled ? 1.0 : 0.5
-        }
-
-        // 其余方法略（按钮构造、返回等）...
-        private func makeButton(_ title: String) -> UIButton {
-            let btn = UIButton(type: .custom)
-            btn.setTitle(title, for: .normal)
-            btn.setTitleColor(.white, for: .normal)
-            btn.titleLabel?.font = UIFont.systemFont(ofSize: 15)
-            btn.backgroundColor = .systemBlue
-            btn.layer.cornerRadius = 4
-            return btn
-        }
-
-        @objc private func onClickBack(_ sender: UIButton) {
-            guard let (img, rectInCanvas) = canvas.drawing.exportTrimmedImageWithFrame() else {
-                dismiss(animated: true)
-                return
-            }
-            let rectInSuperview = canvas.convert(rectInCanvas, to: view.superview)
-            let imageView = UIImageView(image: img)
-            imageView.frame = rectInSuperview
-            imageView.contentMode = .scaleAspectFit
-            view.superview?.addSubview(imageView) // 放在上一层视图
-
-            onDrawingExported?(img,rectInCanvas)
-
-            dismiss(animated: false)
-        }
+        onDrawingExported?(img, rect)
+        dismiss(animated: true)
     }
+
+    private func makeButton(_ title: String) -> UIButton {
+        let btn = UIButton(type: .custom)
+        btn.setTitle(title, for: .normal)
+        btn.setTitleColor(.white, for: .normal)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        btn.backgroundColor = .systemBlue
+        btn.layer.cornerRadius = 4
+        return btn
+    }
+}
 
 extension PKDrawing {
     func exportTrimmedImageWithFrame(scale: CGFloat = UIScreen.main.scale) -> (image: UIImage, rect: CGRect)? {
         guard !strokes.isEmpty else { return nil }
-
         var drawingBounds = CGRect.null
         for stroke in strokes {
             drawingBounds = drawingBounds.union(stroke.renderBounds)
         }
-
-        // 可选 padding
         let padding: CGFloat = 4
         drawingBounds = drawingBounds.insetBy(dx: -padding, dy: -padding)
-
         let img = self.image(from: drawingBounds, scale: scale)
         return (img, drawingBounds)
     }
 }
-
