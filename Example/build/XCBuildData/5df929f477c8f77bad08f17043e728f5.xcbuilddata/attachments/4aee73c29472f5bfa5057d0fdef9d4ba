@@ -1,4 +1,0 @@
-
-module BSWHPhotoPicker.__Swift {
-  exclude header "BSWHPhotoPicker-Swift.h"
-}

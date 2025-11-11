@@ -1,5 +1,0 @@
-
-module BSWHPhotoPicker.Swift {
-  header "BSWHPhotoPicker-Swift.h"
-  requires objc
-}

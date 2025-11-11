@@ -1,2 +1,0 @@
-Target dependency graph (1 target)
-Target 'FBSnapshotTestCase' in project 'Pods' (no dependencies)

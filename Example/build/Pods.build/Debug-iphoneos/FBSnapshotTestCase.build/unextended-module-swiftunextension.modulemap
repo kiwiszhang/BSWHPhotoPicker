@@ -1,4 +1,0 @@
-
-module FBSnapshotTestCase.__Swift {
-  exclude header "FBSnapshotTestCase-Swift.h"
-}
