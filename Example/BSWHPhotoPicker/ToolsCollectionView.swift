@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 
 @objc protocol ToolsCollectionViewDelegate: AnyObject {
@@ -15,7 +16,7 @@ import UIKit
 
 class ToolsCollectionView: UIView {
     weak var delegate: ToolsCollectionViewDelegate?
-    var scannedImages: [String] = ["1234","2345","3456"]
+    var scannedImages: [String] = ["替换背景","弹框测试","修改比例1:1","修改比例4:5","修改比例9:16"]
     var currentIndex: Int = 0
     
     private lazy var collectionView: UICollectionView = {
@@ -25,7 +26,7 @@ class ToolsCollectionView: UIView {
         layout.minimumInteritemSpacing = 0
         
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .clear
+        cv.backgroundColor = .white
         cv.dataSource = self
         cv.delegate = self
         cv.showsHorizontalScrollIndicator = false
@@ -49,7 +50,7 @@ class ToolsCollectionView: UIView {
             make.left.equalToSuperview().offset(0.w)
             make.right.equalToSuperview()
             make.top.equalToSuperview()
-            make.height.equalTo(70.h)
+            make.height.equalTo(120.h)
         }
         reload()
     }
@@ -72,6 +73,7 @@ extension ToolsCollectionView: UICollectionViewDataSource {
             withReuseIdentifier: "ToolCollectionViewCell",
             for: indexPath
         ) as! ToolCollectionViewCell
+        cell.configure(with: scannedImages[indexPath.row])
         return cell
     }
 }
@@ -81,7 +83,7 @@ extension ToolsCollectionView: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 70.h, height: 70.h)
+        return CGSize(width: 120.w, height: 120.h)
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -123,12 +125,11 @@ class ToolCollectionViewCell: UICollectionViewCell {
         titleLab.snp.makeConstraints { make in
             make.bottom.left.right.equalToSuperview()
             make.height.equalTo(20.h)
-
         }
     }
 
 
     func configure(with item: String) {
-
+        titleLab.text = item
     }
 }

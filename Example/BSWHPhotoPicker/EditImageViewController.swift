@@ -15,6 +15,18 @@ class EditImageViewController: ZLEditImageViewController {
     private let jsonFiles:[String] = ["Christmas00","Christmas01","Christmas02","Christmas03","Christmas04","Christmas05","Christmas06","Wedding00"]
 
     var index = 0
+    private var bgPanelBottomConstraint: Constraint?
+
+    private lazy var bgPanel: ReplaceBgView = {
+        let v = ReplaceBgView()
+        v.backgroundColor = .systemRed
+        v.layer.cornerRadius = 16
+        v.layer.masksToBounds = true
+        v.onClose = { [weak self] in
+            self?.hideBottomPanel()
+        }
+        return v
+    }()
     
     let backButton: UIButton = {
         let button = UIButton(type: .custom)
@@ -75,7 +87,13 @@ class EditImageViewController: ZLEditImageViewController {
         view.addSubview(menuButton)
         view.addSubview(toolCollectionView)
         
-
+        view.addSubview(bgPanel)
+                
+        bgPanel.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.height.equalTo(200)
+            self.bgPanelBottomConstraint = make.bottom.equalToSuperview().offset(200).constraint
+        }
         
         nextButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview()
@@ -114,7 +132,7 @@ class EditImageViewController: ZLEditImageViewController {
         
         toolCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.height.equalTo(70.h)
+            make.height.equalTo(120.h)
         }
         toolCollectionView.delegate = self
 
@@ -208,8 +226,31 @@ class EditImageViewController: ZLEditImageViewController {
         dismiss(animated: true)
     }
     
+    /// 点击按钮调用
+    @objc func showBottomPanel() {
+        self.bgPanelBottomConstraint?.update(offset: 0)
+        UIView.animate(withDuration: 0.25) {
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    /// 隐藏
+    func hideBottomPanel() {
+        self.bgPanelBottomConstraint?.update(offset: 200)
+        UIView.animate(withDuration: 0.25) {
+            self.view.layoutIfNeeded()
+        }
+    }
+            
     func renderImage(from view: UIView) -> UIImage? {
-        let renderer = UIGraphicsImageRenderer(size: view.bounds.size)
+        let renderer = UIGraphicsImageRenderer(
+            bounds: view.bounds,
+            format: {
+                let f = UIGraphicsImageRendererFormat.default()
+                f.scale = 3 /// 高清比例 1/2/3 可选
+                return f
+            }()
+        )
         return renderer.image { ctx in
             view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
         }
@@ -246,8 +287,13 @@ class EditImageViewController: ZLEditImageViewController {
 
 extension EditImageViewController:ToolsCollectionViewDelegate {
     func cellDidSelectItemAt(_ sender: ToolsCollectionView, indexPath: IndexPath) {
-        replaceBgImage(image: UIImage(named: "Christmas01-bg")!)
-        resetContainerViewFrame()
+        if indexPath.row == 0 {
+            replaceBgImage(image: UIImage(named: "Christmas01-bg")!)
+            resetContainerViewFrame()
+        }else if indexPath.row == 1 {
+            showBottomPanel()
+        }
+
     }
 }
 
