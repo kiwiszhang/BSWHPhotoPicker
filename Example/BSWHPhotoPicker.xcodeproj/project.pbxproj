@@ -18,6 +18,7 @@
 		533A14BB2EA08DCB00A2E1C6 /* StickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A14BA2EA08DCB00A2E1C6 /* StickerManager.swift */; };
 		53734DE62EB8791D0005ED8B /* Wedding00.json in Resources */ = {isa = PBXBuildFile; fileRef = 53734DE52EB8791D0005ED8B /* Wedding00.json */; };
 		53734DFB2EBA02360005ED8B /* DrawViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53734DFA2EBA02360005ED8B /* DrawViewController.swift */; };
+		53734FB22EC1E6780005ED8B /* ToolsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53734FB12EC1E6780005ED8B /* ToolsCollectionView.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
@@ -49,6 +50,7 @@
 		533A14BA2EA08DCB00A2E1C6 /* StickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerManager.swift; sourceTree = "<group>"; };
 		53734DE52EB8791D0005ED8B /* Wedding00.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Wedding00.json; sourceTree = "<group>"; };
 		53734DFA2EBA02360005ED8B /* DrawViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawViewController.swift; sourceTree = "<group>"; };
+		53734FB12EC1E6780005ED8B /* ToolsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolsCollectionView.swift; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* BSWHPhotoPicker_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BSWHPhotoPicker_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				9899F87A2E73ED02000AABA4 /* EditImageViewController.swift */,
 				53734DFA2EBA02360005ED8B /* DrawViewController.swift */,
+				53734FB12EC1E6780005ED8B /* ToolsCollectionView.swift */,
 				533A14BA2EA08DCB00A2E1C6 /* StickerManager.swift */,
 				9801A70D2E726C2A00607935 /* testImage.png */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
@@ -403,6 +406,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53734FB22EC1E6780005ED8B /* ToolsCollectionView.swift in Sources */,
 				53734DFB2EBA02360005ED8B /* DrawViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,

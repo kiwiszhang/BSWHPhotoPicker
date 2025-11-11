@@ -154,9 +154,9 @@ open class ZLEditImageViewController: UIViewController {
     // The frame after first layout, used in dismiss animation.
     var originalFrame: CGRect = .zero
     
-    let tools: [ZLImageEditorConfiguration.EditTool]
+    var tools: [ZLImageEditorConfiguration.EditTool]
     
-    let adjustTools: [ZLImageEditorConfiguration.AdjustTool]
+    var adjustTools: [ZLImageEditorConfiguration.AdjustTool]
     
     var editImage: UIImage
     
@@ -187,7 +187,7 @@ open class ZLEditImageViewController: UIViewController {
     
     var selectedAdjustTool: ZLImageEditorConfiguration.AdjustTool?
     
-    let drawColors: [UIColor]
+    var drawColors: [UIColor]
     
     var currentDrawColor = ZLImageEditorConfiguration.default().defaultDrawColor
     
@@ -351,11 +351,48 @@ open class ZLEditImageViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         
         editorManager.delegate = self
-        
         if !drawColors.contains(currentDrawColor) {
             currentDrawColor = drawColors.first!
         }
+        stickers = editModel?.stickers.compactMap {
+            ZLBaseStickerView.initWithState($0)
+        } ?? []
+    }
+    
+    public func replaceBgImage(image:UIImage,editModel: ZLEditImageModel? = nil) {
+        var image = image
+        if image.scale != 1,
+           let cgImage = image.cgImage {
+            image = image.zl.resize_vI(
+                CGSize(width: cgImage.width, height: cgImage.height),
+                scale: 1
+            ) ?? image
+        }
         
+        originalImage = image.zl.fixOrientation()
+        editImage = originalImage
+        editImageWithoutAdjust = originalImage
+        currentClipStatus = editModel?.clipStatus ?? ZLClipStatus(editRect: CGRect(origin: .zero, size: image.size))
+        preClipStatus = currentClipStatus
+        drawColors = ZLImageEditorConfiguration.default().drawColors
+        currentFilter = editModel?.selectFilter ?? .normal
+        drawPaths = editModel?.drawPaths ?? []
+        mosaicPaths = editModel?.mosaicPaths ?? []
+        currentAdjustStatus = editModel?.adjustStatus ?? ZLAdjustStatus()
+        preAdjustStatus = currentAdjustStatus
+        
+        var ts = ZLImageEditorConfiguration.default().tools
+        if ts.contains(.imageSticker), ZLImageEditorConfiguration.default().imageStickerContainerView == nil {
+            ts.removeAll { $0 == .imageSticker }
+        }
+        tools = ts
+        adjustTools = ZLImageEditorConfiguration.default().adjustTools
+        selectedAdjustTool = adjustTools.first
+        editorManager = ZLEditorManager(actions: editModel?.actions ?? [])
+        editorManager.delegate = self
+        if !drawColors.contains(currentDrawColor) {
+            currentDrawColor = drawColors.first!
+        }
         stickers = editModel?.stickers.compactMap {
             ZLBaseStickerView.initWithState($0)
         } ?? []
@@ -442,7 +479,7 @@ open class ZLEditImageViewController: UIViewController {
         }
     }
     
-    func resetContainerViewFrame() {
+    public func resetContainerViewFrame() {
         mainScrollView.setZoomScale(1, animated: true)
         imageView.image = editImage
         let editRect = currentClipStatus.editRect

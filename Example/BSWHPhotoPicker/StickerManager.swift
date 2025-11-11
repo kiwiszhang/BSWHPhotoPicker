@@ -7,17 +7,22 @@
 //
 
 import UIKit
+import Photos
 import PhotosUI
 import ObjectiveC
 import BSWHPhotoPicker
 
+
+@objc protocol StickerManagerDelegate: AnyObject {
+    func stickerAddImage(_ sender: StickerManager)
+}
 
 // MARK: - StickerManager
 final class StickerManager: NSObject {
     weak var controller: EditImageViewController?
     private weak var currentStickerView: ZLImageStickerView?
     var modelMap: [String: ImageStickerModel] = [:]
-
+    weak var delegate: StickerManagerDelegate?
     static let shared = StickerManager()
     private override init() {
         super.init()
@@ -135,17 +140,23 @@ final class StickerManager: NSObject {
         
         if overlayRect.contains(point) {
             print("👉 点击在 overlay 区域内")
-            PHPhotoLibrary.requestAuthorization { status in
-                guard status == .authorized || status == .limited else { return }
-                DispatchQueue.main.async {
-                    var config = PHPickerConfiguration(photoLibrary: .shared())
-                    config.filter = .images
-                    config.selectionLimit = 1
-                    let picker = PHPickerViewController(configuration: config)
-                    picker.delegate = self
-                    self.controller?.present(picker, animated: true)
-                }
-            }
+            
+//            PHPhotoLibrary.requestAuthorization { status in
+//                guard status == .authorized || status == .limited else { return }
+//                DispatchQueue.main.async {
+//                    var config = PHPickerConfiguration(photoLibrary: .shared())
+//                    config.filter = .images
+//                    config.selectionLimit = 1
+//                    let picker = PHPickerViewController(configuration: config)
+//                    picker.delegate = self
+//                    self.controller?.present(picker, animated: true)
+//                }
+//            }
+            
+//            self.delegate?.stickerAddImage(self)
+            
+            checkPhotoAuthorizationAndPresentPicker()
+            
         } else {
             print("👉 点击在 overlay 区域外")
             stickerView.setOperation(true)
@@ -154,8 +165,68 @@ final class StickerManager: NSObject {
         }
     }
 }
-/// 选择照片
+///// 选择照片
+//extension StickerManager: PHPickerViewControllerDelegate {
+//    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+//        picker.dismiss(animated: true)
+//
+//        guard let result = results.first else { return }
+//        let provider = result.itemProvider
+//
+//        if provider.canLoadObject(ofClass: UIImage.self) {
+//            provider.loadObject(ofClass: UIImage.self) { [weak self] image, _ in
+//                guard let self = self,
+//                let newImage:UIImage = image as? UIImage,
+//                let stickerView = self.currentStickerView else { return }
+//                DispatchQueue.main.async {
+//                    
+//                    if stickerView.stickerModel?.isBgImage == true {
+//                        if let imageData = newImage.pngData() {
+//                            stickerView.stickerModel?.imageData = imageData
+//                        }
+//                        stickerView.updateImage(newImage, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image)
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    
+//}
+
 extension StickerManager: PHPickerViewControllerDelegate {
+
+    func checkPhotoAuthorizationAndPresentPicker() {
+        let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+        switch status {
+        case .authorized, .limited:
+            presentPhotoPicker()
+        case .notDetermined:
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { newStatus in
+                DispatchQueue.main.async {
+                    if newStatus == .authorized || newStatus == .limited {
+                        self.presentPhotoPicker()
+                    } else {
+                        self.showPhotoPermissionAlert()
+                    }
+                }
+            }
+        case .denied, .restricted:
+            showPhotoPermissionAlert()
+        @unknown default:
+            showPhotoPermissionAlert()
+        }
+    }
+
+    func presentPhotoPicker() {
+        var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
+        config.filter = .images
+        config.selectionLimit = 1  // 选择 1 张，可改为 0 表示无限制
+        let picker = PHPickerViewController(configuration: config)
+        picker.delegate = self
+        self.controller!.present(picker, animated: true)
+    }
+
+    // 相册选择回调
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
 
@@ -181,6 +252,21 @@ extension StickerManager: PHPickerViewControllerDelegate {
     }
 }
 
+/// 选择照片
+extension StickerManager {
+    public func pickerImage(_ image: UIImage) {
+        let newImage:UIImage = image
+        guard let stickerView = self.currentStickerView else { return }
+        DispatchQueue.main.async {
+            if stickerView.stickerModel?.isBgImage == true {
+                if let imageData = newImage.pngData() {
+                    stickerView.stickerModel?.imageData = imageData
+                }
+                stickerView.updateImage(newImage, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image)
+            }
+        }
+    }
+}
 
 // MARK: - 关联属性扩展
 private var stickerIDKey: UInt8 = 0
@@ -344,6 +430,26 @@ extension ZLImageStickerView {
             
             frameImage.draw(in: CGRect(origin: .zero, size: size))
         }
+    }
+}
+
+
+extension StickerManager {
+    func showPhotoPermissionAlert() {
+        let alert = UIAlertController(
+            title: "需要访问相册",
+            message: "请在设置中允许访问相册以选择图片",
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: "取消", style: .cancel))
+        alert.addAction(UIAlertAction(title: "去设置", style: .default, handler: { _ in
+            if let url = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(url)
+            }
+        }))
+
+        self.controller!.present(alert, animated: true)
     }
 }
 

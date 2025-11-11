@@ -25,6 +25,15 @@ class EditImageViewController: ZLEditImageViewController {
         return button
     }()
     
+    let saveButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setTitle("保存", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        button.backgroundColor = .blue
+        return button
+    }()
+    
     let nextButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("下一步", for: .normal)
@@ -50,13 +59,21 @@ class EditImageViewController: ZLEditImageViewController {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         return button
     }()
+    
+    let toolCollectionView:ToolsCollectionView = {
+       let view = ToolsCollectionView()
+        view.backgroundColor = .systemCyan
+        return view
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(backButton)
+        view.addSubview(saveButton)
         view.addSubview(nextButton)
         view.addSubview(lastButton)
         view.addSubview(menuButton)
+        view.addSubview(toolCollectionView)
         
 
         
@@ -88,12 +105,31 @@ class EditImageViewController: ZLEditImageViewController {
             make.top.equalTo(menuButton.snp.top)
         }
         
+        saveButton.snp.makeConstraints { make in
+            make.width.equalTo(80)
+            make.height.equalTo(30)
+            make.right.equalToSuperview()
+            make.top.equalTo(menuButton.snp.top)
+        }
+        
+        toolCollectionView.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.height.equalTo(70.h)
+        }
+        toolCollectionView.delegate = self
+
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
+        saveButton.addTarget(self, action: #selector(onClickSave(_:)), for: .touchUpInside)
         nextButton.addTarget(self, action: #selector(onClickNext(_:)), for: .touchUpInside)
         lastButton.addTarget(self, action: #selector(onClickLast(_:)), for: .touchUpInside)
         menuButton.addTarget(self, action: #selector(onClickMenu(_:)), for: .touchUpInside)
 
         StickerManager.shared.initCurrentTemplate(jsonName: jsonFiles[index], currentVC: self)
+    }
+    
+    @objc private func onClickSave(_ sender: UIButton) {
+        guard let finalImage = renderImage(from: containerView) else { return }
+        saveImageToAlbum(finalImage)
     }
     
     @objc private func onClickNext(_ sender: UIButton) {
@@ -171,8 +207,48 @@ class EditImageViewController: ZLEditImageViewController {
     @objc private func onClickBack(_ sender: UIButton) {
         dismiss(animated: true)
     }
+    
+    func renderImage(from view: UIView) -> UIImage? {
+        let renderer = UIGraphicsImageRenderer(size: view.bounds.size)
+        return renderer.image { ctx in
+            view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+        }
+    }
+
+    func saveImageToAlbum(_ image: UIImage) {
+        PHPhotoLibrary.requestAuthorization { status in
+            if status == .authorized || status == .limited {
+                UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+            } else {
+                DispatchQueue.main.async {
+                    self.showAlbumPermissionAlert()
+                }
+            }
+        }
+    }
+
+    func showAlbumPermissionAlert() {
+        let alert = UIAlertController(
+            title: "需要相册权限",
+            message: "请在设置中允许保存照片",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "取消", style: .cancel))
+        alert.addAction(UIAlertAction(title: "去设置", style: .default, handler: { _ in
+            if let url = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(url)
+            }
+        }))
+        present(alert, animated: true)
+    }
+
 }
 
-
+extension EditImageViewController:ToolsCollectionViewDelegate {
+    func cellDidSelectItemAt(_ sender: ToolsCollectionView, indexPath: IndexPath) {
+        replaceBgImage(image: UIImage(named: "Christmas01-bg")!)
+        resetContainerViewFrame()
+    }
+}
 
 
