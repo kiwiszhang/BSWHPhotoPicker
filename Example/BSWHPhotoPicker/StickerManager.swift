@@ -22,6 +22,7 @@ final class StickerManager: NSObject {
     weak var controller: EditImageViewController?
     private weak var currentStickerView: ZLImageStickerView?
     var modelMap: [String: ImageStickerModel] = [:]
+    var stickerArr: [EditableStickerView] = []
     weak var delegate: StickerManagerDelegate?
     static let shared = StickerManager()
     private override init() {
@@ -40,11 +41,41 @@ final class StickerManager: NSObject {
     func initCurrentTemplate(jsonName:String,currentVC:EditImageViewController){
         let items = StickerManager.shared.loadLocalJSON(fileName: jsonName, type: [ImageStickerModel].self)
         StickerManager.shared.modelMap.removeAll()
+        StickerManager.shared.stickerArr.removeAll()
         controller = currentVC
         for state in items! {
             let sticker = currentVC.addImageSticker01(state: state)
             sticker.stickerModel = state
             StickerManager.shared.modelMap[sticker.id] = state
+            StickerManager.shared.stickerArr.append(sticker)
+            if state.isBgImage == true {
+                let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
+                sticker.addGestureRecognizer(tap)
+                sticker.isUserInteractionEnabled = true
+                if let image = sticker.stickerModel?.stickerImage {
+                    sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
+                }
+            }
+        }
+    }
+    
+    func initCurrentTemplate(jsonName:String,currentVC:EditImageViewController,cropped:Double = 1){
+        let items = StickerManager.shared.loadLocalJSON(fileName: jsonName, type: [ImageStickerModel].self)
+        StickerManager.shared.modelMap.removeAll()
+        StickerManager.shared.stickerArr.removeAll()
+        controller = currentVC
+        for state in items! {
+            state.originScale = state.originScale * cropped
+            state.gesScale = state.gesScale * cropped
+//            state.originFrameX = state.originFrameX * cropped
+            state.originFrameY = state.originFrameY * cropped * cropped * cropped
+            state.originFrameWidth = state.originFrameWidth * cropped
+            state.originFrameHeight = state.originFrameHeight * cropped
+
+            let sticker = currentVC.addImageSticker01(state: state)
+            sticker.stickerModel = state
+            StickerManager.shared.modelMap[sticker.id] = state
+            StickerManager.shared.stickerArr.append(sticker)
             if state.isBgImage == true {
                 let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
                 sticker.addGestureRecognizer(tap)
