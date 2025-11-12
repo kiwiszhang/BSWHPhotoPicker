@@ -16,7 +16,7 @@ import SnapKit
 
 class ToolsCollectionView: UIView {
     weak var delegate: ToolsCollectionViewDelegate?
-    var scannedImages: [String] = ["替换背景","弹框测试","修改比例1:1","修改比例4:5","修改比例9:16"]
+    var scannedImages: [String] = ["替换背景","弹框测试","修改比例1:1","修改比例4:5","修改比例9:16","裁剪"]
     var currentIndex: Int = 0
     
     private lazy var collectionView: UICollectionView = {

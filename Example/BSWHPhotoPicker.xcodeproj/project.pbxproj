@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		2002012A1B0EA79BA1ED45A4 /* Pods_BSWHPhotoPicker_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D925E5EE90C5758598A8BEBB /* Pods_BSWHPhotoPicker_Tests.framework */; };
+		530C84952EC46BCB0037290D /* TemplateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C84942EC46BCB0037290D /* TemplateListViewController.swift */; };
+		530C849B2EC48E000037290D /* CustomScrViewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C849A2EC48E000037290D /* CustomScrViewList.swift */; };
+		530C849D2EC48E770037290D /* TemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C849C2EC48E770037290D /* TemplateViewController.swift */; };
 		533A14A92E9F789700A2E1C6 /* Christmas00.json in Resources */ = {isa = PBXBuildFile; fileRef = 533A14A82E9F789700A2E1C6 /* Christmas00.json */; };
 		533A14AD2E9F887F00A2E1C6 /* Christmas01.json in Resources */ = {isa = PBXBuildFile; fileRef = 533A14AC2E9F887F00A2E1C6 /* Christmas01.json */; };
 		533A14AF2E9F925900A2E1C6 /* Christmas02.json in Resources */ = {isa = PBXBuildFile; fileRef = 533A14AE2E9F925900A2E1C6 /* Christmas02.json */; };
@@ -41,6 +44,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		530C84942EC46BCB0037290D /* TemplateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateListViewController.swift; sourceTree = "<group>"; };
+		530C849A2EC48E000037290D /* CustomScrViewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomScrViewList.swift; sourceTree = "<group>"; };
+		530C849C2EC48E770037290D /* TemplateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateViewController.swift; sourceTree = "<group>"; };
 		533A14A82E9F789700A2E1C6 /* Christmas00.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Christmas00.json; sourceTree = "<group>"; };
 		533A14AC2E9F887F00A2E1C6 /* Christmas01.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Christmas01.json; sourceTree = "<group>"; };
 		533A14AE2E9F925900A2E1C6 /* Christmas02.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Christmas02.json; sourceTree = "<group>"; };
@@ -137,10 +143,13 @@
 				533A14C52EA0CA3300A2E1C6 /* Json */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
+				530C84942EC46BCB0037290D /* TemplateListViewController.swift */,
+				530C849C2EC48E770037290D /* TemplateViewController.swift */,
 				9899F87A2E73ED02000AABA4 /* EditImageViewController.swift */,
 				53734DFA2EBA02360005ED8B /* DrawViewController.swift */,
 				53734FB12EC1E6780005ED8B /* ToolsCollectionView.swift */,
 				533A14BA2EA08DCB00A2E1C6 /* StickerManager.swift */,
+				530C849A2EC48E000037290D /* CustomScrViewList.swift */,
 				53734FEF2EC2E3830005ED8B /* ReplaceBgView.swift */,
 				9801A70D2E726C2A00607935 /* testImage.png */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
@@ -413,8 +422,11 @@
 				53734DFB2EBA02360005ED8B /* DrawViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				530C84952EC46BCB0037290D /* TemplateListViewController.swift in Sources */,
 				9899F87B2E73ED02000AABA4 /* EditImageViewController.swift in Sources */,
+				530C849D2EC48E770037290D /* TemplateViewController.swift in Sources */,
 				533A14BB2EA08DCB00A2E1C6 /* StickerManager.swift in Sources */,
+				530C849B2EC48E000037290D /* CustomScrViewList.swift in Sources */,
 				53734FF02EC2E3830005ED8B /* ReplaceBgView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

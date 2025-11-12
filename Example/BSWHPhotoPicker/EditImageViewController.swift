@@ -325,6 +325,8 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
                 replaceBgImage(image: squareImage)
                 resetContainerViewFrame()
             }
+        }else if indexPath.row == 5 {
+
         }
 
     }
