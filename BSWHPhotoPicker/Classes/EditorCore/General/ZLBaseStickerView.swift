@@ -316,7 +316,7 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
             delegate?.stickerBeginOperation(self)
         } else if !isOn, onOperation {
             onOperation = false
-            startTimer()
+//            startTimer()
             delegate?.stickerEndOperation(self, panGes: panGes)
         }
     }
@@ -347,12 +347,12 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         borderView.layer.borderColor = UIColor.clear.cgColor
     }
     
-    public func startTimer() {
-        cleanTimer()
-        borderView.layer.borderColor = UIColor.white.cgColor
-        timer = Timer.scheduledTimer(timeInterval: 2, target: ZLWeakProxy(target: self), selector: #selector(hideBorder), userInfo: nil, repeats: false)
-        RunLoop.current.add(timer!, forMode: .common)
-    }
+//    public func startTimer() {
+//        cleanTimer()
+//        borderView.layer.borderColor = UIColor.white.cgColor
+//        timer = Timer.scheduledTimer(timeInterval: 2, target: ZLWeakProxy(target: self), selector: #selector(hideBorder), userInfo: nil, repeats: false)
+//        RunLoop.current.add(timer!, forMode: .common)
+//    }
     
     public func cleanTimer() {
         timer?.invalidate()

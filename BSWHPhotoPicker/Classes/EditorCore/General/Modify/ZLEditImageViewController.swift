@@ -1331,7 +1331,7 @@ extension ZLEditImageViewController: ZLStickerViewDelegate {
                 return
             }
             
-            textSticker.startTimer()
+//            textSticker.startTimer()
             guard textSticker.text != text || textSticker.textColor != textColor || textSticker.style != style || textSticker.font != font else {
                 return
             }

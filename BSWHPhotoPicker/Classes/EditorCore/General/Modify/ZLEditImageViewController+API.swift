@@ -472,7 +472,7 @@ public class EditableStickerView: ZLImageStickerView {
         )
         borderView.layer.borderWidth = borderWidth
         borderView.layer.borderColor = UIColor.clear.cgColor
-        if showBorder { startTimer() }
+//        if showBorder { startTimer() }
 
         addButton()
         enableTapSelection()
@@ -819,17 +819,17 @@ public class EditableStickerView: ZLImageStickerView {
         showButton()
     }
 
-    public override func startTimer() {
-        cleanTimer()
-        borderView.layer.borderColor = UIColor.white.cgColor
-        hiddenButton()
-        timer = Timer.scheduledTimer(timeInterval: 2,
-                                     target: ZLWeakProxy(target: self),
-                                     selector: #selector(hideBorder),
-                                     userInfo: nil,
-                                     repeats: false)
-        RunLoop.current.add(timer!, forMode: .common)
-    }
+//    public override func startTimer() {
+//        cleanTimer()
+//        borderView.layer.borderColor = UIColor.white.cgColor
+//        hiddenButton()
+//        timer = Timer.scheduledTimer(timeInterval: 2,
+//                                     target: ZLWeakProxy(target: self),
+//                                     selector: #selector(hideBorder),
+//                                     userInfo: nil,
+//                                     repeats: false)
+//        RunLoop.current.add(timer!, forMode: .common)
+//    }
 
     public func refreshResizeButtonPosition() {
         syncResizeButtonToOverlay()
@@ -1249,17 +1249,17 @@ public class EditableTextStickerView: ZLTextStickerView {
         hiddenButtons()
     }
     
-    public override func startTimer() {
-        cleanTimer()
-        borderView.layer.borderColor = UIColor.white.cgColor
-        showButtons()
-        timer = Timer.scheduledTimer(timeInterval: 2,
-                                     target: ZLWeakProxy(target: self),
-                                     selector: #selector(hideBorder),
-                                     userInfo: nil,
-                                     repeats: false)
-        RunLoop.current.add(timer!, forMode: .common)
-    }
+//    public override func startTimer() {
+//        cleanTimer()
+//        borderView.layer.borderColor = UIColor.white.cgColor
+//        showButtons()
+//        timer = Timer.scheduledTimer(timeInterval: 2,
+//                                     target: ZLWeakProxy(target: self),
+//                                     selector: #selector(hideBorder),
+//                                     userInfo: nil,
+//                                     repeats: false)
+//        RunLoop.current.add(timer!, forMode: .common)
+//    }
     
     public override func removeFromSuperview() {
         resizeButton.removeFromSuperview()
