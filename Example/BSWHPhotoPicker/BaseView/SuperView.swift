@@ -84,3 +84,53 @@ public func kkColorFromHex(_ hex: String) -> UIColor {
         return UIColor(red: 0, green: 0, blue: 0, alpha: 1)
     }
 }
+
+public let kkTABBAR_HEIGHT = 49.0
+public let kkNAV_HEIGHT = 44.0
+
+/// top安全区域
+public let kkSAFE_AREA_TOP: CGFloat = {
+    guard let window = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .flatMap({ $0.windows })
+            .first(where: { $0.isKeyWindow }) else {
+            return 0
+    }
+    
+    if #available(iOS 11.0, *) {
+        return window.safeAreaInsets.top
+    }
+    return 0
+}()
+/// bottom 安全区域
+public let kkSAFE_AREA_BOTTOM: CGFloat = {
+    guard let window = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .flatMap({ $0.windows })
+            .first(where: { $0.isKeyWindow }) else {
+            return 0
+    }
+    
+    if #available(iOS 11.0, *) {
+        return window.safeAreaInsets.bottom
+    }
+    return 0
+}()
+
+/// 状态栏高度
+public let kkSTATUS_BAR_HEIGHT: CGFloat = {
+    guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
+        return 0
+    }
+    if #available(iOS 13.0, *) {
+        return windowScene.statusBarManager?.statusBarFrame.height ?? 0
+    } else {
+        return UIApplication.shared.statusBarFrame.height
+    }
+}()
+
+/// 导航栏总高度（状态栏+导航栏）
+public let kkNAVIGATION_BAR_HEIGHT = kkNAV_HEIGHT + kkSTATUS_BAR_HEIGHT
+
+/// Tab栏总高度（Tab栏+底部安全区域）
+public let kkTAB_BAR_TOTAL_HEIGHT = kkTABBAR_HEIGHT + kkSAFE_AREA_BOTTOM

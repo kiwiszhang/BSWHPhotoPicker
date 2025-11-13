@@ -17,12 +17,22 @@ struct TemplateModel {
 
 class TemplateViewController: UIViewController, UIScrollViewDelegate {
     
+    let topView = UIView()
+    private lazy var backBtn = UIImageView().image(UIImage(named: "templateNavBack")).enable(true).onTap {
+        self.dismiss(animated: true)
+    }
+    private lazy var titleLab = UILabel().color(kkColorFromHex("333333")).hnFont(size: 18.h, weight: .boldBase).centerAligned()
     let tabView = CustomScrViewList()
     var collectionView: UICollectionView!
     private let titles = ["ALL", "Christmas"]
     var items:[[TemplateModel]] = []
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.hidden(true)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+//        title = "Choose A Template"
         view.backgroundColor = .white
         
         let item00 = TemplateModel(imageName: "1",imageBg: "Christmas00-bg",jsonName: "Christmas00")
@@ -40,22 +50,49 @@ class TemplateViewController: UIViewController, UIScrollViewDelegate {
     }
     
     private func setupTabView() {
+        
+        view.addSubview(topView)
+        topView.backgroundColor(.white)
+        topView.snp.makeConstraints { make in
+            make.left.right.top.equalToSuperview()
+            make.height.equalTo(kkNAVIGATION_BAR_HEIGHT + 44.h)
+        }
+        
         tabView.titles = titles
+        tabView.backgroundColor = .white
         tabView.delegate = self
-        view.addSubview(tabView)
+        topView.addSubview(tabView)
+        topView.addSubview(backBtn)
+        topView.addSubview(titleLab)
         tabView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.bottom.equalToSuperview()
             make.left.equalToSuperview().offset(24.w)
             make.right.equalToSuperview()
-            make.height.equalTo(44.h)
+            make.height.equalTo((44.h))
         }
+        
+        backBtn.snp.makeConstraints { make in
+            make.width.height.equalTo(24.w)
+            make.left.equalToSuperview().offset(12.w)
+            make.bottom.equalTo(tabView.snp.top).offset(-8.h)
+        }
+        
+        titleLab.snp.makeConstraints { make in
+            make.height.equalTo(backBtn.snp.height)
+            make.centerY.equalTo(backBtn.snp.centerY)
+            make.centerX.equalToSuperview()
+            make.left.equalToSuperview().offset(36.w)
+            make.right.equalToSuperview().offset(-36.w)
+        }
+        titleLab.text = "Choose A Template"
+        
     }
     
     private func setupCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
-        layout.itemSize = CGSize(width: view.frame.width, height: view.frame.height - 44 - view.safeAreaInsets.top)
+        layout.itemSize = CGSize(width: view.frame.width, height: view.frame.height - kkNAVIGATION_BAR_HEIGHT - 44.h)
         
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isPagingEnabled = true
@@ -171,7 +208,7 @@ class ContentCell: UICollectionViewCell {
         layout.sectionInset = UIEdgeInsets(top: 12, left: 8, bottom: 8, right: 8)
         
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .systemCyan
+        collectionView.backgroundColor = .white
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.showsVerticalScrollIndicator = false
