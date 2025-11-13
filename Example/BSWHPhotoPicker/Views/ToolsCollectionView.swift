@@ -9,6 +9,11 @@
 import UIKit
 import SnapKit
 
+struct ToolsModel {
+    var text:String = "Text"
+    var imageName:String = "template-text"
+}
+
 
 @objc protocol ToolsCollectionViewDelegate: AnyObject {
     func cellDidSelectItemAt(_ sender: ToolsCollectionView,indexPath:IndexPath)
@@ -16,7 +21,8 @@ import SnapKit
 
 class ToolsCollectionView: UIView {
     weak var delegate: ToolsCollectionViewDelegate?
-    var scannedImages: [String] = ["替换背景","弹框测试","修改比例1:1","修改比例4:5","修改比例9:16","裁剪"]
+//    var scannedImages: [String] = ["替换背景","弹框测试","修改比例1:1","修改比例4:5","修改比例9:16","裁剪"]
+    var items: [ToolsModel] = []
     var currentIndex: Int = 0
     
     private lazy var collectionView: UICollectionView = {
@@ -26,7 +32,7 @@ class ToolsCollectionView: UIView {
         layout.minimumInteritemSpacing = 0
         
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .white
+        cv.backgroundColor = kkColorFromHex("F5F5F5")
         cv.dataSource = self
         cv.delegate = self
         cv.showsHorizontalScrollIndicator = false
@@ -52,6 +58,13 @@ class ToolsCollectionView: UIView {
             make.top.equalToSuperview()
             make.height.equalTo(120.h)
         }
+        
+        let item00 = ToolsModel(text: "Text",imageName: "template-text")
+        let item01 = ToolsModel(text: "Background",imageName: "template-Background")
+        let item02 = ToolsModel(text: "Photos",imageName: "template-photos")
+        let item03 = ToolsModel(text: "Stickers",imageName: "template-stickers")
+        let item04 = ToolsModel(text: "Ratio",imageName: "template-ratio")
+        items = [item00,item01,item02,item03,item04]
         reload()
     }
 
@@ -63,7 +76,7 @@ class ToolsCollectionView: UIView {
 // MARK: - UICollectionViewDataSource
 extension ToolsCollectionView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return scannedImages.count
+        return items.count
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -73,7 +86,7 @@ extension ToolsCollectionView: UICollectionViewDataSource {
             withReuseIdentifier: "ToolCollectionViewCell",
             for: indexPath
         ) as! ToolCollectionViewCell
-        cell.configure(with: scannedImages[indexPath.row])
+        cell.configure(with: items[indexPath.row])
         return cell
     }
 }
@@ -83,7 +96,7 @@ extension ToolsCollectionView: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 120.w, height: 120.h)
+        return CGSize(width: 70.w, height: 120.h)
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -94,9 +107,9 @@ extension ToolsCollectionView: UICollectionViewDelegateFlowLayout {
 
 class ToolCollectionViewCell: UICollectionViewCell {
         
-    private lazy var containerView = UIView()
+    private lazy var containerView = UIView().backgroundColor(kkColorFromHex("EBEBEB")).cornerRadius(10.w)
     lazy var imgView = UIImageView()
-    lazy var titleLab = UILabel()
+    lazy var titleLab = UILabel().color(kkColorFromHex("65656D")).hnFont(size: 12.h, weight:.mediumBase).centerAligned()
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -107,29 +120,31 @@ class ToolCollectionViewCell: UICollectionViewCell {
     }
 
     private func setupUI() {
+        containerView.backgroundColor(kkColorFromHex("F5F5F5"))
         contentView.addSubview(containerView)
-        containerView.snp.makeConstraints { make in make.edges.equalToSuperview() }
-
-        titleLab.text = "CCCC"
-        titleLab.textColor = .systemRed
+        containerView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(5.h)
+            make.width.height.equalTo(42.w)
+        }
        
         containerView.addSubview(imgView)
-        containerView.addSubview(titleLab)
+        contentView.addSubview(titleLab)
 
         imgView.snp.makeConstraints { make in
-            make.left.equalToSuperview()
-            make.top.equalToSuperview()
-            make.size.equalTo(CGSize(width: 46.h, height: 46.h))
+            make.center.equalToSuperview()
+            make.size.equalTo(CGSize(width: 26.w, height: 26.w))
         }
 
         titleLab.snp.makeConstraints { make in
-            make.bottom.left.right.equalToSuperview()
-            make.height.equalTo(20.h)
+            make.left.right.equalToSuperview()
+            make.height.equalTo(18.h)
+            make.top.equalTo(containerView.snp.bottom).offset(8.h)
         }
     }
 
-
-    func configure(with item: String) {
-        titleLab.text = item
+    func configure(with item: ToolsModel) {
+        titleLab.text = item.text
+        imgView.image(UIImage(named: item.imageName))
     }
 }

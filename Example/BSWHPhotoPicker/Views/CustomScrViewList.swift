@@ -19,8 +19,8 @@ class CustomScrViewList: UIView {
         didSet { reloadData() }
     }
     
-    var btnFont: UIFont = .systemFont(ofSize: 15)
-    var btnSelectedFont: UIFont = .boldSystemFont(ofSize: 15)
+    var btnFont: UIFont = .systemFont(ofSize: 14.h, weight: .medium)
+    var btnSelectedFont: UIFont = .systemFont(ofSize: 14.h, weight: .regular)
     
     var btnColor: UIColor = .darkGray
     var btnSelectedTextColor: UIColor = .white
@@ -29,7 +29,7 @@ class CustomScrViewList: UIView {
     var btnCornerRadius: CGFloat = 12
     
     // 未选中时边框
-    var btnBorderColor: UIColor = .red
+    var btnBorderColor: UIColor = kkColorFromHex("E4E4E4")
     var btnBorderWidth: CGFloat = 1
     
     weak var delegate: CustomScrViewListDelegate?
@@ -129,7 +129,7 @@ class CustomScrViewList: UIView {
                 
                 let gradient = CAGradientLayer()
                 gradient.frame = btn.bounds
-                gradient.colors = [UIColor.red.cgColor, UIColor.orange.cgColor]
+                gradient.colors = [kkColorFromHex("D500FF").cgColor, kkColorFromHex("FD57AF").cgColor]
                 gradient.startPoint = CGPoint(x: 0, y: 0.5)
                 gradient.endPoint = CGPoint(x: 1, y: 0.5)
                 gradient.cornerRadius = btnCornerRadius

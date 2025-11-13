@@ -17,7 +17,6 @@ class EditImageViewController: ZLEditImageViewController {
 
     var index = 0
     private var bgPanelBottomConstraint: Constraint?
-
     private lazy var bgPanel: ReplaceBgView = {
         let v = ReplaceBgView()
         v.backgroundColor = .systemRed
@@ -28,6 +27,7 @@ class EditImageViewController: ZLEditImageViewController {
         }
         return v
     }()
+    private lazy var topView = TemplateTopView().backgroundColor(kkColorFromHex("F5F5F5"))
     
     let backButton: UIButton = {
         let button = UIButton(type: .custom)
@@ -75,19 +75,20 @@ class EditImageViewController: ZLEditImageViewController {
     
     let toolCollectionView:ToolsCollectionView = {
        let view = ToolsCollectionView()
-        view.backgroundColor = .systemCyan
+        view.backgroundColor = kkColorFromHex("F5F5F5")
         return view
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(backButton)
-        view.addSubview(saveButton)
-        view.addSubview(nextButton)
-        view.addSubview(lastButton)
-        view.addSubview(menuButton)
+//        view.addSubview(backButton)
+//        view.addSubview(saveButton)
+//        view.addSubview(nextButton)
+//        view.addSubview(lastButton)
+//        view.addSubview(menuButton)
+        view.addSubview(topView)
         view.addSubview(toolCollectionView)
-        
+
         view.addSubview(bgPanel)
                 
         bgPanel.snp.makeConstraints { make in
@@ -96,40 +97,49 @@ class EditImageViewController: ZLEditImageViewController {
             self.bgPanelBottomConstraint = make.bottom.equalToSuperview().offset(200).constraint
         }
         
-        nextButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview()
-            make.bottom.equalTo(-40)
-            make.width.equalTo(80)
-            make.height.equalTo(30)
-        }
         
-        lastButton.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.bottom.equalTo(-40)
-            make.width.equalTo(80)
-            make.height.equalTo(30)
-        }
+//        nextButton.snp.makeConstraints { make in
+//            make.trailing.equalToSuperview()
+//            make.bottom.equalTo(-40)
+//            make.width.equalTo(80)
+//            make.height.equalTo(30)
+//        }
+//        
+//        lastButton.snp.makeConstraints { make in
+//            make.leading.equalToSuperview()
+//            make.bottom.equalTo(-40)
+//            make.width.equalTo(80)
+//            make.height.equalTo(30)
+//        }
+//        
+//        menuButton.snp.makeConstraints { make in
+//            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
+//            make.centerX.equalToSuperview()
+//            make.width.equalTo(80)
+//            make.height.equalTo(30)
+//        }
+//        
+//        backButton.snp.makeConstraints { make in
+//            make.width.equalTo(80)
+//            make.height.equalTo(30)
+//            make.left.equalToSuperview()
+//            make.top.equalTo(menuButton.snp.top)
+//        }
+//        
+//        saveButton.snp.makeConstraints { make in
+//            make.width.equalTo(80)
+//            make.height.equalTo(30)
+//            make.right.equalToSuperview()
+//            make.top.equalTo(menuButton.snp.top)
+//        }
         
-        menuButton.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(80)
-            make.height.equalTo(30)
+        topView.snp.makeConstraints { make in
+//            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.top.equalToSuperview()
+            make.height.equalTo(88.h)
+            make.left.right.equalToSuperview()
         }
-        
-        backButton.snp.makeConstraints { make in
-            make.width.equalTo(80)
-            make.height.equalTo(30)
-            make.left.equalToSuperview()
-            make.top.equalTo(menuButton.snp.top)
-        }
-        
-        saveButton.snp.makeConstraints { make in
-            make.width.equalTo(80)
-            make.height.equalTo(30)
-            make.right.equalToSuperview()
-            make.top.equalTo(menuButton.snp.top)
-        }
+        topView.delegate = self
         
         toolCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
@@ -137,11 +147,11 @@ class EditImageViewController: ZLEditImageViewController {
         }
         toolCollectionView.delegate = self
 
-        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
-        saveButton.addTarget(self, action: #selector(onClickSave(_:)), for: .touchUpInside)
-        nextButton.addTarget(self, action: #selector(onClickNext(_:)), for: .touchUpInside)
-        lastButton.addTarget(self, action: #selector(onClickLast(_:)), for: .touchUpInside)
-        menuButton.addTarget(self, action: #selector(onClickMenu(_:)), for: .touchUpInside)
+//        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
+//        saveButton.addTarget(self, action: #selector(onClickSave(_:)), for: .touchUpInside)
+//        nextButton.addTarget(self, action: #selector(onClickNext(_:)), for: .touchUpInside)
+//        lastButton.addTarget(self, action: #selector(onClickLast(_:)), for: .touchUpInside)
+//        menuButton.addTarget(self, action: #selector(onClickMenu(_:)), for: .touchUpInside)
 
         StickerManager.shared.initCurrentTemplate(jsonName: jsonFiles[index], currentVC: self)
     }
@@ -285,7 +295,28 @@ class EditImageViewController: ZLEditImageViewController {
     }
 
 }
+// MARK: - TemplateTopView-TemplateTopViewDelegate
+extension EditImageViewController:TemplateTopViewDelegate {
+    func closeTemplate(_ sender: TemplateTopView) {
+        dismiss(animated: true)
+    }
+    func backTemplate(_ sender: TemplateTopView){
+        if canRedo {
+            redoAction()
+        }
+    }
+    func reBackTemplate(_ sender: TemplateTopView) {
+        if canUndo {
+            undoAction()
+        }
+    }
+    func saveTemplate(_ sender: TemplateTopView) {
+        guard let finalImage = renderImage(from: containerView) else { return }
+        saveImageToAlbum(finalImage)
+    }
+}
 
+// MARK: - ToolsCollectionView-ToolsCollectionViewDelegate
 extension EditImageViewController:ToolsCollectionViewDelegate {
     func cellDidSelectItemAt(_ sender: ToolsCollectionView, indexPath: IndexPath) {
         if indexPath.row == 0 {

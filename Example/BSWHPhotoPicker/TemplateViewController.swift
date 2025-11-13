@@ -29,8 +29,11 @@ class TemplateViewController: UIViewController, UIScrollViewDelegate {
         let item01 = TemplateModel(imageName: "2",imageBg: "Christmas01-bg",jsonName: "Christmas01")
         let item02 = TemplateModel(imageName: "3",imageBg: "Christmas02-bg",jsonName: "Christmas02")
         let item03 = TemplateModel(imageName: "4",imageBg: "Christmas03-bg",jsonName: "Christmas03")
+        let item04 = TemplateModel(imageName: "5",imageBg: "Christmas04-bg",jsonName: "Christmas04")
+        let item05 = TemplateModel(imageName: "6",imageBg: "Christmas05-bg",jsonName: "Christmas05")
+        let item06 = TemplateModel(imageName: "7",imageBg: "Christmas06-bg",jsonName: "Christmas06")
 
-        items = [[item00,item01,item02,item03,item00,item01,item02,item03],[item00,item01,item02,item03]]
+        items = [[item00,item01,item02,item03,item04,item05,item06],[item00,item01,item02,item03,item04,item05,item06]]
         
         setupTabView()
         setupCollectionView()
@@ -42,8 +45,9 @@ class TemplateViewController: UIViewController, UIScrollViewDelegate {
         view.addSubview(tabView)
         tabView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.left.right.equalToSuperview()
-            make.height.equalTo(44)
+            make.left.equalToSuperview().offset(24.w)
+            make.right.equalToSuperview()
+            make.height.equalTo(44.h)
         }
     }
     

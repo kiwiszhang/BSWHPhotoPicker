@@ -11,6 +11,13 @@
 		530C84952EC46BCB0037290D /* TemplateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C84942EC46BCB0037290D /* TemplateListViewController.swift */; };
 		530C849B2EC48E000037290D /* CustomScrViewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C849A2EC48E000037290D /* CustomScrViewList.swift */; };
 		530C849D2EC48E770037290D /* TemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C849C2EC48E770037290D /* TemplateViewController.swift */; };
+		530C84A02EC56B850037290D /* TemplateTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C849F2EC56B850037290D /* TemplateTopView.swift */; };
+		530C84A42EC56C080037290D /* SuperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C84A22EC56C080037290D /* SuperView.swift */; };
+		530C84A52EC56C080037290D /* SuperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C84A32EC56C080037290D /* SuperViewController.swift */; };
+		530C84A82EC56C250037290D /* UILabel+Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C84A62EC56C250037290D /* UILabel+Create.swift */; };
+		530C84A92EC56C250037290D /* UIView+Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C84A72EC56C250037290D /* UIView+Create.swift */; };
+		530C84AB2EC56CA80037290D /* UIImageView+Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C84AA2EC56CA80037290D /* UIImageView+Create.swift */; };
+		530C84AD2EC572600037290D /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C84AC2EC572600037290D /* UIFont+Extension.swift */; };
 		533A14A92E9F789700A2E1C6 /* Christmas00.json in Resources */ = {isa = PBXBuildFile; fileRef = 533A14A82E9F789700A2E1C6 /* Christmas00.json */; };
 		533A14AD2E9F887F00A2E1C6 /* Christmas01.json in Resources */ = {isa = PBXBuildFile; fileRef = 533A14AC2E9F887F00A2E1C6 /* Christmas01.json */; };
 		533A14AF2E9F925900A2E1C6 /* Christmas02.json in Resources */ = {isa = PBXBuildFile; fileRef = 533A14AE2E9F925900A2E1C6 /* Christmas02.json */; };
@@ -47,6 +54,13 @@
 		530C84942EC46BCB0037290D /* TemplateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateListViewController.swift; sourceTree = "<group>"; };
 		530C849A2EC48E000037290D /* CustomScrViewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomScrViewList.swift; sourceTree = "<group>"; };
 		530C849C2EC48E770037290D /* TemplateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateViewController.swift; sourceTree = "<group>"; };
+		530C849F2EC56B850037290D /* TemplateTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateTopView.swift; sourceTree = "<group>"; };
+		530C84A22EC56C080037290D /* SuperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperView.swift; sourceTree = "<group>"; };
+		530C84A32EC56C080037290D /* SuperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperViewController.swift; sourceTree = "<group>"; };
+		530C84A62EC56C250037290D /* UILabel+Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Create.swift"; sourceTree = "<group>"; };
+		530C84A72EC56C250037290D /* UIView+Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Create.swift"; sourceTree = "<group>"; };
+		530C84AA2EC56CA80037290D /* UIImageView+Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Create.swift"; sourceTree = "<group>"; };
+		530C84AC2EC572600037290D /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		533A14A82E9F789700A2E1C6 /* Christmas00.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Christmas00.json; sourceTree = "<group>"; };
 		533A14AC2E9F887F00A2E1C6 /* Christmas01.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Christmas01.json; sourceTree = "<group>"; };
 		533A14AE2E9F925900A2E1C6 /* Christmas02.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Christmas02.json; sourceTree = "<group>"; };
@@ -101,6 +115,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		530C849E2EC56B4B0037290D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				53734FB12EC1E6780005ED8B /* ToolsCollectionView.swift */,
+				53734FEF2EC2E3830005ED8B /* ReplaceBgView.swift */,
+				530C849A2EC48E000037290D /* CustomScrViewList.swift */,
+				530C849F2EC56B850037290D /* TemplateTopView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		530C84A12EC56BFB0037290D /* BaseView */ = {
+			isa = PBXGroup;
+			children = (
+				530C84AA2EC56CA80037290D /* UIImageView+Create.swift */,
+				530C84A22EC56C080037290D /* SuperView.swift */,
+				530C84A32EC56C080037290D /* SuperViewController.swift */,
+				530C84A62EC56C250037290D /* UILabel+Create.swift */,
+				530C84AC2EC572600037290D /* UIFont+Extension.swift */,
+				530C84A72EC56C250037290D /* UIView+Create.swift */,
+			);
+			path = BaseView;
+			sourceTree = "<group>";
+		};
 		533A14C52EA0CA3300A2E1C6 /* Json */ = {
 			isa = PBXGroup;
 			children = (
@@ -140,6 +178,8 @@
 		607FACD21AFB9204008FA782 /* Example for BSWHPhotoPicker */ = {
 			isa = PBXGroup;
 			children = (
+				530C84A12EC56BFB0037290D /* BaseView */,
+				530C849E2EC56B4B0037290D /* Views */,
 				533A14C52EA0CA3300A2E1C6 /* Json */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
@@ -147,10 +187,7 @@
 				530C849C2EC48E770037290D /* TemplateViewController.swift */,
 				9899F87A2E73ED02000AABA4 /* EditImageViewController.swift */,
 				53734DFA2EBA02360005ED8B /* DrawViewController.swift */,
-				53734FB12EC1E6780005ED8B /* ToolsCollectionView.swift */,
 				533A14BA2EA08DCB00A2E1C6 /* StickerManager.swift */,
-				530C849A2EC48E000037290D /* CustomScrViewList.swift */,
-				53734FEF2EC2E3830005ED8B /* ReplaceBgView.swift */,
 				9801A70D2E726C2A00607935 /* testImage.png */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -418,15 +455,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				530C84A82EC56C250037290D /* UILabel+Create.swift in Sources */,
+				530C84A92EC56C250037290D /* UIView+Create.swift in Sources */,
 				53734FB22EC1E6780005ED8B /* ToolsCollectionView.swift in Sources */,
 				53734DFB2EBA02360005ED8B /* DrawViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				530C84952EC46BCB0037290D /* TemplateListViewController.swift in Sources */,
+				530C84A02EC56B850037290D /* TemplateTopView.swift in Sources */,
+				530C84A42EC56C080037290D /* SuperView.swift in Sources */,
+				530C84A52EC56C080037290D /* SuperViewController.swift in Sources */,
+				530C84AD2EC572600037290D /* UIFont+Extension.swift in Sources */,
 				9899F87B2E73ED02000AABA4 /* EditImageViewController.swift in Sources */,
 				530C849D2EC48E770037290D /* TemplateViewController.swift in Sources */,
 				533A14BB2EA08DCB00A2E1C6 /* StickerManager.swift in Sources */,
 				530C849B2EC48E000037290D /* CustomScrViewList.swift in Sources */,
+				530C84AB2EC56CA80037290D /* UIImageView+Create.swift in Sources */,
 				53734FF02EC2E3830005ED8B /* ReplaceBgView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
