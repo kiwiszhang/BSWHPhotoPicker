@@ -30,6 +30,7 @@
 		53734FB22EC1E6780005ED8B /* ToolsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53734FB12EC1E6780005ED8B /* ToolsCollectionView.swift */; };
 		53734FF02EC2E3830005ED8B /* StickerToolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53734FEF2EC2E3830005ED8B /* StickerToolsView.swift */; };
 		53FC5F4C2EC5B882009E2F1C /* StickerToolsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC5F4B2EC5B882009E2F1C /* StickerToolsCollectionView.swift */; };
+		53FC5F4E2EC5C341009E2F1C /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC5F4D2EC5C341009E2F1C /* UIImage+Extension.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
@@ -73,6 +74,7 @@
 		53734FB12EC1E6780005ED8B /* ToolsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolsCollectionView.swift; sourceTree = "<group>"; };
 		53734FEF2EC2E3830005ED8B /* StickerToolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerToolsView.swift; sourceTree = "<group>"; };
 		53FC5F4B2EC5B882009E2F1C /* StickerToolsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerToolsCollectionView.swift; sourceTree = "<group>"; };
+		53FC5F4D2EC5C341009E2F1C /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* BSWHPhotoPicker_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BSWHPhotoPicker_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 				530C84A62EC56C250037290D /* UILabel+Create.swift */,
 				530C84AC2EC572600037290D /* UIFont+Extension.swift */,
 				530C84A72EC56C250037290D /* UIView+Create.swift */,
+				53FC5F4D2EC5C341009E2F1C /* UIImage+Extension.swift */,
 			);
 			path = BaseView;
 			sourceTree = "<group>";
@@ -458,6 +461,7 @@
 				530C84A82EC56C250037290D /* UILabel+Create.swift in Sources */,
 				530C84A92EC56C250037290D /* UIView+Create.swift in Sources */,
 				53734FB22EC1E6780005ED8B /* ToolsCollectionView.swift in Sources */,
+				53FC5F4E2EC5C341009E2F1C /* UIImage+Extension.swift in Sources */,
 				53734DFB2EBA02360005ED8B /* DrawViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,

@@ -674,6 +674,7 @@ public class EditableStickerView: ZLImageStickerView {
             totalTranslationPoint.y += dy
             gesTranslationPoint = .zero
             setOperation(false)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":self])
         default: break
         }
     }
