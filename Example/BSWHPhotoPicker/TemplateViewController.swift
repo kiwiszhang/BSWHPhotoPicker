@@ -24,7 +24,7 @@ class TemplateViewController: UIViewController, UIScrollViewDelegate {
     private lazy var titleLab = UILabel().color(kkColorFromHex("333333")).hnFont(size: 18.h, weight: .boldBase).centerAligned()
     let tabView = CustomScrViewList()
     var collectionView: UICollectionView!
-    private let titles = ["ALL", "Christmas"]
+    private let titles = [StickerManager.shared.config.all, StickerManager.shared.config.Christmas]
     var items:[[TemplateModel]] = []
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -83,7 +83,7 @@ class TemplateViewController: UIViewController, UIScrollViewDelegate {
             make.left.equalToSuperview().offset(36.w)
             make.right.equalToSuperview().offset(-36.w)
         }
-        titleLab.text = "Choose A Template"
+        titleLab.text = StickerManager.shared.config.ChooseATemplate
         
     }
     

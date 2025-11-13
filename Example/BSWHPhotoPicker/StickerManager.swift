@@ -20,6 +20,7 @@ import BSWHPhotoPicker
 // MARK: - StickerManager
 final class StickerManager: NSObject {
     weak var controller: EditImageViewController?
+    var config = TemplateConfig()
     private weak var currentStickerView: ZLImageStickerView?
     var modelMap: [String: ImageStickerModel] = [:]
     var stickerArr: [EditableStickerView] = []

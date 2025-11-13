@@ -59,11 +59,11 @@ class ToolsCollectionView: UIView {
             make.height.equalTo(120.h)
         }
         
-        let item00 = ToolsModel(text: "Text",imageName: "template-text")
-        let item01 = ToolsModel(text: "Background",imageName: "template-Background")
-        let item02 = ToolsModel(text: "Photos",imageName: "template-photos")
-        let item03 = ToolsModel(text: "Stickers",imageName: "template-stickers")
-        let item04 = ToolsModel(text: "Ratio",imageName: "template-ratio")
+        let item00 = ToolsModel(text: StickerManager.shared.config.Text,imageName: "template-text")
+        let item01 = ToolsModel(text: StickerManager.shared.config.Background,imageName: "template-Background")
+        let item02 = ToolsModel(text: StickerManager.shared.config.Photos,imageName: "template-photos")
+        let item03 = ToolsModel(text: StickerManager.shared.config.Stickers,imageName: "template-stickers")
+        let item04 = ToolsModel(text: StickerManager.shared.config.Ratio,imageName: "template-ratio")
         items = [item00,item01,item02,item03,item04]
         reload()
     }
