@@ -585,6 +585,8 @@ public class EditableStickerView: ZLImageStickerView {
     }
     
     @objc private func handleLeftTopButtonTap() {
+        self.isEditingCustom = false
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":self])
         UIView.animate(withDuration: 0.2, animations: {
             self.alpha = 0
             self.leftTopButton.alpha = 0
