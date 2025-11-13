@@ -11,57 +11,15 @@ import BSWHPhotoPicker
 import SnapKit
 import PhotosUI
 
+let kstickerToolsViewHeight = 186.h
+
 class EditImageViewController: ZLEditImageViewController {
     var item:TemplateModel? = nil
-    private var bgPanelBottomConstraint: Constraint?
-    private lazy var bgPanel: ReplaceBgView = {
-        let v = ReplaceBgView()
-        v.backgroundColor = .systemRed
-        v.layer.cornerRadius = 16
-        v.layer.masksToBounds = true
-        v.onClose = { [weak self] in
-            self?.hideBottomPanel()
-        }
-        return v
-    }()
+    var currentSticker:EditableStickerView? = nil
+    private var stickerToolsViewBottomConstraint: Constraint?
+    private lazy var stickerToolsView = StickerToolsView().cornerRadius(16.w, corners: [.topLeft,.topRight]).backgroundColor(.white)
     private lazy var topView = TemplateTopView().backgroundColor(kkColorFromHex("F5F5F5"))
-    
-    let backButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setTitle("返回", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
-        button.backgroundColor = .blue
-        return button
-    }()
-    
-    let saveButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setTitle("保存", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
-        button.backgroundColor = .blue
-        return button
-    }()
-    
-    let nextButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setTitle("下一步", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
-        button.backgroundColor = .blue
-        return button
-    }()
-    
-    let lastButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setTitle("上一步", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
-        button.backgroundColor = .blue
-        return button
-    }()
-    
+        
     let menuButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("菜单", for: .normal)
@@ -78,57 +36,18 @@ class EditImageViewController: ZLEditImageViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        view.addSubview(backButton)
-//        view.addSubview(saveButton)
-//        view.addSubview(nextButton)
-//        view.addSubview(lastButton)
-//        view.addSubview(menuButton)
+        NotificationCenter.default.addObserver(self, selector: #selector(tapStickerOutOverlay(_:)), name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: nil)
+
         view.addSubview(topView)
         view.addSubview(toolCollectionView)
-
-        view.addSubview(bgPanel)
+        view.addSubview(stickerToolsView)
                 
-        bgPanel.snp.makeConstraints { make in
+        stickerToolsView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.height.equalTo(200)
-            self.bgPanelBottomConstraint = make.bottom.equalToSuperview().offset(200).constraint
+            make.height.equalTo(kstickerToolsViewHeight)
+            self.stickerToolsViewBottomConstraint = make.bottom.equalToSuperview().offset(kstickerToolsViewHeight).constraint
         }
-        
-        
-//        nextButton.snp.makeConstraints { make in
-//            make.trailing.equalToSuperview()
-//            make.bottom.equalTo(-40)
-//            make.width.equalTo(80)
-//            make.height.equalTo(30)
-//        }
-//        
-//        lastButton.snp.makeConstraints { make in
-//            make.leading.equalToSuperview()
-//            make.bottom.equalTo(-40)
-//            make.width.equalTo(80)
-//            make.height.equalTo(30)
-//        }
-//        
-//        menuButton.snp.makeConstraints { make in
-//            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
-//            make.centerX.equalToSuperview()
-//            make.width.equalTo(80)
-//            make.height.equalTo(30)
-//        }
-//        
-//        backButton.snp.makeConstraints { make in
-//            make.width.equalTo(80)
-//            make.height.equalTo(30)
-//            make.left.equalToSuperview()
-//            make.top.equalTo(menuButton.snp.top)
-//        }
-//        
-//        saveButton.snp.makeConstraints { make in
-//            make.width.equalTo(80)
-//            make.height.equalTo(30)
-//            make.right.equalToSuperview()
-//            make.top.equalTo(menuButton.snp.top)
-//        }
+        stickerToolsView.delegate = self
         
         topView.snp.makeConstraints { make in
 //            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
@@ -144,43 +63,17 @@ class EditImageViewController: ZLEditImageViewController {
         }
         toolCollectionView.delegate = self
 
-//        backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
-//        saveButton.addTarget(self, action: #selector(onClickSave(_:)), for: .touchUpInside)
-//        nextButton.addTarget(self, action: #selector(onClickNext(_:)), for: .touchUpInside)
-//        lastButton.addTarget(self, action: #selector(onClickLast(_:)), for: .touchUpInside)
 //        menuButton.addTarget(self, action: #selector(onClickMenu(_:)), for: .touchUpInside)
 
         StickerManager.shared.initCurrentTemplate(jsonName: item!.jsonName, currentVC: self)
+        backAndreBackStatus()
         
-        if canRedo {
-            topView.backImg.image(UIImage(named: "template-back"))
-        }else{
-            topView.backImg.image(UIImage(named: "template-reBack"))
-        }
         
-        if canUndo {
-            topView.rebackImg.image(UIImage(named: "template-back"))
-        }else{
-            topView.rebackImg.image(UIImage(named: "template-reBack"))
+        stickerToolsView.onClose = { [weak self] in
+            self?.hideBottomPanel()
         }
     }
     
-    @objc private func onClickSave(_ sender: UIButton) {
-        guard let finalImage = renderImage(from: containerView) else { return }
-        saveImageToAlbum(finalImage)
-    }
-    
-    @objc private func onClickNext(_ sender: UIButton) {
-        if canRedo {
-            redoAction()
-        }
-    }
-    
-    @objc private func onClickLast(_ sender: UIButton) {
-        if canUndo {
-            undoAction()
-        }
-    }
     
     @objc private func onClickMenu(_ sender: UIButton) {
         let alert = UIAlertController(title: "菜单", message: nil, preferredStyle: .actionSheet)
@@ -241,14 +134,22 @@ class EditImageViewController: ZLEditImageViewController {
         alert.addAction(cancelAction)
         self.present(alert, animated: true)
     }
-    
-    @objc private func onClickBack(_ sender: UIButton) {
-        dismiss(animated: true)
+
+    // MARK: - Action
+    @objc func tapStickerOutOverlay(_ notification: Notification){
+        let dict = notification.object as! [String:Any]
+        let sticker:EditableStickerView = dict["sticker"] as! EditableStickerView
+        currentSticker = sticker
+        print(sticker)
+        if sticker.isEditingCustom {
+            showBottomPanel()
+        }else{
+            hideBottomPanel()
+        }
     }
-    
     /// 点击按钮调用
     @objc func showBottomPanel() {
-        self.bgPanelBottomConstraint?.update(offset: 0)
+        self.stickerToolsViewBottomConstraint?.update(offset: 0)
         UIView.animate(withDuration: 0.25) {
             self.view.layoutIfNeeded()
         }
@@ -256,9 +157,26 @@ class EditImageViewController: ZLEditImageViewController {
 
     /// 隐藏
     func hideBottomPanel() {
-        self.bgPanelBottomConstraint?.update(offset: 200)
+        if let sticker = currentSticker {
+            sticker.isEditingCustom = false
+        }
+        self.stickerToolsViewBottomConstraint?.update(offset: kstickerToolsViewHeight)
         UIView.animate(withDuration: 0.25) {
             self.view.layoutIfNeeded()
+        }
+    }
+    
+    func backAndreBackStatus(){
+        if canRedo {
+            topView.backImg.image(UIImage(named: "template-back"))
+        }else{
+            topView.backImg.image(UIImage(named: "template-back-lignt"))
+        }
+        
+        if canUndo {
+            topView.rebackImg.image(UIImage(named: "template-reBack"))
+        }else{
+            topView.rebackImg.image(UIImage(named: "template-reBack-light"))
         }
     }
             
@@ -313,33 +231,13 @@ extension EditImageViewController:TemplateTopViewDelegate {
         if canRedo {
             redoAction()
         }
-        if canRedo {
-            topView.backImg.image(UIImage(named: "template-back"))
-        }else{
-            topView.backImg.image(UIImage(named: "template-reBack"))
-        }
-        
-        if canUndo {
-            topView.rebackImg.image(UIImage(named: "template-back"))
-        }else{
-            topView.rebackImg.image(UIImage(named: "template-reBack"))
-        }
+        backAndreBackStatus()
     }
     func reBackTemplate(_ sender: TemplateTopView) {
         if canUndo {
             undoAction()
         }
-        if canRedo {
-            topView.backImg.image(UIImage(named: "template-back"))
-        }else{
-            topView.backImg.image(UIImage(named: "template-reBack"))
-        }
-        
-        if canUndo {
-            topView.rebackImg.image(UIImage(named: "template-back"))
-        }else{
-            topView.rebackImg.image(UIImage(named: "template-reBack"))
-        }
+        backAndreBackStatus()
     }
     func saveTemplate(_ sender: TemplateTopView) {
         guard let finalImage = renderImage(from: containerView) else { return }
@@ -391,6 +289,35 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
 
         }
 
+    }
+}
+
+// MARK: - StickerToolsView-StickerToolsViewDelegate
+extension EditImageViewController:StickerToolsViewDelegate {
+    func stickerToolDidSelectItemAt(_ sender: StickerToolsView, indexPath: IndexPath) {
+        if indexPath.row == 0 {
+
+        }else if indexPath.row == 1 {
+            NotificationCenter.default.post(name: Notification.Name("duplicateSticker"), object: ["sticker": currentSticker])
+        }else if indexPath.row == 2 {
+            
+        }else if indexPath.row == 3 {
+            
+        }else if indexPath.row == 4 {
+            
+        }else if indexPath.row == 5 {
+            if let sticker = currentSticker {
+                UIView.animate(withDuration: 0.2) {
+                    sticker.alpha = 0
+                    sticker.leftTopButton.alpha = 0
+                    sticker.resizeButton.alpha = 0
+                    sticker.rightTopButton.alpha = 0
+                } completion: { _ in
+                    sticker.removeFromSuperview()
+                }
+                hideBottomPanel()
+            }
+        }
     }
 }
 

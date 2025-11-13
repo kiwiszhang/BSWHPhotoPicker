@@ -193,6 +193,7 @@ final class StickerManager: NSObject {
             stickerView.setOperation(true)
             stickerView.isEditingCustom = !stickerView.isEditingCustom
             stickerView.setOperation(false)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":stickerView])
         }
     }
 }

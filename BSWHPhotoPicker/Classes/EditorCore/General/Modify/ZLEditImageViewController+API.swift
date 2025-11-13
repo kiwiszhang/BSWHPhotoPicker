@@ -488,9 +488,9 @@ public class EditableStickerView: ZLImageStickerView {
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     // MARK: - UI
-    private var resizeButton: UIButton!
-    private var leftTopButton: UIButton!
-    private var rightTopButton: UIButton!
+    public var resizeButton: UIButton!
+    public var leftTopButton: UIButton!
+    public var rightTopButton: UIButton!
     
     // MARK: - Gesture / 状态
     private var initialTouchPoint: CGPoint = .zero
@@ -863,9 +863,9 @@ public class EditableStickerView: ZLImageStickerView {
 public class EditableTextStickerView: ZLTextStickerView {
     
     // MARK: - UI
-    private var resizeButton: UIButton!
-    private var leftTopButton: UIButton!
-    private var rightTopButton: UIButton!
+    public var resizeButton: UIButton!
+    public var leftTopButton: UIButton!
+    public var rightTopButton: UIButton!
     
     // MARK: - 状态
     private var initialTouchPoint: CGPoint = .zero

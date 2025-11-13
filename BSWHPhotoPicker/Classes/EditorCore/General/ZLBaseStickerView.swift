@@ -112,7 +112,7 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         fatalError()
     }
     
-    var borderView: UIView {
+    public var borderView: UIView {
         return self
     }
     

@@ -9,19 +9,13 @@
 import UIKit
 import SnapKit
 
-struct ToolsModel {
-    var text:String = "Text"
-    var imageName:String = "template-text"
+
+@objc protocol StickerToolsCollectionViewDelegate: AnyObject {
+    func stickerCellDidSelectItemAt(_ sender: StickerToolsCollectionView,indexPath:IndexPath)
 }
 
-
-@objc protocol ToolsCollectionViewDelegate: AnyObject {
-    func cellDidSelectItemAt(_ sender: ToolsCollectionView,indexPath:IndexPath)
-}
-
-class ToolsCollectionView: UIView {
-    weak var delegate: ToolsCollectionViewDelegate?
-//    var scannedImages: [String] = ["替换背景","弹框测试","修改比例1:1","修改比例4:5","修改比例9:16","裁剪"]
+class StickerToolsCollectionView: UIView {
+    weak var delegate: StickerToolsCollectionViewDelegate?
     var items: [ToolsModel] = []
     var currentIndex: Int = 0
     
@@ -32,11 +26,11 @@ class ToolsCollectionView: UIView {
         layout.minimumInteritemSpacing = 0
         
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = kkColorFromHex("F5F5F5")
+        cv.backgroundColor = .white
         cv.dataSource = self
         cv.delegate = self
         cv.showsHorizontalScrollIndicator = false
-        cv.register(ToolCollectionViewCell.self, forCellWithReuseIdentifier: "ToolCollectionViewCell")
+        cv.register(StickerToolCollectionViewCell.self, forCellWithReuseIdentifier: "StickerToolCollectionViewCell")
         return cv
     }()
 
@@ -59,12 +53,13 @@ class ToolsCollectionView: UIView {
             make.height.equalTo(120.h)
         }
         
-        let item00 = ToolsModel(text: "Text",imageName: "template-text")
-        let item01 = ToolsModel(text: "Background",imageName: "template-Background")
-        let item02 = ToolsModel(text: "Photos",imageName: "template-photos")
-        let item03 = ToolsModel(text: "Stickers",imageName: "template-stickers")
-        let item04 = ToolsModel(text: "Ratio",imageName: "template-ratio")
-        items = [item00,item01,item02,item03,item04]
+        let item00 = ToolsModel(text: "Replace",imageName: "template-replace")
+        let item01 = ToolsModel(text: "Duplicate",imageName: "template-duplicate")
+        let item02 = ToolsModel(text: "Crop",imageName: "template-crop")
+        let item03 = ToolsModel(text: "Flip H",imageName: "template-FlipH")
+        let item04 = ToolsModel(text: "Flip V",imageName: "template-FlipV")
+        let item05 = ToolsModel(text: "Remove",imageName: "template-remove")
+        items = [item00,item01,item02,item03,item04,item05]
         reload()
     }
 
@@ -74,7 +69,7 @@ class ToolsCollectionView: UIView {
 }
 
 // MARK: - UICollectionViewDataSource
-extension ToolsCollectionView: UICollectionViewDataSource {
+extension StickerToolsCollectionView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return items.count
     }
@@ -83,33 +78,33 @@ extension ToolsCollectionView: UICollectionViewDataSource {
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: "ToolCollectionViewCell",
+            withReuseIdentifier: "StickerToolCollectionViewCell",
             for: indexPath
-        ) as! ToolCollectionViewCell
+        ) as! StickerToolCollectionViewCell
         cell.configure(with: items[indexPath.row])
         return cell
     }
 }
 
 // MARK: - UICollectionViewDelegate
-extension ToolsCollectionView: UICollectionViewDelegateFlowLayout {
+extension StickerToolsCollectionView: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: kkScreenWidth / 5.0, height: 120.h)
+        return CGSize(width: kkScreenWidth / 6.0, height: 120.h)
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.delegate?.cellDidSelectItemAt(self, indexPath: indexPath)
+        self.delegate?.stickerCellDidSelectItemAt(self, indexPath: indexPath)
     }
 }
 
 
-class ToolCollectionViewCell: UICollectionViewCell {
+class StickerToolCollectionViewCell: UICollectionViewCell {
         
-    private lazy var containerView = UIView().backgroundColor(kkColorFromHex("EBEBEB")).cornerRadius(10.w)
+    private lazy var containerView = UIView().backgroundColor(.white).cornerRadius(10.w)
     lazy var imgView = UIImageView()
-    lazy var titleLab = UILabel().color(kkColorFromHex("65656D")).hnFont(size: 12.h, weight:.mediumBase).centerAligned()
+    lazy var titleLab = UILabel().color(kkColorFromHex("7F7F8C")).hnFont(size: 12.h, weight:.mediumBase).centerAligned()
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -120,7 +115,7 @@ class ToolCollectionViewCell: UICollectionViewCell {
     }
 
     private func setupUI() {
-        containerView.backgroundColor(kkColorFromHex("F5F5F5"))
+        containerView.backgroundColor(.white)
         contentView.addSubview(containerView)
         containerView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
