@@ -32,7 +32,6 @@ class TemplateViewController: UIViewController, UIScrollViewDelegate {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-//        title = "Choose A Template"
         view.backgroundColor = .white
         
         let item00 = TemplateModel(imageName: "1",imageBg: "Christmas00-bg",jsonName: "Christmas00")
@@ -154,10 +153,10 @@ extension TemplateViewController: CustomScrViewListDelegate {
 }
 
 extension TemplateViewController: ContentCellDelegate {
-    func contentCell(_ cell: ContentCell, didSelectItem item: TemplateModel, at index: Int) {
+    func contentCell(_ cell: ContentCell, didSelectItem item: TemplateModel, at index: IndexPath) {
         guard let image = UIImage(named: item.imageBg) else { return }
         let controller = EditImageViewController(image: image)
-        controller.index = index
+        controller.item = items[index.section][index.row]
         controller.modalPresentationStyle = .fullScreen
         self.present(controller, animated: true)
     }
@@ -166,7 +165,7 @@ extension TemplateViewController: ContentCellDelegate {
 
 
 protocol ContentCellDelegate: AnyObject {
-    func contentCell(_ cell: ContentCell, didSelectItem item: TemplateModel, at index: Int)
+    func contentCell(_ cell: ContentCell, didSelectItem item: TemplateModel, at index: IndexPath)
 }
 
 // MARK: - UICollectionViewCell
@@ -262,7 +261,7 @@ extension ContentCell: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = items[indexPath.row]
-        delegate?.contentCell(self, didSelectItem: item, at: indexPath.row)
+        delegate?.contentCell(self, didSelectItem: item, at: indexPath)
     }
 
 }

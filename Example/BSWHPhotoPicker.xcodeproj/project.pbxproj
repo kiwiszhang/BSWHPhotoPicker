@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		2002012A1B0EA79BA1ED45A4 /* Pods_BSWHPhotoPicker_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D925E5EE90C5758598A8BEBB /* Pods_BSWHPhotoPicker_Tests.framework */; };
-		530C84952EC46BCB0037290D /* TemplateListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C84942EC46BCB0037290D /* TemplateListViewController.swift */; };
 		530C849B2EC48E000037290D /* CustomScrViewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C849A2EC48E000037290D /* CustomScrViewList.swift */; };
 		530C849D2EC48E770037290D /* TemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C849C2EC48E770037290D /* TemplateViewController.swift */; };
 		530C84A02EC56B850037290D /* TemplateTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C849F2EC56B850037290D /* TemplateTopView.swift */; };
@@ -51,7 +50,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		530C84942EC46BCB0037290D /* TemplateListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateListViewController.swift; sourceTree = "<group>"; };
 		530C849A2EC48E000037290D /* CustomScrViewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomScrViewList.swift; sourceTree = "<group>"; };
 		530C849C2EC48E770037290D /* TemplateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateViewController.swift; sourceTree = "<group>"; };
 		530C849F2EC56B850037290D /* TemplateTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateTopView.swift; sourceTree = "<group>"; };
@@ -183,7 +181,6 @@
 				533A14C52EA0CA3300A2E1C6 /* Json */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
-				530C84942EC46BCB0037290D /* TemplateListViewController.swift */,
 				530C849C2EC48E770037290D /* TemplateViewController.swift */,
 				9899F87A2E73ED02000AABA4 /* EditImageViewController.swift */,
 				53734DFA2EBA02360005ED8B /* DrawViewController.swift */,
@@ -461,7 +458,6 @@
 				53734DFB2EBA02360005ED8B /* DrawViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
-				530C84952EC46BCB0037290D /* TemplateListViewController.swift in Sources */,
 				530C84A02EC56B850037290D /* TemplateTopView.swift in Sources */,
 				530C84A42EC56C080037290D /* SuperView.swift in Sources */,
 				530C84A52EC56C080037290D /* SuperViewController.swift in Sources */,

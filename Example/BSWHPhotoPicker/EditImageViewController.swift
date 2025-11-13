@@ -12,10 +12,7 @@ import SnapKit
 import PhotosUI
 
 class EditImageViewController: ZLEditImageViewController {
-    private let jsonFiles:[String] = ["Christmas00","Christmas01","Christmas02","Christmas03","Christmas04","Christmas05","Christmas06","Wedding00"]
-    private let itemsImages:[UIImage] = [UIImage(named: "Christmas00-bg")!,UIImage(named: "Christmas01-bg")!,UIImage(named: "Christmas02-bg")!,UIImage(named: "Christmas03-bg")!,UIImage(named: "Christmas04-bg")!,UIImage(named: "Christmas05-bg")!,UIImage(named: "Christmas06-bg")!,UIImage(named: "wedding01-bg")!]
-
-    var index = 0
+    var item:TemplateModel? = nil
     private var bgPanelBottomConstraint: Constraint?
     private lazy var bgPanel: ReplaceBgView = {
         let v = ReplaceBgView()
@@ -153,7 +150,19 @@ class EditImageViewController: ZLEditImageViewController {
 //        lastButton.addTarget(self, action: #selector(onClickLast(_:)), for: .touchUpInside)
 //        menuButton.addTarget(self, action: #selector(onClickMenu(_:)), for: .touchUpInside)
 
-        StickerManager.shared.initCurrentTemplate(jsonName: jsonFiles[index], currentVC: self)
+        StickerManager.shared.initCurrentTemplate(jsonName: item!.jsonName, currentVC: self)
+        
+        if canRedo {
+            topView.backImg.image(UIImage(named: "template-back"))
+        }else{
+            topView.backImg.image(UIImage(named: "template-reBack"))
+        }
+        
+        if canUndo {
+            topView.rebackImg.image(UIImage(named: "template-back"))
+        }else{
+            topView.rebackImg.image(UIImage(named: "template-reBack"))
+        }
     }
     
     @objc private func onClickSave(_ sender: UIButton) {
@@ -304,10 +313,32 @@ extension EditImageViewController:TemplateTopViewDelegate {
         if canRedo {
             redoAction()
         }
+        if canRedo {
+            topView.backImg.image(UIImage(named: "template-back"))
+        }else{
+            topView.backImg.image(UIImage(named: "template-reBack"))
+        }
+        
+        if canUndo {
+            topView.rebackImg.image(UIImage(named: "template-back"))
+        }else{
+            topView.rebackImg.image(UIImage(named: "template-reBack"))
+        }
     }
     func reBackTemplate(_ sender: TemplateTopView) {
         if canUndo {
             undoAction()
+        }
+        if canRedo {
+            topView.backImg.image(UIImage(named: "template-back"))
+        }else{
+            topView.backImg.image(UIImage(named: "template-reBack"))
+        }
+        
+        if canUndo {
+            topView.rebackImg.image(UIImage(named: "template-back"))
+        }else{
+            topView.rebackImg.image(UIImage(named: "template-reBack"))
         }
     }
     func saveTemplate(_ sender: TemplateTopView) {
@@ -325,34 +356,34 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
         }else if indexPath.row == 1 {
             showBottomPanel()
         }else if indexPath.row == 2 {
-            let image = itemsImages[index]
-            if let squareImage = image.croppedToCenteredSquare() {
+            let image = UIImage(named: item!.imageBg)
+            if let squareImage = image!.croppedToCenteredSquare() {
                 
                 for sticker in StickerManager.shared.stickerArr {
                     sticker.removeFromSuperview()
                 }
-                StickerManager.shared.initCurrentTemplate(jsonName:jsonFiles[index], currentVC: self,cropped: 0.7)
+                StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName, currentVC: self,cropped: 0.7)
                 replaceBgImage(image: squareImage)
                 resetContainerViewFrame()
             }
         }else if indexPath.row == 3 {
-            let image = itemsImages[index]
-            if let squareImage = image.croppedToAspect4x5() {
+            let image = UIImage(named: item!.imageBg)
+            if let squareImage = image!.croppedToAspect4x5() {
                 
                 for sticker in StickerManager.shared.stickerArr {
                     sticker.removeFromSuperview()
                 }
-                StickerManager.shared.initCurrentTemplate(jsonName:jsonFiles[index], currentVC: self,cropped: 0.8)
+                StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName, currentVC: self,cropped: 0.8)
                 replaceBgImage(image: squareImage)
                 resetContainerViewFrame()
             }
         }else if indexPath.row == 4 {
-            let image = itemsImages[index]
-            if let squareImage = image.croppedToAspect9x16() {
+            let image = UIImage(named: item!.imageBg)
+            if let squareImage = image!.croppedToAspect9x16() {
                 for sticker in StickerManager.shared.stickerArr {
                     sticker.removeFromSuperview()
                 }
-                StickerManager.shared.initCurrentTemplate(jsonName:jsonFiles[index], currentVC: self,cropped: 0.9)
+                StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName, currentVC: self,cropped: 0.9)
                 replaceBgImage(image: squareImage)
                 resetContainerViewFrame()
             }

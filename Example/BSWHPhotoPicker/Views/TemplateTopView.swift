@@ -21,10 +21,10 @@ class TemplateTopView: SuperView {
     private lazy var closeImg = UIImageView().image(UIImage(named: "template-close")).enable(true).onTap { [self] in
         delegate?.closeTemplate(self)
     }
-    private lazy var backImg = UIImageView().image(UIImage(named: "template-back")).enable(true).onTap { [self] in
+    lazy var backImg = UIImageView().image(UIImage(named: "template-back")).enable(true).onTap { [self] in
         delegate?.backTemplate(self)
     }
-    private lazy var rebackImg = UIImageView().image(UIImage(named: "template-reBack")).enable(true).onTap { [self] in
+    lazy var rebackImg = UIImageView().image(UIImage(named: "template-reBack")).enable(true).onTap { [self] in
         delegate?.reBackTemplate(self)
     }
     private lazy var saveBtn = UILabel().text("save").backgroundColor(kkColorFromHex("A216FF")).color(.white).centerAligned().hnFont(size: 14.h, weight: .boldBase).cornerRadius(8.h).onTap { [self] in
