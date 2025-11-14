@@ -61,6 +61,7 @@ class EditImageViewController: ZLEditImageViewController {
             make.height.equalTo(kRatioToolsViewHeight)
             self.ratioToolViewBottomConstraint = make.bottom.equalToSuperview().offset(kRatioToolsViewHeight).constraint
         }
+        ratioToolView.delegate = self
         
         statusView.snp.makeConstraints { make in
             make.top.equalToSuperview()
@@ -375,122 +376,6 @@ class EditImageViewController: ZLEditImageViewController {
         present(alert, animated: true)
     }
 
-}
-// MARK: - TemplateTopView-TemplateTopViewDelegate
-extension EditImageViewController:TemplateTopViewDelegate {
-    func closeTemplate(_ sender: TemplateTopView) {
-        dismiss(animated: true)
-    }
-    func backTemplate(_ sender: TemplateTopView){
-        currentSticker = nil
-        hideBottomPanel()
-        if canRedo {
-            redoAction()
-        }
-        backAndreBackStatus()
-    }
-    func reBackTemplate(_ sender: TemplateTopView) {
-        currentSticker = nil
-        hideBottomPanel()
-        if canUndo {
-            undoAction()
-        }
-        backAndreBackStatus()
-    }
-    func saveTemplate(_ sender: TemplateTopView) {
-        guard let finalImage = renderImage(from: containerView) else { return }
-        saveImageToAlbum(finalImage)
-    }
-}
-
-// MARK: - ToolsCollectionView-ToolsCollectionViewDelegate
-extension EditImageViewController:ToolsCollectionViewDelegate {
-    func cellDidSelectItemAt(_ sender: ToolsCollectionView, indexPath: IndexPath) {
-        if indexPath.row == 0 {
-            self.switchOperation(type: .textSticker)
-            self.addTextSticker(font: UIFont.systemFont(ofSize: 20))
-            
-//            replaceBgImage(image: UIImage(named: "Christmas00-bg")!)
-//            resetContainerViewFrame()
-        }else if indexPath.row == 1 {
-            showBottomPanel()
-        }else if indexPath.row == 2 {
-//            let image = UIImage(named: item!.imageBg)
-//            if let squareImage = image!.croppedToCenteredSquare() {
-//                for sticker in StickerManager.shared.stickerArr {
-//                    sticker.removeFromSuperview()
-//                }
-//                StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName, currentVC: self,cropped: 0.7)
-//                replaceBgImage(image: squareImage)
-//                resetContainerViewFrame()
-//            }
-            StickerManager.shared.checkPhotoAuthorizationAndPresentPicker(presentTypeFrom: 1)
-        }else if indexPath.row == 3 {
-            let image = UIImage(named: item!.imageBg)
-            if let squareImage = image!.croppedToAspect4x5() {
-                for sticker in StickerManager.shared.stickerArr {
-                    sticker.removeFromSuperview()
-                }
-                StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName, currentVC: self,cropped: 0.8)
-                replaceBgImage(image: squareImage)
-                resetContainerViewFrame()
-            }
-        }else if indexPath.row == 4 {
-//            let image = UIImage(named: item!.imageBg)
-//            if let squareImage = image!.croppedToAspect9x16() {
-//                for sticker in StickerManager.shared.stickerArr {
-//                    sticker.removeFromSuperview()
-//                }
-//                StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName, currentVC: self,cropped: 0.9)
-//                replaceBgImage(image: squareImage)
-//                resetContainerViewFrame()
-//            }
-            showRatioBottomPanel()
-        }
-    }
-}
-
-// MARK: - StickerToolsView-StickerToolsViewDelegate
-extension EditImageViewController:StickerToolsViewDelegate {
-    func stickerToolDidSelectItemAt(_ sender: StickerToolsView, indexPath: IndexPath) {
-        if indexPath.row == 0 {
-            StickerManager.shared.checkPhotoAuthorizationAndPresentPicker()
-        }else if indexPath.row == 1 {
-            NotificationCenter.default.post(name: Notification.Name("duplicateSticker"), object: ["sticker": currentSticker])
-        }else if indexPath.row == 2 {
-            
-        }else if indexPath.row == 3 {
-            if let sticker = currentSticker {
-                if let image = sticker.stickerModel?.stickerImage,let newImage = image.flippedHorizontally() {
-                    if let imageData = newImage.pngData() {
-                        sticker.stickerModel?.imageData = imageData
-                    }
-                    sticker.updateImage(newImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
-                }
-            }
-        }else if indexPath.row == 4 {
-            if let sticker = currentSticker {
-                if let image = sticker.stickerModel?.stickerImage,let newImage = image.flippedVertically() {
-                    if let imageData = newImage.pngData() {
-                        sticker.stickerModel?.imageData = imageData
-                    }
-                    sticker.updateImage(newImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
-                }
-            }
-        }else if indexPath.row == 5 {
-            if let sticker = currentSticker {
-                UIView.animate(withDuration: 0.2) {
-                    sticker.alpha = 0
-                    sticker.leftTopButton.alpha = 0
-                    sticker.resizeButton.alpha = 0
-                    sticker.rightTopButton.alpha = 0
-                } completion: { _ in
-                    sticker.removeFromSuperview()
-                }
-                hideBottomPanel()
-            }
-        }
-    }
 }
 
 

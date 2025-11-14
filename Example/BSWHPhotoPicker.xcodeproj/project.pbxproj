@@ -35,6 +35,7 @@
 		53FC5F522EC6D379009E2F1C /* RatioToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC5F512EC6D379009E2F1C /* RatioToolView.swift */; };
 		53FC5F542EC6DF64009E2F1C /* RatioCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC5F532EC6DF64009E2F1C /* RatioCollectionView.swift */; };
 		53FC5F562EC6F84C009E2F1C /* RatioScrViewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC5F552EC6F84C009E2F1C /* RatioScrViewList.swift */; };
+		53FC5F5A2EC70DEB009E2F1C /* EditImageViewController+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC5F592EC70DEB009E2F1C /* EditImageViewController+extension.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
@@ -83,6 +84,7 @@
 		53FC5F512EC6D379009E2F1C /* RatioToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioToolView.swift; sourceTree = "<group>"; };
 		53FC5F532EC6DF64009E2F1C /* RatioCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioCollectionView.swift; sourceTree = "<group>"; };
 		53FC5F552EC6F84C009E2F1C /* RatioScrViewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioScrViewList.swift; sourceTree = "<group>"; };
+		53FC5F592EC70DEB009E2F1C /* EditImageViewController+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditImageViewController+extension.swift"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* BSWHPhotoPicker_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BSWHPhotoPicker_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				530C849C2EC48E770037290D /* TemplateViewController.swift */,
 				9899F87A2E73ED02000AABA4 /* EditImageViewController.swift */,
+				53FC5F592EC70DEB009E2F1C /* EditImageViewController+extension.swift */,
 				53734DFA2EBA02360005ED8B /* DrawViewController.swift */,
 				533A14BA2EA08DCB00A2E1C6 /* StickerManager.swift */,
 				53FC5F4F2EC5C6FD009E2F1C /* TemplateConfig.swift */,
@@ -475,6 +478,7 @@
 				53734FB22EC1E6780005ED8B /* ToolsCollectionView.swift in Sources */,
 				53FC5F4E2EC5C341009E2F1C /* UIImage+Extension.swift in Sources */,
 				53734DFB2EBA02360005ED8B /* DrawViewController.swift in Sources */,
+				53FC5F5A2EC70DEB009E2F1C /* EditImageViewController+extension.swift in Sources */,
 				53FC5F542EC6DF64009E2F1C /* RatioCollectionView.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				53FC5F522EC6D379009E2F1C /* RatioToolView.swift in Sources */,

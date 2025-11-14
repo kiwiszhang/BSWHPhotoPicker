@@ -11,13 +11,13 @@ import SnapKit
 
 
 
-@objc protocol RatioCollectionViewDelegate: AnyObject {
-    func ratioCellDidSelectItemAt(_ sender: RatioCollectionView,indexPath:IndexPath)
+protocol RatioCollectionViewDelegate: AnyObject {
+    func ratioCellDidSelectItemAt(_ sender: RatioCollectionView,indexPath:IndexPath,item:RatioToolsModel)
 }
 
 class RatioCollectionView: UIView {
     weak var delegate: RatioCollectionViewDelegate?
-    var items: [ToolsModel] = []
+    var items: [RatioToolsModel] = []
     var currentIndex: Int = 0
     
     private lazy var collectionView: UICollectionView = {
@@ -88,7 +88,7 @@ extension RatioCollectionView: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.delegate?.ratioCellDidSelectItemAt(self, indexPath: indexPath)
+        self.delegate?.ratioCellDidSelectItemAt(self, indexPath: indexPath,item: items[indexPath.row])
     }
 }
 
@@ -123,7 +123,7 @@ class RatioCollectionViewCell: UICollectionViewCell {
         }
     }
 
-    func configure(with item: ToolsModel) {
+    func configure(with item: RatioToolsModel) {
         titleLab.text = item.text
         imgView.image(UIImage(named: item.imageName))
     }

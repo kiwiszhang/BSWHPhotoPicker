@@ -9,8 +9,15 @@
 import Foundation
 import UIKit
 
-@objc protocol RatioToolViewDelegate: AnyObject {
-    func RatioToolViewDidSelectItemAt(_ sender: RatioToolView,indexPath:IndexPath)
+struct RatioToolsModel {
+    var text:String = "Text"
+    var imageName:String = "template-text"
+    var width:Double = 1.0
+    var height:Double = 1.0
+}
+
+protocol RatioToolViewDelegate: AnyObject {
+    func RatioToolViewDidSelectItemAt(_ sender: RatioToolView,indexPath:IndexPath,ratioItem:RatioToolsModel)
 }
 
 class RatioToolView:UIView {
@@ -21,56 +28,56 @@ class RatioToolView:UIView {
         closeAction()
     }
     private lazy var listView = RatioScrViewList()
-    private lazy var ratioCollectionView = RatioCollectionView().backgroundColor(.white)
+    lazy var ratioCollectionView = RatioCollectionView().backgroundColor(.white)
     private let titles = [StickerManager.shared.config.General, StickerManager.shared.config.Social,StickerManager.shared.config.Print]
-    var items:[[ToolsModel]] = []
+    var items:[[RatioToolsModel]] = []
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let item00 = ToolsModel(text: "1:1",imageName: "ratio1-1")
-        let item01 = ToolsModel(text: "16:9",imageName: "ratio16-9")
-        let item02 = ToolsModel(text: "5:4",imageName: "ratio5-4")
-        let item03 = ToolsModel(text: "7:5",imageName: "ratio7-5")
-        let item04 = ToolsModel(text: "4:3",imageName: "ratio4-3")
-        let item05 = ToolsModel(text: "9:16",imageName: "ratio9-16")
-        let item06 = ToolsModel(text: "5:3",imageName: "ratio5-3")
-        let item07 = ToolsModel(text: "3:2",imageName: "ratio3-2")
-        let item08 = ToolsModel(text: "3:4",imageName: "ratio3-4")
+        let item00 = RatioToolsModel(text: "1:1",imageName: "ratio1-1",width: 1.0,height: 1.0)
+        let item01 = RatioToolsModel(text: "16:9",imageName: "ratio16-9",width: 16.0,height: 9.0)
+        let item02 = RatioToolsModel(text: "5:4",imageName: "ratio5-4",width: 5.0,height: 4.0)
+        let item03 = RatioToolsModel(text: "7:5",imageName: "ratio7-5",width: 7.0,height: 5.0)
+        let item04 = RatioToolsModel(text: "4:3",imageName: "ratio4-3",width: 4.0,height: 3.0)
+        let item05 = RatioToolsModel(text: "9:16",imageName: "ratio9-16",width: 9.0,height: 16.0)
+        let item06 = RatioToolsModel(text: "5:3",imageName: "ratio5-3",width: 5.0,height: 3.0)
+        let item07 = RatioToolsModel(text: "3:2",imageName: "ratio3-2",width: 3.0,height: 2.0)
+        let item08 = RatioToolsModel(text: "3:4",imageName: "ratio3-4",width: 3.0,height: 4.0)
         
-        let item10 = ToolsModel(text: "Postcard",imageName: "print-00-postcard")
-        let item11 = ToolsModel(text: "Poster",imageName: "print-01-poster")
-        let item12 = ToolsModel(text: "Poster",imageName: "print-02-poster")
-        let item13 = ToolsModel(text: "A4",imageName: "print-03-A4")
-        let item14 = ToolsModel(text: "A4",imageName: "print-04-A4")
-        let item15 = ToolsModel(text: "Letter",imageName: "print-05-Letter")
-        let item16 = ToolsModel(text: "Letter",imageName: "print-06-Letter")
-        let item17 = ToolsModel(text: "Half letter",imageName: "print-07-HLetter")
-        let item18 = ToolsModel(text: "Half letter",imageName: "print-08-HLetter")
-        let item19 = ToolsModel(text: "Postcard",imageName: "print-09-postcard")
+        let item10 = RatioToolsModel(text: "Postcard",imageName: "print-00-postcard",width: 3.0,height: 2.0)
+        let item11 = RatioToolsModel(text: "Poster",imageName: "print-01-poster",width: 4.0,height: 5.0)
+        let item12 = RatioToolsModel(text: "Poster",imageName: "print-02-poster",width: 5.0,height: 4.0)
+        let item13 = RatioToolsModel(text: "A4",imageName: "print-03-A4",width: 1.0,height: 1.414)
+        let item14 = RatioToolsModel(text: "A4",imageName: "print-04-A4",width: 1.414,height: 1.0)
+        let item15 = RatioToolsModel(text: "Letter",imageName: "print-05-Letter",width: 1.0,height: 1.294)
+        let item16 = RatioToolsModel(text: "Letter",imageName: "print-06-Letter",width: 1.294,height: 1.0)
+        let item17 = RatioToolsModel(text: "Half letter",imageName: "print-07-HLetter",width: 1.0,height: 1.545)
+        let item18 = RatioToolsModel(text: "Half letter",imageName: "print-08-HLetter",width: 1.545,height: 1.0)
+        let item19 = RatioToolsModel(text: "Postcard",imageName: "print-09-postcard",width: 2.0,height: 3.0)
 
-        let item20 = ToolsModel(text: "Square",imageName: "social-00-square")
-        let item21 = ToolsModel(text: "Portrait",imageName: "social-01-portrait")
-        let item22 = ToolsModel(text: "Story",imageName: "social-02-Story")
-        let item23 = ToolsModel(text: "Post",imageName: "social-03-post")
-        let item24 = ToolsModel(text: "Cover",imageName: "social-04-cover")
-        let item25 = ToolsModel(text: "Post",imageName: "social-05-post")
-        let item26 = ToolsModel(text: "Post",imageName: "social-06-postX")
-        let item27 = ToolsModel(text: "Header",imageName: "social-07-header")
-        let item28 = ToolsModel(text: "YouTube",imageName: "social-08-YouTube")
-        let item29 = ToolsModel(text: "Shopify",imageName: "social-09-Shopify")
-        let item30 = ToolsModel(text: "Shopify",imageName: "social-10-Shopify")
-        let item31 = ToolsModel(text: "Shopify",imageName: "social-11-Shopify")
-        let item32 = ToolsModel(text: "Amazon",imageName: "social-12-Amazon")
-        let item33 = ToolsModel(text: "Shopee",imageName: "social-13-Shopee")
-        let item34 = ToolsModel(text: "Facebook",imageName: "social-14-Facebook")
-        let item35 = ToolsModel(text: "Linkedin",imageName: "social-15-linkedin")
-        let item36 = ToolsModel(text: "Linkedin",imageName: "social-16-linkedin")
-        let item37 = ToolsModel(text: "Tiktok",imageName: "social-17-tiktok")
-        let item38 = ToolsModel(text: "Tiktok",imageName: "social-18-tiktok")
-        let item39 = ToolsModel(text: "Ebay",imageName: "social-19-ebay")
-        let item40 = ToolsModel(text: "Poshmark",imageName: "social-20-Poshmark")
-        let item41 = ToolsModel(text: "Etsy",imageName: "social-21-etsy")
-        let item42 = ToolsModel(text: "Depop",imageName: "social-22-depop")
+        let item20 = RatioToolsModel(text: "Square",imageName: "social-00-square",width: 1.0,height: 1.0)
+        let item21 = RatioToolsModel(text: "Portrait",imageName: "social-01-portrait",width: 4.0,height: 5.0)
+        let item22 = RatioToolsModel(text: "Story",imageName: "social-02-Story",width: 9.0,height: 16.0)
+        let item23 = RatioToolsModel(text: "Post",imageName: "social-03-post",width: 1.91,height: 1.0)
+        let item24 = RatioToolsModel(text: "Cover",imageName: "social-04-cover",width: 16.0,height: 9.0)
+        let item25 = RatioToolsModel(text: "Post",imageName: "social-05-post",width: 2.0,height: 3.0)
+        let item26 = RatioToolsModel(text: "Post",imageName: "social-06-postX",width: 16.0,height: 9.0)
+        let item27 = RatioToolsModel(text: "Header",imageName: "social-07-header",width: 3.0,height: 1.0)
+        let item28 = RatioToolsModel(text: "YouTube",imageName: "social-08-YouTube",width: 16.0,height: 9.0)
+        let item29 = RatioToolsModel(text: "Shopify",imageName: "social-09-Shopify",width: 1.0,height: 1.0)
+        let item30 = RatioToolsModel(text: "Shopify",imageName: "social-10-Shopify",width: 1.0,height: 1.1)
+        let item31 = RatioToolsModel(text: "Shopify",imageName: "social-11-Shopify",width: 4.0,height: 5.0)
+        let item32 = RatioToolsModel(text: "Amazon",imageName: "social-12-Amazon",width: 1.0,height: 1.0)
+        let item33 = RatioToolsModel(text: "Shopee",imageName: "social-13-Shopee",width: 1.0,height: 1.0)
+        let item34 = RatioToolsModel(text: "Facebook",imageName: "social-14-Facebook",width: 1.0,height: 1.0)
+        let item35 = RatioToolsModel(text: "Linkedin",imageName: "social-15-linkedin",width: 1.91,height: 1.0)
+        let item36 = RatioToolsModel(text: "Linkedin",imageName: "social-16-linkedin",width: 1.0,height: 1.0)
+        let item37 = RatioToolsModel(text: "Tiktok",imageName: "social-17-tiktok",width: 9.0,height: 16.0)
+        let item38 = RatioToolsModel(text: "Tiktok",imageName: "social-18-tiktok",width: 1.0,height: 1.0)
+        let item39 = RatioToolsModel(text: "Ebay",imageName: "social-19-ebay",width: 1.0,height: 1.0)
+        let item40 = RatioToolsModel(text: "Poshmark",imageName: "social-20-Poshmark",width: 1.0,height: 1.0)
+        let item41 = RatioToolsModel(text: "Etsy",imageName: "social-21-etsy",width: 5.0,height: 4.0)
+        let item42 = RatioToolsModel(text: "Depop",imageName: "social-22-depop",width: 1.0,height: 1.0)
 
         
         items = [[item00,item01,item02,item03,item04,item05,item06,item07,item08],[item20,item21,item22,item23,item24,item25,item26,item27,item28,item29,item30,item31,item32,item33,item34,item35,item36,item37,item38,item39,item40,item41,item42],[item10,item11,item12,item13,item14,item15,item16,item17,item18,item19]]
@@ -119,8 +126,8 @@ class RatioToolView:UIView {
 
 // MARK: - RatioCollectionViewDelegate
 extension RatioToolView:RatioCollectionViewDelegate {
-    func ratioCellDidSelectItemAt(_ sender: RatioCollectionView, indexPath: IndexPath) {
-        self.delegate?.RatioToolViewDidSelectItemAt(self, indexPath: indexPath)
+    func ratioCellDidSelectItemAt(_ sender: RatioCollectionView, indexPath: IndexPath,item:RatioToolsModel) {
+        self.delegate?.RatioToolViewDidSelectItemAt(self, indexPath: indexPath,ratioItem: item)
     }
 }
 
@@ -128,6 +135,7 @@ extension RatioToolView:RatioCollectionViewDelegate {
 extension RatioToolView:RatioScrViewListDelegate {
     func ratioScrViewDidSelect(index: Int) {
         ratioCollectionView.items = items[index]
+        ratioCollectionView.currentIndex = index
         ratioCollectionView.reload()
     }
 }
