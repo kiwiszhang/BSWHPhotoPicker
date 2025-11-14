@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import BSWHPhotoPicker
 
 // MARK: - 顶部工具栏 TemplateTopView-TemplateTopViewDelegate
 extension EditImageViewController:TemplateTopViewDelegate {
@@ -68,11 +69,26 @@ extension EditImageViewController:StickerToolsViewDelegate {
             
         }else if indexPath.row == 3 {
             if let sticker = currentSticker {
-                if let image = sticker.stickerModel?.stickerImage,let newImage = image.flippedHorizontally() {
-                    if let imageData = newImage.pngData() {
-                        sticker.stickerModel?.imageData = imageData
+                if sticker.stickerModel!.isBgImage {
+                    if let image = sticker.stickerModel?.stickerImage,let newImage = image.flippedHorizontally() {
+                        if let imageData = newImage.pngData() {
+                            sticker.stickerModel?.imageData = imageData
+                        }
+                        sticker.updateImage(newImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
                     }
-                    sticker.updateImage(newImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
+                }else{
+                    if let image = sticker.stickerModel?.image,let newImage = image.flippedVertically() {
+                        sticker.stickerModel?.image = newImage
+                        sticker.layoutSubviews()
+//                        switchOperation(type: .imageSticker)
+//                        let state: ImageStickerModel = sticker.stickerModel!
+//                        sticker.removeFromSuperview()
+//                        let newSticker = addImageSticker01(state: state)
+//                        newSticker.stickerModel = state
+//                        StickerManager.shared.modelMap[newSticker.id] = state
+//                        currentSticker = newSticker
+//                        currentSticker?.layoutSubviews()
+                    }
                 }
             }
         }else if indexPath.row == 4 {

@@ -18,7 +18,7 @@
   "bgAddImageType":"addGrayImage"
 },
 {
-    "imageName": "Christmas05-sticker04",
+    "imageName": "empty",
     "originScale": 1,
     "originAngle": 0,
     "originFrameX": 182,
@@ -27,8 +27,14 @@
     "originFrameHeight": 24,
     "gesScale": 1,
     "gesRotation": 0,
-    "isBgImage": false,
-  },
+    "isBgImage": true,
+    "overlayRectX": 0,
+    "overlayRectY": 0,
+    "overlayRectWidth": 1,
+    "overlayRectHeight": 1,
+    "imageType": "square",
+    "bgAddImageType":"Christmas05-sticker04"
+},
 {
   "imageName": "Christmas05-sticker-bg01",
   "originScale": 1,
@@ -48,7 +54,7 @@
   "bgAddImageType":"addWhiteImage"
 },
 {
-    "imageName": "Christmas05-sticker00",
+    "imageName": "empty",
     "originScale": 1,
     "originAngle": 0,
     "originFrameX": 13,
@@ -57,10 +63,16 @@
     "originFrameHeight": 50,
     "gesScale": 1,
     "gesRotation": 0,
-    "isBgImage": false,
-  },
+    "isBgImage": true,
+    "overlayRectX": 0,
+    "overlayRectY": 0,
+    "overlayRectWidth": 1,
+    "overlayRectHeight": 1,
+    "imageType": "square",
+    "bgAddImageType":"Christmas05-sticker00"
+},
   {
-    "imageName": "Christmas05-sticker01",
+    "imageName": "empty",
     "originScale": 1,
     "originAngle": 0,
     "originFrameX": -15,
@@ -69,10 +81,16 @@
     "originFrameHeight": 130,
     "gesScale": 1,
     "gesRotation": 0,
-    "isBgImage": false,
+    "isBgImage": true,
+    "overlayRectX": 0,
+    "overlayRectY": 0,
+    "overlayRectWidth": 1,
+    "overlayRectHeight": 1,
+    "imageType": "square",
+    "bgAddImageType":"Christmas05-sticker01"
   },
   {
-    "imageName": "Christmas05-sticker02",
+    "imageName": "empty",
     "originScale": 1,
     "originAngle": 0,
     "originFrameX": 129,
@@ -81,10 +99,16 @@
     "originFrameHeight": 220,
     "gesScale": 1,
     "gesRotation": 0,
-    "isBgImage": false,
+    "isBgImage": true,
+    "overlayRectX": 0,
+    "overlayRectY": 0,
+    "overlayRectWidth": 1,
+    "overlayRectHeight": 1,
+    "imageType": "square",
+    "bgAddImageType":"Christmas05-sticker02"
   },
   {
-    "imageName": "Christmas05-sticker03",
+    "imageName": "empty",
     "originScale": 1,
     "originAngle": 0,
     "originFrameX": 20,
@@ -93,6 +117,12 @@
     "originFrameHeight": 54,
     "gesScale": 1,
     "gesRotation": 0,
-    "isBgImage": false,
+    "isBgImage": true,
+    "overlayRectX": 0,
+    "overlayRectY": 0,
+    "overlayRectWidth": 1,
+    "overlayRectHeight": 1,
+    "imageType": "square",
+    "bgAddImageType":"Christmas05-sticker03"
   }]
 

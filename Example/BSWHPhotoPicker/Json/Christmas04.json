@@ -54,7 +54,7 @@
   "bgAddImageType":"addGrayImage"
 },
 {
-    "imageName": "Christmas04-sticker00",
+    "imageName": "empty",
     "originScale": 1,
     "originAngle": 0,
     "originFrameX": 178,
@@ -63,6 +63,12 @@
     "originFrameHeight": 73,
     "gesScale": 1,
     "gesRotation": 0,
-    "isBgImage": false,
-  }]
+    "isBgImage": true,
+    "overlayRectX": 0,
+    "overlayRectY": 0,
+    "overlayRectWidth": 1,
+    "overlayRectHeight": 1,
+    "imageType": "square",
+    "bgAddImageType":"Christmas04-sticker00"
+}]
 

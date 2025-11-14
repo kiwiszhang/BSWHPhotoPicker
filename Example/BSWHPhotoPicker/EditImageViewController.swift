@@ -178,18 +178,15 @@ class EditImageViewController: ZLEditImageViewController {
     @objc func tapStickerOutOverlay(_ notification: Notification){
         let dict = notification.object as! [String:Any]
         let sticker:EditableStickerView = dict["sticker"] as! EditableStickerView
+        hideRatioBottomPanel()
         guard let model = sticker.stickerModel else {
             hideBottomPanel()
             return
         }
-        if model.isBgImage {
-            currentSticker = sticker
-            if sticker.isEditingCustom {
-                showBottomPanel()
-                sticker.layoutSubviews()
-            } else {
-                hideBottomPanel()
-            }
+        currentSticker = sticker
+        if sticker.isEditingCustom {
+            showBottomPanel()
+            sticker.layoutSubviews()
         } else {
             hideBottomPanel()
         }
@@ -249,9 +246,6 @@ class EditImageViewController: ZLEditImageViewController {
         contentView.layoutIfNeeded()
         resetContainerViewFrame()
         
-        if let sticker = currentSticker {
-            sticker.isEditingCustom = false
-        }
         self.ratioToolViewBottomConstraint?.update(offset: kRatioToolsViewHeight)
         UIView.animate(withDuration: 0.25) {
             self.view.layoutIfNeeded()

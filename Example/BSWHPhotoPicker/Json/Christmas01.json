@@ -71,7 +71,7 @@
   "bgAddImageType":"addGrayImage"
 },
 {
-    "imageName": "Christmas01-sticker00",
+    "imageName": "empty",
     "originScale": 1,
     "originAngle": 0,
     "originFrameX": 242,
@@ -80,10 +80,16 @@
     "originFrameHeight": 100,
     "gesScale": 1,
     "gesRotation": 0,
-    "isBgImage": false,
+    "isBgImage": true,
+    "overlayRectX": 0,
+    "overlayRectY": 0,
+    "overlayRectWidth": 1,
+    "overlayRectHeight": 1,
+    "imageType": "square",
+    "bgAddImageType":"Christmas01-sticker00"
   },
   {
-    "imageName": "Christmas01-sticker01",
+    "imageName": "empty",
     "originScale": 1,
     "originAngle": 0,
     "originFrameX": 18,
@@ -92,10 +98,16 @@
     "originFrameHeight": 87,
     "gesScale": 1,
     "gesRotation": 0,
-    "isBgImage": false,
+    "isBgImage": true,
+    "overlayRectX": 0,
+    "overlayRectY": 0,
+    "overlayRectWidth": 1,
+    "overlayRectHeight": 1,
+    "imageType": "square",
+    "bgAddImageType":"Christmas01-sticker01"
   },
   {
-    "imageName": "Christmas01-sticker02",
+    "imageName": "empty",
     "originScale": 1,
     "originAngle": 0,
     "originFrameX": 316,
@@ -104,10 +116,16 @@
     "originFrameHeight": 100,
     "gesScale": 1,
     "gesRotation": 0,
-    "isBgImage": false,
+    "isBgImage": true,
+    "overlayRectX": 0,
+    "overlayRectY": 0,
+    "overlayRectWidth": 1,
+    "overlayRectHeight": 1,
+    "imageType": "square",
+    "bgAddImageType":"Christmas01-sticker02"
   },
   {
-    "imageName": "Christmas01-sticker03",
+    "imageName": "empty",
     "originScale": 1,
     "originAngle": 0,
     "originFrameX": 0,
@@ -116,6 +134,12 @@
     "originFrameHeight": 95,
     "gesScale": 1,
     "gesRotation": 0,
-    "isBgImage": false,
+    "isBgImage": true,
+    "overlayRectX": 0,
+    "overlayRectY": 0,
+    "overlayRectWidth": 1,
+    "overlayRectHeight": 1,
+    "imageType": "square",
+    "bgAddImageType":"Christmas01-sticker03"
   }]
 

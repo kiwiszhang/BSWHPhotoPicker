@@ -116,6 +116,9 @@ final class StickerManager: NSObject {
         state.originScale = stickerOld.originScale
         state.gesRotation = stickerOld.gesRotation
         state.imageMask = stickerOld.imageMask
+        if state.imageName == "empty" {
+            state.bgAddImageType = stickerOld.stickerModel?.bgAddImageType
+        }
         state.image = stickerOld.image
         let sticker = controller!.addImageSticker01(state: state)
         sticker.stickerModel = state
@@ -170,6 +173,14 @@ final class StickerManager: NSObject {
         )
         
         let point = sender.location(in: stickerView)
+        
+        if stickerView.stickerModel?.imageName == "empty" {
+            stickerView.setOperation(true)
+            stickerView.isEditingCustom = !stickerView.isEditingCustom
+            stickerView.setOperation(false)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":stickerView])
+            return
+        }
         
         if overlayRect.contains(point) {
             print("👉 点击在 overlay 区域内")

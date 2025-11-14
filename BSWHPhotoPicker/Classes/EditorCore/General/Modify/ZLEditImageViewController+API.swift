@@ -163,12 +163,27 @@ extension ZLEditImageViewController {
     }
 
     public func addImageSticker01(state: ImageStickerModel) -> EditableStickerView {
-        let imageSticker = EditableStickerView(image: state.image ?? UIImage(named: state.imageName)!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX.w, y: state.originFrameY.h, width: state.originFrameWidth.w, height: state.originFrameHeight.h),gesRotation: state.gesRotation,isBgImage: state.isBgImage,bgAddImageType: state.isBgImage == true ? state.bgAddImageType! : "addGrayImage",imageMask: state.imageMask ?? "")
+        var clearImage:UIImage? = nil
+        if state.imageName == "empty" {
+            clearImage = createTransparentImage(size: CGSize(width: state.originFrameWidth, height: state.originFrameHeight))
+        }else{
+            clearImage = state.image ?? UIImage(named: state.imageName)!
+        }
+        let imageSticker = EditableStickerView(image:clearImage!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX.w, y: state.originFrameY.h, width: state.originFrameWidth.w, height: state.originFrameHeight.h),gesRotation: state.gesRotation,isBgImage: state.isBgImage,bgAddImageType: state.isBgImage == true ? state.bgAddImageType! : "addGrayImage",imageMask: state.imageMask ?? "")
         addSticker(imageSticker)
         view.layoutIfNeeded()
         editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
         return imageSticker
     }
+    
+    func createTransparentImage(size: CGSize) -> UIImage? {
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { _ in
+            UIColor.clear.setFill()
+            UIRectFill(CGRect(origin: .zero, size: size))
+        }
+    }
+
     
     /// 添加文字贴纸(固定为ZLTextSticker类型，如果ZLTextStickerView不适用，可以自定义，使用addCustomSticker方法)
     public func addTextSticker(font: UIFont) {
@@ -585,7 +600,6 @@ public class EditableStickerView: ZLImageStickerView {
     }
     
     @objc private func handleLeftTopButtonTap() {
-        self.isEditingCustom = false
         NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":self])
         UIView.animate(withDuration: 0.2, animations: {
             self.alpha = 0
