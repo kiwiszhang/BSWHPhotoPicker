@@ -25,6 +25,7 @@ final class StickerManager: NSObject {
     var modelMap: [String: ImageStickerModel] = [:]
     var stickerArr: [EditableStickerView] = []
     weak var delegate: StickerManagerDelegate?
+    var persentType:Int = 0
     static let shared = StickerManager()
     private override init() {
         super.init()
@@ -234,7 +235,8 @@ final class StickerManager: NSObject {
 
 extension StickerManager: PHPickerViewControllerDelegate {
 
-    func checkPhotoAuthorizationAndPresentPicker() {
+    func checkPhotoAuthorizationAndPresentPicker(presentTypeFrom:Int = 0) {
+        persentType = presentTypeFrom
         let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         switch status {
         case .authorized, .limited:
@@ -272,18 +274,34 @@ extension StickerManager: PHPickerViewControllerDelegate {
         guard let result = results.first else { return }
         let provider = result.itemProvider
 
-        if provider.canLoadObject(ofClass: UIImage.self) {
-            provider.loadObject(ofClass: UIImage.self) { [weak self] image, _ in
-                guard let self = self,
-                let newImage:UIImage = image as? UIImage,
-                let stickerView = self.currentStickerView else { return }
-                DispatchQueue.main.async {
-                    
-                    if stickerView.stickerModel?.isBgImage == true {
-                        if let imageData = newImage.pngData() {
-                            stickerView.stickerModel?.imageData = imageData
+        if persentType == 0 {
+            if provider.canLoadObject(ofClass: UIImage.self) {
+                provider.loadObject(ofClass: UIImage.self) { [weak self] image, _ in
+                    guard let self = self,
+                    let newImage:UIImage = image as? UIImage,
+                    let stickerView = self.currentStickerView else { return }
+                    DispatchQueue.main.async {
+                        
+                        if stickerView.stickerModel?.isBgImage == true {
+                            if let imageData = newImage.pngData() {
+                                stickerView.stickerModel?.imageData = imageData
+                            }
+                            stickerView.updateImage(newImage, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image)
                         }
-                        stickerView.updateImage(newImage, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image)
+                    }
+                }
+            }
+        }else{
+            if provider.canLoadObject(ofClass: UIImage.self) {
+                provider.loadObject(ofClass: UIImage.self) { [weak self] image, _ in
+                    guard let self = self,
+                    let newImage:UIImage = image as? UIImage else { return }
+                    DispatchQueue.main.async {
+                        self.controller!.switchOperation(type: .imageSticker)
+                        let state: ImageStickerModel = ImageStickerModel(image: newImage,originFrame: CGRect(x: 40, y: 100, width: 120, height: 120),gesScale: 1,gesRotation: 0,isBgImage: false)
+                        let sticker = self.controller!.addImageSticker01(state: state)
+                        sticker.stickerModel = state
+                        StickerManager.shared.modelMap[sticker.id] = state
                     }
                 }
             }

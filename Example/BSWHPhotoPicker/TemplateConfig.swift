@@ -32,5 +32,9 @@ public struct TemplateConfig {
     public var Cancel = "Cancel"
     public var GotoSettings = "Go to Settings"
 
-    
+    public var Done = "Done"
+    public var General = "General"
+    public var Social = "Social"
+    public var Print = "Print"
+
 }

@@ -12,12 +12,15 @@ import SnapKit
 import PhotosUI
 
 let kstickerToolsViewHeight = 166.h
+let kRatioToolsViewHeight = 193.h
 
 class EditImageViewController: ZLEditImageViewController {
     var item:TemplateModel? = nil
     var currentSticker:EditableStickerView? = nil
     private var stickerToolsViewBottomConstraint: Constraint?
-    private lazy var stickerToolsView = StickerToolsView().cornerRadius(16.w, corners: [.topLeft,.topRight]).backgroundColor(.white)
+    private var ratioToolViewBottomConstraint: Constraint?
+    private lazy var stickerToolsView = StickerToolsView().cornerRadius(20.w, corners: [.topLeft,.topRight]).backgroundColor(.white)
+    private lazy var ratioToolView = RatioToolView().cornerRadius(20.w, corners: [.topLeft,.topRight]).backgroundColor(.white)
     private lazy var statusView = UIView().backgroundColor(kkColorFromHex("F5F5F5"))
     private lazy var topView = TemplateTopView().backgroundColor(kkColorFromHex("F5F5F5"))
     private lazy var contentView = UIView().backgroundColor(.white)
@@ -44,12 +47,20 @@ class EditImageViewController: ZLEditImageViewController {
         view.addSubview(contentView)
         view.addSubview(toolCollectionView)
         view.addSubview(stickerToolsView)
+        view.addSubview(ratioToolView)
+        
         stickerToolsView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(kstickerToolsViewHeight)
             self.stickerToolsViewBottomConstraint = make.bottom.equalToSuperview().offset(kstickerToolsViewHeight).constraint
         }
         stickerToolsView.delegate = self
+        
+        ratioToolView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.height.equalTo(kRatioToolsViewHeight)
+            self.ratioToolViewBottomConstraint = make.bottom.equalToSuperview().offset(kRatioToolsViewHeight).constraint
+        }
         
         statusView.snp.makeConstraints { make in
             make.top.equalToSuperview()
@@ -78,11 +89,14 @@ class EditImageViewController: ZLEditImageViewController {
         stickerToolsView.onClose = { [weak self] in
             self?.hideBottomPanel()
         }
+        ratioToolView.onClose = {
+            self.hideRatioBottomPanel()
+        }
         
         contentView.snp.makeConstraints { make in
             make.width.equalTo(kkScreenWidth)
             make.left.equalToSuperview().offset(0)
-            make.height.equalTo(kkScreenHeight - 44.h - 120.h - kkSAFE_AREA_TOP)
+            make.height.equalTo(kkScreenHeight - kstickerToolsViewHeight - kkSAFE_AREA_TOP)
             make.top.equalTo(topView.snp.bottom).offset(0)
         }
         contentView.addSubview(mainScrollView)
@@ -163,20 +177,87 @@ class EditImageViewController: ZLEditImageViewController {
     @objc func tapStickerOutOverlay(_ notification: Notification){
         let dict = notification.object as! [String:Any]
         let sticker:EditableStickerView = dict["sticker"] as! EditableStickerView
-
-        if sticker.stickerModel?.isBgImage == false {
+        guard let model = sticker.stickerModel else {
             hideBottomPanel()
-        }else{
+            return
+        }
+        if model.isBgImage {
             currentSticker = sticker
             if sticker.isEditingCustom {
                 showBottomPanel()
                 sticker.layoutSubviews()
-            }else{
+            } else {
                 hideBottomPanel()
             }
+        } else {
+            hideBottomPanel()
         }
     }
-    /// 点击按钮调用
+    
+    // MARK: - ratioToolView 隐藏显示处理
+    @objc func showRatioBottomPanel() {
+        topView.hidden(true)
+        topView.snp.remakeConstraints { make in
+            make.top.equalTo(statusView.snp.bottom)
+            make.height.equalTo(0.h)
+            make.left.right.equalToSuperview()
+        }
+        contentView.snp.remakeConstraints { make in
+            make.width.equalTo(kkScreenWidth)
+            make.left.equalToSuperview().offset(0)
+            make.height.equalTo(kkScreenHeight - kRatioToolsViewHeight - kkSAFE_AREA_TOP)
+            make.top.equalTo(topView.snp.bottom).offset(0)
+        }
+        contentView.addSubview(mainScrollView)
+        mainScrollView.snp.remakeConstraints { make in
+            make.width.equalTo(kkScreenWidth)
+            make.left.equalToSuperview().offset(0)
+            make.height.equalToSuperview()
+            make.top.equalTo(topView.snp.bottom).offset(0)
+        }
+        contentView.layoutIfNeeded()
+        resetContainerViewFrame()
+        
+        self.ratioToolViewBottomConstraint?.update(offset: 0)
+        UIView.animate(withDuration: 0.25) {
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    /// 隐藏
+    func hideRatioBottomPanel() {
+        topView.hidden(false)
+        topView.snp.remakeConstraints { make in
+            make.top.equalTo(statusView.snp.bottom)
+            make.height.equalTo(44.h)
+            make.left.right.equalToSuperview()
+        }
+        contentView.snp.remakeConstraints { make in
+            make.width.equalTo(kkScreenWidth)
+            make.left.equalToSuperview().offset(0)
+            make.height.equalTo(kkScreenHeight - kRatioToolsViewHeight - kkSAFE_AREA_TOP)
+            make.top.equalTo(topView.snp.bottom).offset(0)
+        }
+        contentView.addSubview(mainScrollView)
+        mainScrollView.snp.remakeConstraints { make in
+            make.width.equalTo(kkScreenWidth)
+            make.left.equalToSuperview().offset(0)
+            make.height.equalToSuperview()
+            make.top.equalTo(topView.snp.bottom).offset(0)
+        }
+        contentView.layoutIfNeeded()
+        resetContainerViewFrame()
+        
+        if let sticker = currentSticker {
+            sticker.isEditingCustom = false
+        }
+        self.ratioToolViewBottomConstraint?.update(offset: kRatioToolsViewHeight)
+        UIView.animate(withDuration: 0.25) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    // MARK: - stickerToolsView 隐藏显示处理
     @objc func showBottomPanel() {
         topView.hidden(true)
         topView.snp.remakeConstraints { make in
@@ -187,7 +268,7 @@ class EditImageViewController: ZLEditImageViewController {
         contentView.snp.remakeConstraints { make in
             make.width.equalTo(kkScreenWidth)
             make.left.equalToSuperview().offset(0)
-            make.height.equalTo(kkScreenHeight - 44.h - 120.h - kkSAFE_AREA_TOP)
+            make.height.equalTo(kkScreenHeight - kstickerToolsViewHeight - kkSAFE_AREA_TOP)
             make.top.equalTo(topView.snp.bottom).offset(0)
         }
         contentView.addSubview(mainScrollView)
@@ -217,7 +298,7 @@ class EditImageViewController: ZLEditImageViewController {
         contentView.snp.remakeConstraints { make in
             make.width.equalTo(kkScreenWidth)
             make.left.equalToSuperview().offset(0)
-            make.height.equalTo(kkScreenHeight - 44.h - 120.h - kkSAFE_AREA_TOP)
+            make.height.equalTo(kkScreenHeight - kstickerToolsViewHeight - kkSAFE_AREA_TOP)
             make.top.equalTo(topView.snp.bottom).offset(0)
         }
         contentView.addSubview(mainScrollView)
@@ -326,25 +407,27 @@ extension EditImageViewController:TemplateTopViewDelegate {
 extension EditImageViewController:ToolsCollectionViewDelegate {
     func cellDidSelectItemAt(_ sender: ToolsCollectionView, indexPath: IndexPath) {
         if indexPath.row == 0 {
-            replaceBgImage(image: UIImage(named: "Christmas00-bg")!)
-            resetContainerViewFrame()
+            self.switchOperation(type: .textSticker)
+            self.addTextSticker(font: UIFont.systemFont(ofSize: 20))
+            
+//            replaceBgImage(image: UIImage(named: "Christmas00-bg")!)
+//            resetContainerViewFrame()
         }else if indexPath.row == 1 {
             showBottomPanel()
         }else if indexPath.row == 2 {
-            let image = UIImage(named: item!.imageBg)
-            if let squareImage = image!.croppedToCenteredSquare() {
-                
-                for sticker in StickerManager.shared.stickerArr {
-                    sticker.removeFromSuperview()
-                }
-                StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName, currentVC: self,cropped: 0.7)
-                replaceBgImage(image: squareImage)
-                resetContainerViewFrame()
-            }
+//            let image = UIImage(named: item!.imageBg)
+//            if let squareImage = image!.croppedToCenteredSquare() {
+//                for sticker in StickerManager.shared.stickerArr {
+//                    sticker.removeFromSuperview()
+//                }
+//                StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName, currentVC: self,cropped: 0.7)
+//                replaceBgImage(image: squareImage)
+//                resetContainerViewFrame()
+//            }
+            StickerManager.shared.checkPhotoAuthorizationAndPresentPicker(presentTypeFrom: 1)
         }else if indexPath.row == 3 {
             let image = UIImage(named: item!.imageBg)
             if let squareImage = image!.croppedToAspect4x5() {
-                
                 for sticker in StickerManager.shared.stickerArr {
                     sticker.removeFromSuperview()
                 }
@@ -353,19 +436,17 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
                 resetContainerViewFrame()
             }
         }else if indexPath.row == 4 {
-            let image = UIImage(named: item!.imageBg)
-            if let squareImage = image!.croppedToAspect9x16() {
-                for sticker in StickerManager.shared.stickerArr {
-                    sticker.removeFromSuperview()
-                }
-                StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName, currentVC: self,cropped: 0.9)
-                replaceBgImage(image: squareImage)
-                resetContainerViewFrame()
-            }
-        }else if indexPath.row == 5 {
-
+//            let image = UIImage(named: item!.imageBg)
+//            if let squareImage = image!.croppedToAspect9x16() {
+//                for sticker in StickerManager.shared.stickerArr {
+//                    sticker.removeFromSuperview()
+//                }
+//                StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName, currentVC: self,cropped: 0.9)
+//                replaceBgImage(image: squareImage)
+//                resetContainerViewFrame()
+//            }
+            showRatioBottomPanel()
         }
-
     }
 }
 
