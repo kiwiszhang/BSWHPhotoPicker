@@ -34,7 +34,7 @@ class TemplateTopView: SuperView {
         addChildView([closeImg,backImg,rebackImg,saveBtn])
         closeImg.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(8.w)
-            make.top.equalToSuperview().offset(54.h)
+            make.bottom.equalToSuperview().offset(-10.h)
             make.height.width.equalTo(24.h)
         }
         backImg.snp.makeConstraints { make in

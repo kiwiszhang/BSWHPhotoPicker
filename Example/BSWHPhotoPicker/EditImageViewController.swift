@@ -11,15 +11,16 @@ import BSWHPhotoPicker
 import SnapKit
 import PhotosUI
 
-let kstickerToolsViewHeight = 186.h
+let kstickerToolsViewHeight = 166.h
 
 class EditImageViewController: ZLEditImageViewController {
     var item:TemplateModel? = nil
     var currentSticker:EditableStickerView? = nil
     private var stickerToolsViewBottomConstraint: Constraint?
     private lazy var stickerToolsView = StickerToolsView().cornerRadius(16.w, corners: [.topLeft,.topRight]).backgroundColor(.white)
+    private lazy var statusView = UIView().backgroundColor(kkColorFromHex("F5F5F5"))
     private lazy var topView = TemplateTopView().backgroundColor(kkColorFromHex("F5F5F5"))
-        
+    private lazy var contentView = UIView().backgroundColor(.white)
     let menuButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("菜单", for: .normal)
@@ -36,12 +37,13 @@ class EditImageViewController: ZLEditImageViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = kkColorFromHex("F5F5F5")
         NotificationCenter.default.addObserver(self, selector: #selector(tapStickerOutOverlay(_:)), name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: nil)
-
+        view.addSubview(statusView)
         view.addSubview(topView)
+        view.addSubview(contentView)
         view.addSubview(toolCollectionView)
         view.addSubview(stickerToolsView)
-                
         stickerToolsView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(kstickerToolsViewHeight)
@@ -49,10 +51,15 @@ class EditImageViewController: ZLEditImageViewController {
         }
         stickerToolsView.delegate = self
         
-        topView.snp.makeConstraints { make in
-//            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+        statusView.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.height.equalTo(88.h)
+            make.height.equalTo(kkSAFE_AREA_TOP)
+            make.left.right.equalToSuperview()
+        }
+        
+        topView.snp.makeConstraints { make in
+            make.top.equalTo(statusView.snp.bottom)
+            make.height.equalTo(44.h)
             make.left.right.equalToSuperview()
         }
         topView.delegate = self
@@ -68,10 +75,27 @@ class EditImageViewController: ZLEditImageViewController {
         StickerManager.shared.initCurrentTemplate(jsonName: item!.jsonName, currentVC: self)
         backAndreBackStatus()
         
-        
         stickerToolsView.onClose = { [weak self] in
             self?.hideBottomPanel()
         }
+        
+        contentView.snp.makeConstraints { make in
+            make.width.equalTo(kkScreenWidth)
+            make.left.equalToSuperview().offset(0)
+            make.height.equalTo(kkScreenHeight - 44.h - 120.h - kkSAFE_AREA_TOP)
+            make.top.equalTo(topView.snp.bottom).offset(0)
+        }
+        contentView.addSubview(mainScrollView)
+        mainScrollView.snp.makeConstraints { make in
+            make.width.equalTo(kkScreenWidth)
+            make.left.equalToSuperview().offset(0)
+            make.height.equalToSuperview()
+            make.top.equalTo(topView.snp.bottom).offset(0)
+        }
+        contentView.layoutIfNeeded()
+        resetContainerViewFrame()
+        mainScrollView.backgroundColor = .white
+        
     }
     
     
@@ -139,16 +163,43 @@ class EditImageViewController: ZLEditImageViewController {
     @objc func tapStickerOutOverlay(_ notification: Notification){
         let dict = notification.object as! [String:Any]
         let sticker:EditableStickerView = dict["sticker"] as! EditableStickerView
-        currentSticker = sticker
-        print(sticker)
-        if sticker.isEditingCustom {
-            showBottomPanel()
-        }else{
+
+        if sticker.stickerModel?.isBgImage == false {
             hideBottomPanel()
+        }else{
+            currentSticker = sticker
+            if sticker.isEditingCustom {
+                showBottomPanel()
+                sticker.layoutSubviews()
+            }else{
+                hideBottomPanel()
+            }
         }
     }
     /// 点击按钮调用
     @objc func showBottomPanel() {
+        topView.hidden(true)
+        topView.snp.remakeConstraints { make in
+            make.top.equalTo(statusView.snp.bottom)
+            make.height.equalTo(0.h)
+            make.left.right.equalToSuperview()
+        }
+        contentView.snp.remakeConstraints { make in
+            make.width.equalTo(kkScreenWidth)
+            make.left.equalToSuperview().offset(0)
+            make.height.equalTo(kkScreenHeight - 44.h - 120.h - kkSAFE_AREA_TOP)
+            make.top.equalTo(topView.snp.bottom).offset(0)
+        }
+        contentView.addSubview(mainScrollView)
+        mainScrollView.snp.remakeConstraints { make in
+            make.width.equalTo(kkScreenWidth)
+            make.left.equalToSuperview().offset(0)
+            make.height.equalToSuperview()
+            make.top.equalTo(topView.snp.bottom).offset(0)
+        }
+        contentView.layoutIfNeeded()
+        resetContainerViewFrame()
+        
         self.stickerToolsViewBottomConstraint?.update(offset: 0)
         UIView.animate(withDuration: 0.25) {
             self.view.layoutIfNeeded()
@@ -157,6 +208,28 @@ class EditImageViewController: ZLEditImageViewController {
 
     /// 隐藏
     func hideBottomPanel() {
+        topView.hidden(false)
+        topView.snp.remakeConstraints { make in
+            make.top.equalTo(statusView.snp.bottom)
+            make.height.equalTo(44.h)
+            make.left.right.equalToSuperview()
+        }
+        contentView.snp.remakeConstraints { make in
+            make.width.equalTo(kkScreenWidth)
+            make.left.equalToSuperview().offset(0)
+            make.height.equalTo(kkScreenHeight - 44.h - 120.h - kkSAFE_AREA_TOP)
+            make.top.equalTo(topView.snp.bottom).offset(0)
+        }
+        contentView.addSubview(mainScrollView)
+        mainScrollView.snp.remakeConstraints { make in
+            make.width.equalTo(kkScreenWidth)
+            make.left.equalToSuperview().offset(0)
+            make.height.equalToSuperview()
+            make.top.equalTo(topView.snp.bottom).offset(0)
+        }
+        contentView.layoutIfNeeded()
+        resetContainerViewFrame()
+        
         if let sticker = currentSticker {
             sticker.isEditingCustom = false
         }
@@ -208,12 +281,12 @@ class EditImageViewController: ZLEditImageViewController {
 
     func showAlbumPermissionAlert() {
         let alert = UIAlertController(
-            title: "需要相册权限",
-            message: "请在设置中允许保存照片",
+            title: StickerManager.shared.config.NoPermission,
+            message: StickerManager.shared.config.photoLibrarySettings,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "取消", style: .cancel))
-        alert.addAction(UIAlertAction(title: "去设置", style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: StickerManager.shared.config.Cancel, style: .cancel))
+        alert.addAction(UIAlertAction(title: StickerManager.shared.config.GotoSettings, style: .default, handler: { _ in
             if let url = URL(string: UIApplication.openSettingsURLString) {
                 UIApplication.shared.open(url)
             }
@@ -228,12 +301,16 @@ extension EditImageViewController:TemplateTopViewDelegate {
         dismiss(animated: true)
     }
     func backTemplate(_ sender: TemplateTopView){
+        currentSticker = nil
+        hideBottomPanel()
         if canRedo {
             redoAction()
         }
         backAndreBackStatus()
     }
     func reBackTemplate(_ sender: TemplateTopView) {
+        currentSticker = nil
+        hideBottomPanel()
         if canUndo {
             undoAction()
         }

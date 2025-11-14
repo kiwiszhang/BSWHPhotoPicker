@@ -609,6 +609,7 @@ public class EditableStickerView: ZLImageStickerView {
         isEditingCustom.toggle()
         syncResizeButtonToOverlay()
         setOperation(false)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":self])
     }
 
     public override func didMoveToSuperview() {

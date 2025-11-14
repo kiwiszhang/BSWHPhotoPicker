@@ -26,4 +26,11 @@ public struct TemplateConfig {
     public var FlipH = "Flip H"
     public var FlipV = "Flip V"
     public var Remove = "Remove"
+    
+    public var NoPermission = "No Permission"
+    public var photoLibrarySettings = "Please allow access to the photo library in Settings"
+    public var Cancel = "Cancel"
+    public var GotoSettings = "Go to Settings"
+
+    
 }

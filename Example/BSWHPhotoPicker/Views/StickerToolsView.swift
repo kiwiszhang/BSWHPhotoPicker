@@ -44,7 +44,7 @@ class StickerToolsView:UIView {
         toolCollectionView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(70.h)
-            make.top.equalTo(closeBtn.snp.bottom).offset(20.h)
+            make.top.equalTo(closeBtn.snp.bottom).offset(0.h)
         }
         toolCollectionView.delegate = self
     }

@@ -187,8 +187,14 @@ final class StickerManager: NSObject {
             
 //            self.delegate?.stickerAddImage(self)
             
-            checkPhotoAuthorizationAndPresentPicker()
-            
+            if let _ = stickerView.stickerModel?.imageData {
+                stickerView.setOperation(true)
+                stickerView.isEditingCustom = !stickerView.isEditingCustom
+                stickerView.setOperation(false)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":stickerView])
+            }else{
+                checkPhotoAuthorizationAndPresentPicker()
+            }
         } else {
             print("👉 点击在 overlay 区域外")
             stickerView.setOperation(true)
@@ -470,13 +476,13 @@ extension ZLImageStickerView {
 extension StickerManager {
     func showPhotoPermissionAlert() {
         let alert = UIAlertController(
-            title: "需要访问相册",
-            message: "请在设置中允许访问相册以选择图片",
+            title: StickerManager.shared.config.NoPermission,
+            message: StickerManager.shared.config.photoLibrarySettings,
             preferredStyle: .alert
         )
 
-        alert.addAction(UIAlertAction(title: "取消", style: .cancel))
-        alert.addAction(UIAlertAction(title: "去设置", style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: StickerManager.shared.config.Cancel, style: .cancel))
+        alert.addAction(UIAlertAction(title: StickerManager.shared.config.GotoSettings, style: .default, handler: { _ in
             if let url = URL(string: UIApplication.openSettingsURLString) {
                 UIApplication.shared.open(url)
             }
