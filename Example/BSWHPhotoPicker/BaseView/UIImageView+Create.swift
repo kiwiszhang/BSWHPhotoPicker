@@ -75,3 +75,32 @@ public extension UIImageView {
         }
     }
 }
+
+extension UIView {
+    func toImage(targetSize: CGSize? = nil) -> UIImage {
+        self.layoutIfNeeded()
+
+        let renderSize = targetSize ?? self.bounds.size
+        guard renderSize.width > 0, renderSize.height > 0 else {
+            print("❌ Invalid render size:", renderSize)
+            return UIImage()
+        }
+
+        // 🔥 临时调整 bounds
+        let oldBounds = self.bounds
+        self.bounds = CGRect(origin: .zero, size: renderSize)
+
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = UIScreen.main.scale
+        format.opaque = false
+
+        let renderer = UIGraphicsImageRenderer(size: renderSize, format: format)
+        let img = renderer.image { ctx in
+            self.layer.render(in: ctx.cgContext)
+        }
+
+        self.bounds = oldBounds // 恢复
+        return img
+    }
+}
+

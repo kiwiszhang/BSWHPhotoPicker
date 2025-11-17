@@ -41,8 +41,26 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
     func cellDidSelectItemAt(_ sender: ToolsCollectionView, indexPath: IndexPath) {
         if indexPath.row == 0 {
             self.switchOperation(type: .textSticker)
-            self.addTextSticker(font: UIFont.systemFont(ofSize: 20))
-            
+            self.addTextSticker01(font: UIFont.systemFont(ofSize: 20)) { result in
+                if let result = result {
+                    let sticker = result.sticker
+                    sticker.frame = result.frame
+                    let image = sticker.toImage(targetSize: result.frame.size)
+                    let frame = result.frame
+                    DispatchQueue.main.async {
+                        self.switchOperation(type: .imageSticker)
+                        let state: ImageStickerModel = ImageStickerModel(imageName: "empty",imageData:image.pngData(), originFrame: CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width, height: frame.size.height),gesScale: 1,gesRotation: 0,overlayRect: CGRect(x:0,y: 0,width: 1,height: 1) ,isBgImage: true)
+                        state.imageData = image.pngData()
+                        let sticker = self.addImageSticker01(state: state)
+                        sticker.stickerModel = state
+                        StickerManager.shared.modelMap[sticker.id] = state
+                        StickerManager.shared.stickerArr.append(sticker)
+                        if let image = sticker.stickerModel?.stickerImage {
+                            sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
+                        }
+                    }
+                }
+            }
 //            replaceBgImage(image: UIImage(named: "Christmas00-bg")!)
 //            resetContainerViewFrame()
         }else if indexPath.row == 1 {

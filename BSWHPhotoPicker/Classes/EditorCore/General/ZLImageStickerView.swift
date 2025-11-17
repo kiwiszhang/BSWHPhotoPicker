@@ -51,7 +51,8 @@ open class ZLImageStickerView: ZLBaseStickerView {
             totalTranslationPoint: totalTranslationPoint,
             isBgImage: isBgImage,
             bgAddImageType: bgAddImageType,
-            imageMask: imageMask
+            imageMask: imageMask,
+            imageData: imageData!
         )
     }
     
@@ -72,6 +73,7 @@ open class ZLImageStickerView: ZLBaseStickerView {
             isBgImage:state.isBgImage,
             bgAddImageType: state.bgAddImageType,
             imageMask: state.imageMask,
+            imageData: state.imageData,
             showBorder: false
         )
     }
@@ -88,6 +90,7 @@ open class ZLImageStickerView: ZLBaseStickerView {
         isBgImage:Bool = false,
         bgAddImageType:String = "addGrayImage",
         imageMask:String = "",
+        imageData:Data? = nil,
         showBorder: Bool = true
     ) {
         self.image = image
@@ -102,6 +105,7 @@ open class ZLImageStickerView: ZLBaseStickerView {
             isBgImage: isBgImage,
             bgAddImageType: bgAddImageType,
             imageMask: imageMask,
+            imageData: imageData,
             showBorder: showBorder
         )
         

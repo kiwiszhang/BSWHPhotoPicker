@@ -169,7 +169,7 @@ extension ZLEditImageViewController {
         }else{
             clearImage = state.image ?? UIImage(named: state.imageName)!
         }
-        let imageSticker = EditableStickerView(image:clearImage!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX.w, y: state.originFrameY.h, width: state.originFrameWidth.w, height: state.originFrameHeight.h),gesRotation: state.gesRotation,isBgImage: state.isBgImage,bgAddImageType: state.isBgImage == true ? state.bgAddImageType! : "addGrayImage",imageMask: state.imageMask ?? "")
+        let imageSticker = EditableStickerView(image:clearImage!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX.w, y: state.originFrameY.h, width: state.originFrameWidth.w, height: state.originFrameHeight.h),gesRotation: state.gesRotation,isBgImage: state.isBgImage,bgAddImageType: state.bgAddImageType!,imageMask: state.imageMask ?? "",imageData: state.imageData ?? UIImage(named: state.bgAddImageType!)?.pngData())
         addSticker(imageSticker)
         view.layoutIfNeeded()
         editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
@@ -189,6 +189,29 @@ extension ZLEditImageViewController {
     public func addTextSticker(font: UIFont) {
         showInputTextVC(font: font) { [weak self] text, textColor, font, image, style in
             self?.addTextStickersView(text, textColor: textColor, font: font, image: image, style: style)
+        }
+    }
+    
+    public func addTextSticker01(
+        font: UIFont,
+        completion: @escaping ((sticker: EditableTextStickerView, frame: CGRect)?) -> Void
+    ) {
+        showInputTextVC(font: font) { [weak self] text, textColor, font, image, style in
+            guard let self = self else {
+                completion(nil)
+                return
+            }
+            if let result = self.addTextStickersView02(
+                        text,
+                        textColor: textColor,
+                        font: font,
+                        image: image,
+                        style: style
+                    ) {
+                        completion((sticker: result.sticker, frame: result.originFrame))
+                    } else {
+                        completion(nil)
+                    }
         }
     }
     
@@ -377,7 +400,7 @@ public class ImageStickerModel: Codable {
         overlayRect: CGRect? = nil,
         imageType: ImageAddType? = nil,
         isBgImage: Bool = false,
-        bgAddImageType:String = "addGrayImage"
+        bgAddImageType:String = "addGrayImage",
     ) {
         self._image = image
         self.imageName = imageName
@@ -468,6 +491,7 @@ public class EditableStickerView: ZLImageStickerView {
         isBgImage: Bool = false,
         bgAddImageType:String = "addGrayImage",
         imageMask:String = "",
+        imageData:Data? = nil,
         showBorder: Bool = false
         
     ) {
@@ -483,6 +507,7 @@ public class EditableStickerView: ZLImageStickerView {
             isBgImage: isBgImage,
             bgAddImageType: bgAddImageType,
             imageMask: imageMask,
+            imageData: imageData,
             showBorder: showBorder
         )
         borderView.layer.borderWidth = borderWidth
@@ -493,8 +518,8 @@ public class EditableStickerView: ZLImageStickerView {
         enableTapSelection()
     }
 
-    init(image: UIImage, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect,gesRotation:CGFloat, isBgImage: Bool,bgAddImageType:String,imageMask:String) {
-        super.init(image: image, originScale: originScale, originAngle: originAngle, originFrame: originFrame,gesRotation: gesRotation, isBgImage: isBgImage,bgAddImageType:bgAddImageType,imageMask: imageMask)
+    init(image: UIImage, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect,gesRotation:CGFloat, isBgImage: Bool,bgAddImageType:String,imageMask:String,imageData:Data?) {
+        super.init(image: image, originScale: originScale, originAngle: originAngle, originFrame: originFrame,gesRotation: gesRotation, isBgImage: isBgImage,bgAddImageType:bgAddImageType,imageMask: imageMask,imageData: imageData!)
         addButton()
         enableTapSelection()
     }
@@ -931,6 +956,7 @@ public class EditableTextStickerView: ZLTextStickerView {
             gesScale: state.gesScale,
             gesRotation: state.gesRotation,
             totalTranslationPoint: state.totalTranslationPoint,
+            imageData: state.imageData,
             showBorder: false
         )
         self.refreshResizeButtonPosition()
@@ -950,6 +976,7 @@ public class EditableTextStickerView: ZLTextStickerView {
         gesScale: CGFloat = 1,
         gesRotation: CGFloat = 0,
         totalTranslationPoint: CGPoint = .zero,
+        imageData:Data? = nil,
         showBorder: Bool = false
     ) {
         super.init(
@@ -965,6 +992,7 @@ public class EditableTextStickerView: ZLTextStickerView {
             gesScale: gesScale,
             gesRotation: gesRotation,
             totalTranslationPoint: totalTranslationPoint,
+            imageData: imageData,
             showBorder: showBorder
         )
         
@@ -1025,6 +1053,7 @@ public class EditableTextStickerView: ZLTextStickerView {
     }
     
     @objc private func handleLeftTopButtonTap() {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":self])
         UIView.animate(withDuration: 0.2) {
             self.alpha = 0
             self.leftTopButton.alpha = 0
@@ -1053,6 +1082,7 @@ public class EditableTextStickerView: ZLTextStickerView {
         isEditingCustom.toggle()
         syncButtonsToOverlay()
         setOperation(false)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":self])
     }
     
     // MARK: - Overlay 同步
@@ -1115,6 +1145,7 @@ public class EditableTextStickerView: ZLTextStickerView {
             totalTranslationPoint.y += dy
             gesTranslationPoint = .zero
             setOperation(false)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":self])
         default: break
         }
     }

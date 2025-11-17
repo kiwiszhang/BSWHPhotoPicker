@@ -991,11 +991,34 @@ open class ZLEditImageViewController: UIViewController {
             image: image,
             originScale: 1 / scale,
             originAngle: -currentClipStatus.angle,
-            originFrame: originFrame
+            originFrame: originFrame,
+            imageData:createTransparentImage(size: CGSize(width: originFrame.width, height: originFrame.height))?.pngData()
         )
+        
         addSticker(textSticker)
         
         editorManager.storeAction(.sticker(oldState: nil, newState: textSticker.state))
+    }
+    
+    public func addTextStickersView02(_ text: String, textColor: UIColor, font: UIFont, image: UIImage?, style: ZLInputTextStyle) -> (sticker: EditableTextStickerView, originFrame: CGRect)? {
+        guard !text.isEmpty, let image = image else { return nil}
+        
+        let scale = mainScrollView.zoomScale
+        let size = EditableTextStickerView.calculateSize(image: image)
+        let originFrame = getStickerOriginFrame(size)
+        
+        let textSticker = EditableTextStickerView(
+            text: text,
+            textColor: textColor,
+            font: font,
+            style: style,
+            image: image,
+            originScale: 1 / scale,
+            originAngle: -currentClipStatus.angle,
+            originFrame: originFrame,
+            imageData:createTransparentImage(size: CGSize(width: originFrame.width, height: originFrame.height))?.pngData()
+        )
+        return (textSticker, originFrame)
     }
     
     func addSticker(_ sticker: ZLBaseStickerView) {

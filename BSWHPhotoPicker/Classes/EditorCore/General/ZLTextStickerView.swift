@@ -69,8 +69,17 @@ public class ZLTextStickerView: ZLBaseStickerView {
             totalTranslationPoint: totalTranslationPoint,
             isBgImage: isBgImage,
             bgAddImageType: bgAddImageType,
-            imageMask: imageMask
+            imageMask: imageMask,
+            imageData: imageData!
         )
+    }
+    
+    func createTransparentImage(size: CGSize) -> UIImage? {
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { _ in
+            UIColor.clear.setFill()
+            UIRectFill(CGRect(origin: .zero, size: size))
+        }
     }
     
     deinit {
@@ -91,6 +100,7 @@ public class ZLTextStickerView: ZLBaseStickerView {
             gesScale: state.gesScale,
             gesRotation: state.gesRotation,
             totalTranslationPoint: state.totalTranslationPoint,
+            imageData:state.imageData,
             showBorder: false
         )
     }
@@ -108,6 +118,7 @@ public class ZLTextStickerView: ZLBaseStickerView {
         gesScale: CGFloat = 1,
         gesRotation: CGFloat = 0,
         totalTranslationPoint: CGPoint = .zero,
+        imageData:Data? = nil,
         showBorder: Bool = true
     ) {
         self.text = text
@@ -123,6 +134,7 @@ public class ZLTextStickerView: ZLBaseStickerView {
             gesScale: gesScale,
             gesRotation: gesRotation,
             totalTranslationPoint: totalTranslationPoint,
+            imageData: imageData,
             showBorder: showBorder
         )
         
