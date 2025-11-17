@@ -64,7 +64,7 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
 //            replaceBgImage(image: UIImage(named: "Christmas00-bg")!)
 //            resetContainerViewFrame()
         }else if indexPath.row == 1 {
-            showBottomPanel()
+//            showBottomPanel()
         }else if indexPath.row == 2 {
             StickerManager.shared.checkPhotoAuthorizationAndPresentPicker(presentTypeFrom: 1)
         }else if indexPath.row == 3 {
@@ -87,26 +87,11 @@ extension EditImageViewController:StickerToolsViewDelegate {
             
         }else if indexPath.row == 3 {
             if let sticker = currentSticker {
-                if sticker.stickerModel!.isBgImage {
-                    if let image = sticker.stickerModel?.stickerImage,let newImage = image.flippedHorizontally() {
-                        if let imageData = newImage.pngData() {
-                            sticker.stickerModel?.imageData = imageData
-                        }
-                        sticker.updateImage(newImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
+                if let image = sticker.stickerModel?.stickerImage,let newImage = image.flippedHorizontally() {
+                    if let imageData = newImage.pngData() {
+                        sticker.stickerModel?.imageData = imageData
                     }
-                }else{
-                    if let image = sticker.stickerModel?.image,let newImage = image.flippedVertically() {
-                        sticker.stickerModel?.image = newImage
-                        sticker.layoutSubviews()
-//                        switchOperation(type: .imageSticker)
-//                        let state: ImageStickerModel = sticker.stickerModel!
-//                        sticker.removeFromSuperview()
-//                        let newSticker = addImageSticker01(state: state)
-//                        newSticker.stickerModel = state
-//                        StickerManager.shared.modelMap[newSticker.id] = state
-//                        currentSticker = newSticker
-//                        currentSticker?.layoutSubviews()
-                    }
+                    sticker.updateImage(newImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
                 }
             }
         }else if indexPath.row == 4 {

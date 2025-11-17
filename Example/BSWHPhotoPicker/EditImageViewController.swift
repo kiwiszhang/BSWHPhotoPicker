@@ -177,9 +177,14 @@ class EditImageViewController: ZLEditImageViewController {
     // MARK: - Action
     @objc func tapStickerOutOverlay(_ notification: Notification){
         let dict = notification.object as! [String:Any]
+        if let _ = dict["leftTopTap"] as? Int {
+            hideRatioBottomPanel()
+            hideBottomPanel()
+            return
+        }
         let sticker:EditableStickerView = dict["sticker"] as! EditableStickerView
         hideRatioBottomPanel()
-        guard let model = sticker.stickerModel else {
+        guard let _ = sticker.stickerModel else {
             hideBottomPanel()
             return
         }
