@@ -52,7 +52,7 @@ open class ZLImageStickerView: ZLBaseStickerView {
             isBgImage: isBgImage,
             bgAddImageType: bgAddImageType,
             imageMask: imageMask,
-            imageData: imageData!
+            imageData: (imageData ?? UIImage(named: "addWhiteImage")?.pngData())!
         )
     }
     

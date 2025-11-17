@@ -1322,6 +1322,16 @@ extension ZLEditImageViewController: ZLStickerViewDelegate {
         }
     }
     
+    func stickerBeginOperation01(_ sticker: ZLBaseStickerView) {
+        stickersContainer.bringSubviewToFront(sticker)
+        stickersContainer.subviews.forEach { view in
+            if view !== sticker {
+                (view as? ZLStickerViewAdditional)?.resetState()
+                (view as? ZLStickerViewAdditional)?.gesIsEnabled = false
+            }
+        }
+    }
+    
     func stickerOnOperation(_ sticker: ZLBaseStickerView, panGes: UIPanGestureRecognizer) {
         
     }
@@ -1338,6 +1348,11 @@ extension ZLEditImageViewController: ZLStickerViewDelegate {
         }
     }
     
+    func stickerEndOperation01(_ sticker: ZLBaseStickerView, panGes: UIPanGestureRecognizer) {
+        stickersContainer.subviews.forEach { view in
+            (view as? ZLStickerViewAdditional)?.gesIsEnabled = true
+        }
+    }
     func stickerDidTap(_ sticker: ZLBaseStickerView) {
         stickersContainer.bringSubviewToFront(sticker)
         stickersContainer.subviews.forEach { view in

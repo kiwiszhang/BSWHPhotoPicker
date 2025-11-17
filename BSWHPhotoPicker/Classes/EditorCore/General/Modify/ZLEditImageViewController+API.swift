@@ -644,10 +644,10 @@ public class EditableStickerView: ZLImageStickerView {
     }
 
     @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
-        setOperation(true)
+        setOperation01(true)
         isEditingCustom.toggle()
         syncResizeButtonToOverlay()
-        setOperation(false)
+        setOperation01(false)
         NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":self])
     }
 

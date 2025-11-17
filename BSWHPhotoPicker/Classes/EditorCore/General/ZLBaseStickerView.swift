@@ -29,13 +29,15 @@ import UIKit
 protocol ZLStickerViewDelegate: NSObject {
     /// Called when scale or rotate or move.
     func stickerBeginOperation(_ sticker: ZLBaseStickerView)
-    
+    func stickerBeginOperation01(_ sticker: ZLBaseStickerView)
+
     /// Called during scale or rotate or move.
     func stickerOnOperation(_ sticker: ZLBaseStickerView, panGes: UIPanGestureRecognizer)
     
     /// Called after scale or rotate or move.
     func stickerEndOperation(_ sticker: ZLBaseStickerView, panGes: UIPanGestureRecognizer)
-    
+    func stickerEndOperation01(_ sticker: ZLBaseStickerView, panGes: UIPanGestureRecognizer)
+
     /// Called when tap sticker.
     func stickerDidTap(_ sticker: ZLBaseStickerView)
     
@@ -320,6 +322,18 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
             onOperation = false
 //            startTimer()
             delegate?.stickerEndOperation(self, panGes: panGes)
+        }
+    }
+    
+    public func setOperation01(_ isOn: Bool) {
+        if isOn, !onOperation {
+            onOperation = true
+            cleanTimer()
+            borderView.layer.borderColor = UIColor.white.cgColor
+            delegate?.stickerBeginOperation01(self)
+        } else if !isOn, onOperation {
+            onOperation = false
+            delegate?.stickerEndOperation01(self, panGes: panGes)
         }
     }
     

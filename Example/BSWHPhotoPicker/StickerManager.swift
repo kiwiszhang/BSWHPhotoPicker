@@ -178,9 +178,9 @@ final class StickerManager: NSObject {
         let point = sender.location(in: stickerView)
         
         if stickerView.stickerModel?.imageName == "empty" {
-            stickerView.setOperation(true)
+            stickerView.setOperation01(true)
             stickerView.isEditingCustom = !stickerView.isEditingCustom
-            stickerView.setOperation(false)
+            stickerView.setOperation01(false)
             NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":stickerView])
             return
         }
@@ -203,18 +203,18 @@ final class StickerManager: NSObject {
 //            self.delegate?.stickerAddImage(self)
             
             if let _ = stickerView.stickerModel?.imageData {
-                stickerView.setOperation(true)
+                stickerView.setOperation01(true)
                 stickerView.isEditingCustom = !stickerView.isEditingCustom
-                stickerView.setOperation(false)
+                stickerView.setOperation01(false)
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":stickerView])
             }else{
                 checkPhotoAuthorizationAndPresentPicker()
             }
         } else {
             print("👉 点击在 overlay 区域外")
-            stickerView.setOperation(true)
+            stickerView.setOperation01(true)
             stickerView.isEditingCustom = !stickerView.isEditingCustom
-            stickerView.setOperation(false)
+            stickerView.setOperation01(false)
             NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":stickerView])
         }
     }
