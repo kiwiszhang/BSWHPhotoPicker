@@ -58,7 +58,7 @@ class ZLInputTextViewController: UIViewController {
     
     private lazy var cancelBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setTitle("Cancel", for: .normal)
+        btn.setTitle(StickerManager.shared.config.Cancel, for: .normal)
         btn.titleLabel?.font = ZLImageEditorLayout.bottomToolTitleFont
         btn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         return btn
@@ -66,7 +66,7 @@ class ZLInputTextViewController: UIViewController {
     
     private lazy var doneBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setTitle("Done", for: .normal)
+        btn.setTitle(StickerManager.shared.config.Done, for: .normal)
         btn.setTitleColor(.zl.editDoneBtnTitleColor, for: .normal)
         btn.backgroundColor = .zl.editDoneBtnBgColor
         btn.titleLabel?.font = ZLImageEditorLayout.bottomToolTitleFont
@@ -203,10 +203,10 @@ class ZLInputTextViewController: UIViewController {
         coverView.frame = bgImageView.bounds
         
         let btnY = max(deviceSafeAreaInsets().top, 20) + 20
-        let cancelBtnW = "Cancel".zl.boundingRect(font: ZLImageEditorLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLImageEditorLayout.bottomToolBtnH)).width + 20
+        let cancelBtnW = StickerManager.shared.config.Cancel.zl.boundingRect(font: ZLImageEditorLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLImageEditorLayout.bottomToolBtnH)).width + 20
         cancelBtn.frame = CGRect(x: 15, y: btnY, width: cancelBtnW, height: ZLImageEditorLayout.bottomToolBtnH)
         
-        let doneBtnW = "Done".zl.boundingRect(font: ZLImageEditorLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLImageEditorLayout.bottomToolBtnH)).width + 20
+        let doneBtnW = StickerManager.shared.config.Done.zl.boundingRect(font: ZLImageEditorLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLImageEditorLayout.bottomToolBtnH)).width + 20
         doneBtn.frame = CGRect(x: view.zl.width - 20 - doneBtnW, y: btnY, width: doneBtnW, height: ZLImageEditorLayout.bottomToolBtnH)
         
         textView.frame = CGRect(x: 10, y: doneBtn.zl.bottom + 30, width: view.zl.width - 20, height: 200)
@@ -538,9 +538,9 @@ public enum ZLInputTextStyle {
     fileprivate var btnImage: UIImage? {
         switch self {
         case .normal:
-            return .zl.getImage("zl_input_font")
+            return UIImage(named: "zl_input_font")
         case .bg:
-            return .zl.getImage("zl_input_font_bg")
+            return UIImage(named: "zl_input_font_bg")
         }
     }
 }
