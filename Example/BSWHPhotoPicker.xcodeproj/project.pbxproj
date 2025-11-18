@@ -13,7 +13,6 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
-		9801A70E2E726C2A00607935 /* testImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 9801A70D2E726C2A00607935 /* testImage.png */; };
 		E9B8A531545637AE044C21C4 /* Pods_BSWHPhotoPicker_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB4B89D00CA4BEF5AAAAD92 /* Pods_BSWHPhotoPicker_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -40,7 +39,6 @@
 		6423FB67CCDDE76BDB3E9436 /* Pods-BSWHPhotoPicker_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BSWHPhotoPicker_Tests.debug.xcconfig"; path = "Target Support Files/Pods-BSWHPhotoPicker_Tests/Pods-BSWHPhotoPicker_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		6F7DB20C074BCA838881559B /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		87CF0061522ED5864706D839 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		9801A70D2E726C2A00607935 /* testImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = testImage.png; sourceTree = "<group>"; };
 		A3B2DFEDCD26FC5697D2F798 /* Pods-BSWHPhotoPicker_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BSWHPhotoPicker_Tests.release.xcconfig"; path = "Target Support Files/Pods-BSWHPhotoPicker_Tests/Pods-BSWHPhotoPicker_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		BDB6FDD318F07EF2DFCB0594 /* BSWHPhotoPicker.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = BSWHPhotoPicker.podspec; path = ../BSWHPhotoPicker.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		D57F64FB0C3ACB692F89B37A /* Pods-BSWHPhotoPicker_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BSWHPhotoPicker_Example.debug.xcconfig"; path = "Target Support Files/Pods-BSWHPhotoPicker_Example/Pods-BSWHPhotoPicker_Example.debug.xcconfig"; sourceTree = "<group>"; };
@@ -95,7 +93,6 @@
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
-				9801A70D2E726C2A00607935 /* testImage.png */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
@@ -251,7 +248,6 @@
 			files = (
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
-				9801A70E2E726C2A00607935 /* testImage.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

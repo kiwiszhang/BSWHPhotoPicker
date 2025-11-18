@@ -8,14 +8,7 @@
 
 import UIKit
 
-struct TemplateModel {
-    var imageName:String = "1"
-    var imageBg:String = "Christmas00-bg"
-    var jsonName:String = "Christmas00"
-}
-
-
-class TemplateViewController: UIViewController, UIScrollViewDelegate {
+public class TemplateViewController: UIViewController, UIScrollViewDelegate {
     
     let topView = UIView()
     private lazy var backBtn = UIImageView().image(UIImage(named: "templateNavBack")).enable(true).onTap {
@@ -24,25 +17,17 @@ class TemplateViewController: UIViewController, UIScrollViewDelegate {
     private lazy var titleLab = UILabel().color(kkColorFromHex("333333")).hnFont(size: 18.h, weight: .boldBase).centerAligned()
     let tabView = CustomScrViewList()
     var collectionView: UICollectionView!
-    private let titles = [StickerManager.shared.config.all, StickerManager.shared.config.Christmas]
+    private var titles:[String] = []
     var items:[[TemplateModel]] = []
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.hidden(true)
     }
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
-        let item00 = TemplateModel(imageName: "1",imageBg: "Christmas00-bg",jsonName: "Christmas00")
-        let item01 = TemplateModel(imageName: "2",imageBg: "Christmas01-bg",jsonName: "Christmas01")
-        let item02 = TemplateModel(imageName: "3",imageBg: "Christmas02-bg",jsonName: "Christmas02")
-        let item03 = TemplateModel(imageName: "4",imageBg: "Christmas03-bg",jsonName: "Christmas03")
-        let item04 = TemplateModel(imageName: "5",imageBg: "Christmas04-bg",jsonName: "Christmas04")
-        let item05 = TemplateModel(imageName: "6",imageBg: "Christmas05-bg",jsonName: "Christmas05")
-        let item06 = TemplateModel(imageName: "7",imageBg: "Christmas06-bg",jsonName: "Christmas06")
-
-        items = [[item00,item01,item02,item03,item04,item05,item06],[item00,item01,item02,item03,item04,item05,item06]]
+        titles = ConfigDataItem.getTemplateTabData()
+        items = ConfigDataItem.getTemplateListData()
         
         setupTabView()
         setupCollectionView()
@@ -120,23 +105,23 @@ class TemplateViewController: UIViewController, UIScrollViewDelegate {
 
 // MARK: - UICollectionViewDataSource & Delegate
 extension TemplateViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return titles.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ContentCell", for: indexPath) as! ContentCell
         cell.delegate = self
         cell.items = items[indexPath.row]
         return cell
     }
     
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let page = Int(round(scrollView.contentOffset.x / scrollView.frame.width))
         tabView.selectIndex(index: page, animated: true)
     }
     
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+    public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         let page = Int(round(scrollView.contentOffset.x / scrollView.frame.width))
         tabView.selectIndex(index: page, animated: true)
     }

@@ -1,5 +1,6 @@
 PODS:
-  - BSWHPhotoPicker (0.0.1)
+  - BSWHPhotoPicker (0.0.1):
+    - SnapKit (~> 5.7.1)
   - FBSnapshotTestCase (2.1.4):
     - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
   - FBSnapshotTestCase/Core (2.1.4)
@@ -22,7 +23,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  BSWHPhotoPicker: 2bd3544b10ed68a781d621ee7dea0771681a638d
+  BSWHPhotoPicker: e2c434517a1395efa4d711664792c6e7abc723f1
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
 

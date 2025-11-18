@@ -52,14 +52,7 @@ class StickerToolsCollectionView: UIView {
             make.top.equalToSuperview()
             make.height.equalTo(120.h)
         }
-        
-        let item00 = ToolsModel(text: StickerManager.shared.config.Replace,imageName: "template-replace")
-        let item01 = ToolsModel(text: StickerManager.shared.config.Duplicate,imageName: "template-duplicate")
-        let item02 = ToolsModel(text: StickerManager.shared.config.Crop,imageName: "template-crop")
-        let item03 = ToolsModel(text: StickerManager.shared.config.FlipH,imageName: "template-FlipH")
-        let item04 = ToolsModel(text: StickerManager.shared.config.FlipV,imageName: "template-FlipV")
-        let item05 = ToolsModel(text: StickerManager.shared.config.Remove,imageName: "template-remove")
-        items = [item00,item01,item02,item03,item04,item05]
+        items = ConfigDataItem.getStickerToolsData()
         reload()
     }
 

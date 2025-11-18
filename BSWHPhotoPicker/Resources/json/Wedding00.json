@@ -19,7 +19,7 @@
   "bgAddImageType":"addWhiteImage"
 },
 {
-    "imageName": "wedding-sticker00",
+    "imageName": "empty",
     "originScale": 1,
     "originAngle": 0,
     "originFrameX": -150,
@@ -28,10 +28,16 @@
     "originFrameHeight": 362,
     "gesScale": 1,
     "gesRotation": 0,
-    "isBgImage": false,
+    "isBgImage": true,
+    "overlayRectX": 0,
+    "overlayRectY": 0,
+    "overlayRectWidth": 1,
+    "overlayRectHeight": 1,
+    "imageType": "square",
+    "bgAddImageType":"wedding-sticker00"
   },
   {
-    "imageName": "wedding-sticker01",
+    "imageName": "empty",
     "originScale": 1,
     "originAngle": 0,
     "originFrameX": 110,
@@ -40,10 +46,16 @@
     "originFrameHeight": 96,
     "gesScale": 1,
     "gesRotation": 0,
-    "isBgImage": false,
+    "isBgImage": true,
+    "overlayRectX": 0,
+    "overlayRectY": 0,
+    "overlayRectWidth": 1,
+    "overlayRectHeight": 1,
+    "imageType": "square",
+    "bgAddImageType":"wedding-sticker01"
   },
   {
-    "imageName": "wedding-sticker02",
+    "imageName": "empty",
     "originScale": 1,
     "originAngle": 0,
     "originFrameX": 135,
@@ -52,6 +64,12 @@
     "originFrameHeight": 276,
     "gesScale": 1,
     "gesRotation": 0,
-    "isBgImage": false,
+    "isBgImage": true,
+    "overlayRectX": 0,
+    "overlayRectY": 0,
+    "overlayRectWidth": 1,
+    "overlayRectHeight": 1,
+    "imageType": "square",
+    "bgAddImageType":"wedding-sticker02"
   }]
 

@@ -33,7 +33,6 @@ class ViewController: UIViewController {
     }
     @objc private func onClickBack(_ sender: UIButton) {
         let vc = UINavigationController(rootViewController: TemplateViewController())
-//        let vc = UINavigationController(rootViewController: TemplateListViewController())
         vc.modalPresentationStyle = .overFullScreen
         self.present(vc, animated: true)
     }

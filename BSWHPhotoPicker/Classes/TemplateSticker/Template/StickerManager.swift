@@ -10,8 +10,6 @@ import UIKit
 import Photos
 import PhotosUI
 import ObjectiveC
-import BSWHPhotoPicker
-
 
 @objc protocol StickerManagerDelegate: AnyObject {
     func stickerAddImage(_ sender: StickerManager)
@@ -78,7 +76,8 @@ final class StickerManager: NSObject {
     }
     // MARK: 加载本地 JSON
     func loadLocalJSON<T: Decodable>(fileName: String, type: T.Type) -> T? {
-        guard let url = Bundle.main.url(forResource: fileName, withExtension: "json") else {
+        let bundle = BSWHBundle.bundle() 
+        guard let url = bundle.url(forResource: fileName, withExtension: "json") else {
             print("❌ 未找到 \(fileName).json")
             return nil
         }

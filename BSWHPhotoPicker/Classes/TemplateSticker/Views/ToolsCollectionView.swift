@@ -9,11 +9,6 @@
 import UIKit
 import SnapKit
 
-struct ToolsModel {
-    var text:String = "Text"
-    var imageName:String = "template-text"
-}
-
 
 @objc protocol ToolsCollectionViewDelegate: AnyObject {
     func cellDidSelectItemAt(_ sender: ToolsCollectionView,indexPath:IndexPath)
@@ -58,13 +53,7 @@ class ToolsCollectionView: UIView {
             make.top.equalToSuperview()
             make.height.equalTo(120.h)
         }
-        
-        let item00 = ToolsModel(text: StickerManager.shared.config.Text,imageName: "template-text")
-        let item01 = ToolsModel(text: StickerManager.shared.config.Background,imageName: "template-Background")
-        let item02 = ToolsModel(text: StickerManager.shared.config.Photos,imageName: "template-photos")
-        let item03 = ToolsModel(text: StickerManager.shared.config.Stickers,imageName: "template-stickers")
-        let item04 = ToolsModel(text: StickerManager.shared.config.Ratio,imageName: "template-ratio")
-        items = [item00,item01,item02,item03,item04]
+        items = ConfigDataItem.getTemplateToolsData()
         reload()
     }
 
