@@ -88,6 +88,9 @@ public func kkColorFromHex(_ hex: String) -> UIColor {
 public let kkTABBAR_HEIGHT = 49.0
 public let kkNAV_HEIGHT = 44.0
 
+public let kkScreenWidth = UIScreen.main.bounds.size.width
+public let kkScreenHeight = UIScreen.main.bounds.size.height
+
 /// top安全区域
 public let kkSAFE_AREA_TOP: CGFloat = {
     guard let window = UIApplication.shared.connectedScenes

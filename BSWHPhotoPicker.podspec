@@ -29,6 +29,8 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '15.0'
   s.swift_versions        = ['5.0', '5.1', '5.2']
 
+  s.dependency 'SnapKit', '~> 5.7.1'
+
   s.source_files = 'BSWHPhotoPicker/Classes/**/*'
   s.exclude_files = ["BSWHPhotoPicker/Classes/General/ZLWeakProxy.swift"]
   

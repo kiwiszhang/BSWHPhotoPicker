@@ -6,9 +6,6 @@
 //  Copyright (c) 2025 caoguangming. All rights reserved.
 //
 
-public let kkScreenWidth = UIScreen.main.bounds.size.width
-public let kkScreenHeight = UIScreen.main.bounds.size.height
-
 
 import UIKit
 import BSWHPhotoPicker
