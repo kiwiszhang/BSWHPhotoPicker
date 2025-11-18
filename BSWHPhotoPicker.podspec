@@ -33,16 +33,12 @@ Pod::Spec.new do |s|
   s.exclude_files = ["BSWHPhotoPicker/Classes/General/ZLWeakProxy.swift"]
   
   s.resource_bundles = {
-      'BSWHPhotoPicker' => [
-        'BSWHPhotoPicker/Assets/**/*'
-      ]
-    }
-
-    # ✔ 非 xcassets 文件（例如 json）单独放 resources
-    s.resources = [
-      'BSWHPhotoPicker/Resources/**/*'
+    'BSWHPhotoPicker' => [
+      'BSWHPhotoPicker/Assets/StickerAssets.xcassets',
+      'BSWHPhotoPicker/Resources/**/*.json'
     ]
+  }
 
-#  s.resources = 'BSWHPhotoPicker/BSWHPhotoPicker.bundle'
+  s.resources = 'BSWHPhotoPicker/BSWHPhotoPicker.bundle'
 
 end
