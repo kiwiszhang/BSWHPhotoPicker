@@ -168,7 +168,7 @@ extension EditImageViewController:RatioToolViewDelegate {
                 convertStickerFrames(
                     stickers: StickerManager.shared.stickerArr,
                     oldSize: image!.size,
-                    newSize: squareImage.size
+                    newSize: squareImage.size,mode: .fit
                 )
                 replaceBgImage(image: squareImage)
                 resetContainerViewFrame()
@@ -178,53 +178,61 @@ extension EditImageViewController:RatioToolViewDelegate {
     func convertStickerFrames(
         stickers: [EditableStickerView],
         oldSize: CGSize,
-        newSize: CGSize
+        newSize: CGSize,
+        mode: CanvasResizeMode
     ) {
-        let scale = min(newSize.width / oldSize.width,
-                        newSize.height / oldSize.height)
+        guard oldSize.width > 0, oldSize.height > 0 else { return }
 
-        let scaledWidth = oldSize.width * scale
-        let scaledHeight = oldSize.height * scale
+        // 计算 scale
+        let scaleByWidth = newSize.width / oldSize.width
+        let scaleByHeight = newSize.height / oldSize.height
 
-        let offsetX = (newSize.width - scaledWidth) / 2
-        let offsetY = (newSize.height - scaledHeight) / 2
+        let scale: CGFloat
+        switch mode {
+        case .byWidth:
+            scale = scaleByWidth
+        case .byHeight:
+            scale = scaleByHeight
+        case .fit:
+            scale = min(scaleByWidth, scaleByHeight)
+        }
+
+        let scaledCanvasW = oldSize.width * scale
+        let scaledCanvasH = oldSize.height * scale
+        let offsetX = (newSize.width - scaledCanvasW) / 2.0
+        let offsetY = (newSize.height - scaledCanvasH) / 2.0
 
         for sticker in stickers {
-            // 1) 先把 sticker 在旧画布中心位置映射到新画布
-            let oldCenter = sticker.center // 在 overlay / 父视图坐标系里的中心
+            let oldCenter = sticker.center
             let newCenter = CGPoint(x: oldCenter.x * scale + offsetX,
                                     y: oldCenter.y * scale + offsetY)
 
-            // 2) 更新模型参数（而不是直接叠加 transform）
-            // 注意：totalTranslationPoint 通常以贴纸的原始坐标体系为准，
-            // 这里我们也按比例缩放 translation（如果你的实现 translation 是相对于父坐标系）
             sticker.totalTranslationPoint.x *= scale
             sticker.totalTranslationPoint.y *= scale
 
-            // 原有的 originScale 是贴纸相对于原图的基础缩放，等比放大
             sticker.originScale *= scale
 
-            // 手动把临时手势状态复位（避免遗留 gesScale/gesRotation）
             sticker.gesScale = 1
-            // sticker.gesRotation = 0 // 视你的实现而定
+            // sticker.gesRotation = 0
 
-            // 3) 通过内部接口更新 transform（由内部负责生成 transform 并定位内容）
-            sticker.updateTransform()    // 或者 sticker.updateTransform01()，看你具体想要的行为
+            sticker.updateTransform()
 
-            // 4) 把 center 设回新位置（updateTransform 可能会用 totalTranslationPoint，确保先设置）
             sticker.center = newCenter
 
-            // 5) 强制布局并刷新 overlay 按钮 / border
             sticker.setNeedsLayout()
             sticker.layoutIfNeeded()
-            sticker.refreshResizeButtonPosition() // 你已有方法，把按钮位置同步到 overlay
+            sticker.refreshResizeButtonPosition()
 
-            // 6) 更新持久化状态
             sticker.originFrame = sticker.frame
             sticker.originTransform = sticker.transform
         }
     }
 
+}
 
+enum CanvasResizeMode {
+    case byHeight
+    case byWidth
+    case fit
 }
 
