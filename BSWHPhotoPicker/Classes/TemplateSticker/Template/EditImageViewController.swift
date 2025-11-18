@@ -7,14 +7,13 @@
 //
 
 import UIKit
-import BSWHPhotoPicker
 import SnapKit
 import PhotosUI
 
 let kstickerToolsViewHeight = 166.h
 let kRatioToolsViewHeight = 193.h
 
-class EditImageViewController: ZLEditImageViewController {
+public class EditImageViewController: ZLEditImageViewController {
     var item:TemplateModel? = nil
     var currentSticker:EditableStickerView? = nil
     private var stickerToolsViewBottomConstraint: Constraint?
@@ -30,7 +29,7 @@ class EditImageViewController: ZLEditImageViewController {
         return view
     }()
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = kkColorFromHex("F5F5F5")
         NotificationCenter.default.addObserver(self, selector: #selector(tapStickerOutOverlay(_:)), name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: nil)

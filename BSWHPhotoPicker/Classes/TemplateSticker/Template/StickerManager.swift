@@ -11,8 +11,7 @@ import Photos
 import PhotosUI
 import ObjectiveC
  
-@objc protocol StickerManagerDelegate: AnyObject {
-    func stickerAddImage(_ sender: StickerManager)
+public protocol StickerManagerDelegate: AnyObject {
     /// 替换背景，传入本控制器和返回图片的大小，返回处理好的图片
     func replaceBackgroundWith(
             controller: EditImageViewController,
@@ -38,7 +37,7 @@ public final class StickerManager: NSObject {
     private weak var currentStickerView: ZLImageStickerView?
     var modelMap: [String: ImageStickerModel] = [:]
     var stickerArr: [EditableStickerView] = []
-    weak var delegate: StickerManagerDelegate?
+    public weak var delegate: StickerManagerDelegate?
     var persentType:Int = 0
     public static let shared = StickerManager()
     private override init() {

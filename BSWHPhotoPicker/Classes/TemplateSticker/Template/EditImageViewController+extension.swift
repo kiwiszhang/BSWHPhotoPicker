@@ -156,6 +156,9 @@ extension EditImageViewController:StickerToolsViewDelegate {
                 print("裁剪后的照片")
                 StickerManager.shared.delegate?.cropStickerImage(controller: self) { image in
                     if let img = image {
+                        if let imageData = img.pngData() {
+                            sticker.stickerModel?.imageData = imageData
+                        }
                         sticker.updateImage(img, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
                     } else {
                     }

@@ -77,6 +77,7 @@ class ViewController: UIViewController {
         let config = genarateConfig()
         StickerManager.shared.config = config
         let vc = UINavigationController(rootViewController: TemplateViewController())
+        StickerManager.shared.delegate = self
         vc.modalPresentationStyle = .overFullScreen
         self.present(vc, animated: true)
     }
@@ -117,4 +118,24 @@ class ViewController: UIViewController {
     
 }
 
+extension ViewController: StickerManagerDelegate {
+    
+    func replaceBackgroundWith(controller: BSWHPhotoPicker.EditImageViewController, imageRect: CGRect, completion: @escaping (UIImage?) -> Void) {
+        
+    }
+    
+    func addStickerImage(controller: BSWHPhotoPicker.EditImageViewController, completion: @escaping (UIImage?) -> Void) {
+        let img = UIImage(named: "imageSticker000")
+        print("image")
+        completion(img)
+    }
+    
+    func cropStickerImage(controller: BSWHPhotoPicker.EditImageViewController, completion: @escaping (UIImage?) -> Void) {
+        let img = UIImage(named: "imageSticker000")
+        print("image")
+        completion(img)
+    }
+    
+    
+}
 
