@@ -8,33 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		2002012A1B0EA79BA1ED45A4 /* Pods_BSWHPhotoPicker_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D925E5EE90C5758598A8BEBB /* Pods_BSWHPhotoPicker_Tests.framework */; };
-		530C849B2EC48E000037290D /* CustomScrViewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C849A2EC48E000037290D /* CustomScrViewList.swift */; };
-		530C849D2EC48E770037290D /* TemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C849C2EC48E770037290D /* TemplateViewController.swift */; };
-		530C84A02EC56B850037290D /* TemplateTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C849F2EC56B850037290D /* TemplateTopView.swift */; };
-		530C84A42EC56C080037290D /* SuperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C84A22EC56C080037290D /* SuperView.swift */; };
-		530C84A52EC56C080037290D /* SuperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C84A32EC56C080037290D /* SuperViewController.swift */; };
-		530C84A82EC56C250037290D /* UILabel+Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C84A62EC56C250037290D /* UILabel+Create.swift */; };
-		530C84A92EC56C250037290D /* UIView+Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C84A72EC56C250037290D /* UIView+Create.swift */; };
-		530C84AB2EC56CA80037290D /* UIImageView+Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C84AA2EC56CA80037290D /* UIImageView+Create.swift */; };
-		530C84AD2EC572600037290D /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C84AC2EC572600037290D /* UIFont+Extension.swift */; };
-		533A14BB2EA08DCB00A2E1C6 /* StickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A14BA2EA08DCB00A2E1C6 /* StickerManager.swift */; };
-		53734DFB2EBA02360005ED8B /* DrawViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53734DFA2EBA02360005ED8B /* DrawViewController.swift */; };
-		53734FB22EC1E6780005ED8B /* ToolsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53734FB12EC1E6780005ED8B /* ToolsCollectionView.swift */; };
-		53734FF02EC2E3830005ED8B /* StickerToolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53734FEF2EC2E3830005ED8B /* StickerToolsView.swift */; };
-		53FC5F4C2EC5B882009E2F1C /* StickerToolsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC5F4B2EC5B882009E2F1C /* StickerToolsCollectionView.swift */; };
-		53FC5F4E2EC5C341009E2F1C /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC5F4D2EC5C341009E2F1C /* UIImage+Extension.swift */; };
-		53FC5F502EC5C6FD009E2F1C /* TemplateConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC5F4F2EC5C6FD009E2F1C /* TemplateConfig.swift */; };
-		53FC5F522EC6D379009E2F1C /* RatioToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC5F512EC6D379009E2F1C /* RatioToolView.swift */; };
-		53FC5F542EC6DF64009E2F1C /* RatioCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC5F532EC6DF64009E2F1C /* RatioCollectionView.swift */; };
-		53FC5F562EC6F84C009E2F1C /* RatioScrViewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC5F552EC6F84C009E2F1C /* RatioScrViewList.swift */; };
-		53FC5F5A2EC70DEB009E2F1C /* EditImageViewController+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FC5F592EC70DEB009E2F1C /* EditImageViewController+extension.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		9801A70E2E726C2A00607935 /* testImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 9801A70D2E726C2A00607935 /* testImage.png */; };
-		9899F87B2E73ED02000AABA4 /* EditImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9899F87A2E73ED02000AABA4 /* EditImageViewController.swift */; };
 		E9B8A531545637AE044C21C4 /* Pods_BSWHPhotoPicker_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB4B89D00CA4BEF5AAAAD92 /* Pods_BSWHPhotoPicker_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -49,26 +28,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		530C849A2EC48E000037290D /* CustomScrViewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomScrViewList.swift; sourceTree = "<group>"; };
-		530C849C2EC48E770037290D /* TemplateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateViewController.swift; sourceTree = "<group>"; };
-		530C849F2EC56B850037290D /* TemplateTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateTopView.swift; sourceTree = "<group>"; };
-		530C84A22EC56C080037290D /* SuperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperView.swift; sourceTree = "<group>"; };
-		530C84A32EC56C080037290D /* SuperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperViewController.swift; sourceTree = "<group>"; };
-		530C84A62EC56C250037290D /* UILabel+Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Create.swift"; sourceTree = "<group>"; };
-		530C84A72EC56C250037290D /* UIView+Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Create.swift"; sourceTree = "<group>"; };
-		530C84AA2EC56CA80037290D /* UIImageView+Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Create.swift"; sourceTree = "<group>"; };
-		530C84AC2EC572600037290D /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
-		533A14BA2EA08DCB00A2E1C6 /* StickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerManager.swift; sourceTree = "<group>"; };
-		53734DFA2EBA02360005ED8B /* DrawViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawViewController.swift; sourceTree = "<group>"; };
-		53734FB12EC1E6780005ED8B /* ToolsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolsCollectionView.swift; sourceTree = "<group>"; };
-		53734FEF2EC2E3830005ED8B /* StickerToolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerToolsView.swift; sourceTree = "<group>"; };
-		53FC5F4B2EC5B882009E2F1C /* StickerToolsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerToolsCollectionView.swift; sourceTree = "<group>"; };
-		53FC5F4D2EC5C341009E2F1C /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
-		53FC5F4F2EC5C6FD009E2F1C /* TemplateConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateConfig.swift; sourceTree = "<group>"; };
-		53FC5F512EC6D379009E2F1C /* RatioToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioToolView.swift; sourceTree = "<group>"; };
-		53FC5F532EC6DF64009E2F1C /* RatioCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioCollectionView.swift; sourceTree = "<group>"; };
-		53FC5F552EC6F84C009E2F1C /* RatioScrViewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioScrViewList.swift; sourceTree = "<group>"; };
-		53FC5F592EC70DEB009E2F1C /* EditImageViewController+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditImageViewController+extension.swift"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* BSWHPhotoPicker_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BSWHPhotoPicker_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -82,7 +41,6 @@
 		6F7DB20C074BCA838881559B /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		87CF0061522ED5864706D839 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		9801A70D2E726C2A00607935 /* testImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = testImage.png; sourceTree = "<group>"; };
-		9899F87A2E73ED02000AABA4 /* EditImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditImageViewController.swift; sourceTree = "<group>"; };
 		A3B2DFEDCD26FC5697D2F798 /* Pods-BSWHPhotoPicker_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BSWHPhotoPicker_Tests.release.xcconfig"; path = "Target Support Files/Pods-BSWHPhotoPicker_Tests/Pods-BSWHPhotoPicker_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		BDB6FDD318F07EF2DFCB0594 /* BSWHPhotoPicker.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = BSWHPhotoPicker.podspec; path = ../BSWHPhotoPicker.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		D57F64FB0C3ACB692F89B37A /* Pods-BSWHPhotoPicker_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BSWHPhotoPicker_Example.debug.xcconfig"; path = "Target Support Files/Pods-BSWHPhotoPicker_Example/Pods-BSWHPhotoPicker_Example.debug.xcconfig"; sourceTree = "<group>"; };
@@ -111,35 +69,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		530C849E2EC56B4B0037290D /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				53734FB12EC1E6780005ED8B /* ToolsCollectionView.swift */,
-				53FC5F532EC6DF64009E2F1C /* RatioCollectionView.swift */,
-				53FC5F4B2EC5B882009E2F1C /* StickerToolsCollectionView.swift */,
-				53734FEF2EC2E3830005ED8B /* StickerToolsView.swift */,
-				53FC5F512EC6D379009E2F1C /* RatioToolView.swift */,
-				530C849A2EC48E000037290D /* CustomScrViewList.swift */,
-				53FC5F552EC6F84C009E2F1C /* RatioScrViewList.swift */,
-				530C849F2EC56B850037290D /* TemplateTopView.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		530C84A12EC56BFB0037290D /* BaseView */ = {
-			isa = PBXGroup;
-			children = (
-				530C84AA2EC56CA80037290D /* UIImageView+Create.swift */,
-				530C84A22EC56C080037290D /* SuperView.swift */,
-				530C84A32EC56C080037290D /* SuperViewController.swift */,
-				530C84A62EC56C250037290D /* UILabel+Create.swift */,
-				530C84AC2EC572600037290D /* UIFont+Extension.swift */,
-				530C84A72EC56C250037290D /* UIView+Create.swift */,
-				53FC5F4D2EC5C341009E2F1C /* UIImage+Extension.swift */,
-			);
-			path = BaseView;
-			sourceTree = "<group>";
-		};
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
@@ -164,16 +93,8 @@
 		607FACD21AFB9204008FA782 /* Example for BSWHPhotoPicker */ = {
 			isa = PBXGroup;
 			children = (
-				530C84A12EC56BFB0037290D /* BaseView */,
-				530C849E2EC56B4B0037290D /* Views */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
-				530C849C2EC48E770037290D /* TemplateViewController.swift */,
-				9899F87A2E73ED02000AABA4 /* EditImageViewController.swift */,
-				53FC5F592EC70DEB009E2F1C /* EditImageViewController+extension.swift */,
-				53734DFA2EBA02360005ED8B /* DrawViewController.swift */,
-				533A14BA2EA08DCB00A2E1C6 /* StickerManager.swift */,
-				53FC5F4F2EC5C6FD009E2F1C /* TemplateConfig.swift */,
 				9801A70D2E726C2A00607935 /* testImage.png */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -433,29 +354,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				530C84A82EC56C250037290D /* UILabel+Create.swift in Sources */,
-				530C84A92EC56C250037290D /* UIView+Create.swift in Sources */,
-				53734FB22EC1E6780005ED8B /* ToolsCollectionView.swift in Sources */,
-				53FC5F4E2EC5C341009E2F1C /* UIImage+Extension.swift in Sources */,
-				53734DFB2EBA02360005ED8B /* DrawViewController.swift in Sources */,
-				53FC5F5A2EC70DEB009E2F1C /* EditImageViewController+extension.swift in Sources */,
-				53FC5F542EC6DF64009E2F1C /* RatioCollectionView.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
-				53FC5F522EC6D379009E2F1C /* RatioToolView.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
-				530C84A02EC56B850037290D /* TemplateTopView.swift in Sources */,
-				530C84A42EC56C080037290D /* SuperView.swift in Sources */,
-				53FC5F4C2EC5B882009E2F1C /* StickerToolsCollectionView.swift in Sources */,
-				530C84A52EC56C080037290D /* SuperViewController.swift in Sources */,
-				530C84AD2EC572600037290D /* UIFont+Extension.swift in Sources */,
-				53FC5F562EC6F84C009E2F1C /* RatioScrViewList.swift in Sources */,
-				9899F87B2E73ED02000AABA4 /* EditImageViewController.swift in Sources */,
-				53FC5F502EC5C6FD009E2F1C /* TemplateConfig.swift in Sources */,
-				530C849D2EC48E770037290D /* TemplateViewController.swift in Sources */,
-				533A14BB2EA08DCB00A2E1C6 /* StickerManager.swift in Sources */,
-				530C849B2EC48E000037290D /* CustomScrViewList.swift in Sources */,
-				530C84AB2EC56CA80037290D /* UIImageView+Create.swift in Sources */,
-				53734FF02EC2E3830005ED8B /* StickerToolsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

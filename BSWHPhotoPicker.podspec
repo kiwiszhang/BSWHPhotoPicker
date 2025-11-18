@@ -39,6 +39,6 @@ Pod::Spec.new do |s|
     ]
   }
 
-  s.resources = 'BSWHPhotoPicker/BSWHPhotoPicker.bundle'
+#  s.resources = 'BSWHPhotoPicker/BSWHPhotoPicker.bundle'
 
 end
