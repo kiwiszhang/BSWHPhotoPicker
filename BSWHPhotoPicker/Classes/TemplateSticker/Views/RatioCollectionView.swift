@@ -125,6 +125,6 @@ class RatioCollectionViewCell: UICollectionViewCell {
 
     func configure(with item: RatioToolsModel) {
         titleLab.text = item.text
-        imgView.image(UIImage(named: item.imageName))
+        imgView.image(BSWHBundle.image(named: item.imageName))
     }
 }

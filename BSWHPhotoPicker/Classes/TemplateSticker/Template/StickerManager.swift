@@ -145,7 +145,7 @@ public final class StickerManager: NSObject {
         let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
         sticker.addGestureRecognizer(tap)
         sticker.isUserInteractionEnabled = true
-        let selectedImage: UIImage = sticker.stickerModel?.stickerImage ?? UIImage(named: (sticker.stickerModel?.bgAddImageType)!)!
+        let selectedImage: UIImage = sticker.stickerModel?.stickerImage ?? BSWHBundle.image(named: (sticker.stickerModel?.bgAddImageType)!)!
         sticker.updateImage(selectedImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
     }
     
@@ -352,8 +352,8 @@ extension ZLImageStickerView {
         if imageTypeRaw == "IrregularShape" {
             if !stickerModel.imageName.isEmpty,
                !stickerModel.imageMask!.isEmpty,
-               let base = UIImage(named: stickerModel.imageName),
-               let frame = UIImage(named: stickerModel.imageMask!) {
+               let base = BSWHBundle.image(named: stickerModel.imageName),
+               let frame = BSWHBundle.image(named: stickerModel.imageMask!) {
                 
                 finalImage = overlayImageWithFrame(newImage, baseImage: base, frameImage: frame)
             }

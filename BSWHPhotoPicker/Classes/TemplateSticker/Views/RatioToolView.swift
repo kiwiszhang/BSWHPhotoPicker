@@ -17,7 +17,7 @@ class RatioToolView:UIView {
     weak var delegate: RatioToolViewDelegate?
     // 点击关闭回调
     var onClose: (() -> Void)?
-    private lazy var closeBtn = UIImageView().image(UIImage(named: "template-Tools-close")).enable(true).onTap { [self] in
+    private lazy var closeBtn = UIImageView().image(BSWHBundle.image(named: "template-Tools-close")).enable(true).onTap { [self] in
         closeAction()
     }
     private lazy var listView = RatioScrViewList()

@@ -199,22 +199,22 @@ extension EditImageViewController:StickerToolsViewDelegate {
 // MARK: - 比例工具栏 RatioToolView-RatioToolViewDelegate
 extension EditImageViewController:RatioToolViewDelegate {
     func RatioToolViewDidSelectItemAt(_ sender: RatioToolView, indexPath: IndexPath,ratioItem:RatioToolsModel) {
-        let image = UIImage(named: item!.imageBg)
-            if let squareImage = image!.cropped(toAspectRatioWidth: ratioItem.width, height: ratioItem.height) {
-                
-                for sticker in StickerManager.shared.stickerArr {
-                    sticker.removeFromSuperview()
-                }
-                
-                StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName, currentVC: self)
-                
-                convertStickerFrames(
-                    stickers: StickerManager.shared.stickerArr,
-                    oldSize: image!.size,
-                    newSize: squareImage.size,mode: .fit
-                )
-                replaceBgImage(image: squareImage)
-                resetContainerViewFrame()
+        let image = BSWHBundle.image(named: item!.imageBg)
+        if let squareImage = image!.cropped(toAspectRatioWidth: ratioItem.width, height: ratioItem.height) {
+            
+            for sticker in StickerManager.shared.stickerArr {
+                sticker.removeFromSuperview()
+            }
+            
+            StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName, currentVC: self)
+            
+            convertStickerFrames(
+                stickers: StickerManager.shared.stickerArr,
+                oldSize: image!.size,
+                newSize: squareImage.size,mode: .fit
+            )
+            replaceBgImage(image: squareImage)
+            resetContainerViewFrame()
         }
     }
     

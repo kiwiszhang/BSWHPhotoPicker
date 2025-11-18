@@ -18,13 +18,13 @@ import UIKit
 class TemplateTopView: SuperView {
 
     weak var delegate: TemplateTopViewDelegate?
-    private lazy var closeImg = UIImageView().image(UIImage(named: "template-close")).enable(true).onTap { [self] in
+    private lazy var closeImg = UIImageView().image(BSWHBundle.image(named: "template-close")).enable(true).onTap { [self] in
         delegate?.closeTemplate(self)
     }
-    lazy var backImg = UIImageView().image(UIImage(named: "template-back")).enable(true).onTap { [self] in
+    lazy var backImg = UIImageView().image(BSWHBundle.image(named: "template-back")).enable(true).onTap { [self] in
         delegate?.backTemplate(self)
     }
-    lazy var rebackImg = UIImageView().image(UIImage(named: "template-reBack")).enable(true).onTap { [self] in
+    lazy var rebackImg = UIImageView().image(BSWHBundle.image(named: "template-reBack")).enable(true).onTap { [self] in
         delegate?.reBackTemplate(self)
     }
     private lazy var saveBtn = UILabel().text(StickerManager.shared.config.save).backgroundColor(kkColorFromHex("A216FF")).color(.white).centerAligned().hnFont(size: 14.h, weight: .boldBase).cornerRadius(8.h).onTap { [self] in

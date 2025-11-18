@@ -11,7 +11,7 @@ import UIKit
 public class TemplateViewController: UIViewController, UIScrollViewDelegate {
     
     let topView = UIView()
-    private lazy var backBtn = UIImageView().image(UIImage(named: "templateNavBack")).enable(true).onTap {
+    private lazy var backBtn = UIImageView().image(BSWHBundle.image(named: "templateNavBack")).enable(true).onTap {
         self.dismiss(animated: true)
     }
     private lazy var titleLab = UILabel().color(kkColorFromHex("333333")).hnFont(size: 18.h, weight: .boldBase).centerAligned()
@@ -139,7 +139,7 @@ extension TemplateViewController: CustomScrViewListDelegate {
 
 extension TemplateViewController: ContentCellDelegate {
     func contentCell(_ cell: ContentCell, didSelectItem item: TemplateModel, at index: IndexPath) {
-        guard let image = UIImage(named: item.imageBg) else { return }
+        guard let image = BSWHBundle.image(named: item.imageBg) else { return }
         let controller = EditImageViewController(image: image)
         controller.item = items[index.section][index.row]
         controller.modalPresentationStyle = .fullScreen
@@ -220,7 +220,7 @@ class ContentCell: UICollectionViewCell {
         let itemWidth = (screenWidth - spacing) / columnCount
         
         for item in items {
-            if let img = UIImage(named: item.imageName) {
+            if let img = BSWHBundle.image(named: item.imageName) {
                 let ratio = img.size.height / img.size.width
                 let height = itemWidth * ratio
                 itemHeights.append(height)
@@ -273,7 +273,7 @@ class WaterfallImageCell: UICollectionViewCell {
 
     
     func setItem(item: TemplateModel) {
-        imgView.image = UIImage(named: item.imageName)
+        imgView.image = BSWHBundle.image(named: item.imageName)
     }
 }
 

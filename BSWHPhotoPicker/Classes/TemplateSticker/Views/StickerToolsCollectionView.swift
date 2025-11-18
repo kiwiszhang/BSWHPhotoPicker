@@ -133,6 +133,6 @@ class StickerToolCollectionViewCell: UICollectionViewCell {
 
     func configure(with item: ToolsModel) {
         titleLab.text = item.text
-        imgView.image(UIImage(named: item.imageName))
+        imgView.image(BSWHBundle.image(named: item.imageName))
     }
 }

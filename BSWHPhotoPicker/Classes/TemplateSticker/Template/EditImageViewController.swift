@@ -102,7 +102,7 @@ class EditImageViewController: ZLEditImageViewController {
         mainScrollView.backgroundColor = .white
         
         //根据调整后的containerView布局里面的贴纸
-        convertStickerFrames(stickers: StickerManager.shared.stickerArr, oldSize: UIImage(named: item!.imageBg)!.size, newSize: containerView.frame.size, mode: .fit)
+        convertStickerFrames(stickers: StickerManager.shared.stickerArr, oldSize: BSWHBundle.image(named: item!.imageBg)!.size, newSize: containerView.frame.size, mode: .fit)
     }
     
     
@@ -274,15 +274,15 @@ class EditImageViewController: ZLEditImageViewController {
     
     func backAndreBackStatus(){
         if canRedo {
-            topView.backImg.image(UIImage(named: "template-back"))
+            topView.backImg.image(BSWHBundle.image(named: "template-back"))
         }else{
-            topView.backImg.image(UIImage(named: "template-back-lignt"))
+            topView.backImg.image(BSWHBundle.image(named: "template-back-lignt"))
         }
         
         if canUndo {
-            topView.rebackImg.image(UIImage(named: "template-reBack"))
+            topView.rebackImg.image(BSWHBundle.image(named: "template-reBack"))
         }else{
-            topView.rebackImg.image(UIImage(named: "template-reBack-light"))
+            topView.rebackImg.image(BSWHBundle.image(named: "template-reBack-light"))
         }
     }
 

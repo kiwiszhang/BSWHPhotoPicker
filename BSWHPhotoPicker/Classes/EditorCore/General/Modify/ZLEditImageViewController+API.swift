@@ -167,9 +167,9 @@ extension ZLEditImageViewController {
         if state.imageName == "empty" {
             clearImage = createTransparentImage(size: CGSize(width: state.originFrameWidth, height: state.originFrameHeight))
         }else{
-            clearImage = state.image ?? UIImage(named: state.imageName)!
+            clearImage = state.image ?? BSWHBundle.image(named: state.imageName)!
         }
-        let imageSticker = EditableStickerView(image:clearImage!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX.w, y: state.originFrameY.h, width: state.originFrameWidth.w, height: state.originFrameHeight.h),gesRotation: state.gesRotation,isBgImage: state.isBgImage,bgAddImageType: state.bgAddImageType!,imageMask: state.imageMask ?? "",imageData: state.imageData ?? UIImage(named: state.bgAddImageType!)?.pngData())
+        let imageSticker = EditableStickerView(image:clearImage!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX.w, y: state.originFrameY.h, width: state.originFrameWidth.w, height: state.originFrameHeight.h),gesRotation: state.gesRotation,isBgImage: state.isBgImage,bgAddImageType: state.bgAddImageType!,imageMask: state.imageMask ?? "",imageData: state.imageData ?? BSWHBundle.image(named: state.bgAddImageType!)?.pngData())
         addSticker(imageSticker)
         view.layoutIfNeeded()
         editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
@@ -269,7 +269,7 @@ public class ImageStickerModel: Codable {
     private var _image: UIImage?
     public var image: UIImage? {
         get {
-            return _image ?? UIImage(named: imageName)
+            return _image ?? BSWHBundle.image(named: imageName)
         }
         set {
             _image = newValue
@@ -303,7 +303,7 @@ public class ImageStickerModel: Codable {
     /// 可添加照片贴图中间加号图片类型
     public var bgAddImageType: String? = "addGrayImage"
     public var stickerImage: UIImage? {
-        UIImage(data: (imageData ?? UIImage(named: bgAddImageType!)?.pngData())!)
+        UIImage(data: (imageData ?? BSWHBundle.image(named: bgAddImageType!)!.pngData())!)
     }
     
     enum CodingKeys: String, CodingKey {
