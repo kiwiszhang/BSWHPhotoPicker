@@ -74,7 +74,7 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     var maxGesScale: CGFloat
     
-    var originTransform: CGAffineTransform = .identity
+    public var originTransform: CGAffineTransform = .identity
     
     var timer: Timer?
     
