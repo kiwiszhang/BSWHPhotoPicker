@@ -33,10 +33,12 @@ Pod::Spec.new do |s|
   s.exclude_files = ["BSWHPhotoPicker/Classes/General/ZLWeakProxy.swift"]
   
   s.resource_bundles = {
-    'TLPhotoPicker' => [
-      'BSWHPhotoPicker/Resources/**/*.{png,jpg,json,xcassets}'
+    'BSWHPhotoPicker' => [
+      'BSWHPhotoPicker/Assets/**/*',
+      'BSWHPhotoPicker/Resources/**/*'
     ]
   }
-  s.resources = 'BSWHPhotoPicker/BSWHPhotoPicker.bundle'
+
+#  s.resources = 'BSWHPhotoPicker/BSWHPhotoPicker.bundle'
 
 end
