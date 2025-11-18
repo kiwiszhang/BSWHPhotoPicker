@@ -10,7 +10,7 @@ import UIKit
 import Photos
 import PhotosUI
 import ObjectiveC
-
+ 
 @objc protocol StickerManagerDelegate: AnyObject {
     func stickerAddImage(_ sender: StickerManager)
     /// 替换背景，传入本控制器和返回图片的大小，返回处理好的图片
@@ -32,15 +32,15 @@ import ObjectiveC
 }
 
 // MARK: - StickerManager
-final class StickerManager: NSObject {
+public final class StickerManager: NSObject {
     weak var controller: EditImageViewController?
-    var config = TemplateConfig()
+    public var config = TemplateConfig()
     private weak var currentStickerView: ZLImageStickerView?
     var modelMap: [String: ImageStickerModel] = [:]
     var stickerArr: [EditableStickerView] = []
     weak var delegate: StickerManagerDelegate?
     var persentType:Int = 0
-    static let shared = StickerManager()
+    public static let shared = StickerManager()
     private override init() {
         super.init()
         NotificationCenter.default.addObserver(
@@ -268,7 +268,7 @@ extension StickerManager: PHPickerViewControllerDelegate {
     }
 
     // 相册选择回调
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+    public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
 
         guard let result = results.first else { return }

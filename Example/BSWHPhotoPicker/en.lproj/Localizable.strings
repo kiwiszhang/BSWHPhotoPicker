@@ -1,0 +1,38 @@
+/* 
+  Localizable.strings
+  BSWHPhotoPicker
+
+  Created by 笔尚文化 on 2025/11/18.
+  Copyright © 2025 CocoaPods. All rights reserved.
+*/
+
+"save" = "save";
+"ALL" = "ALL";
+"Christmas" = "Christmas";
+"ChooseATemplate" = "Choose A Template";
+
+"Text" = "Text";
+"Background" = "Background";
+"Photos" = "Photos";
+"Stickers" = "Stickers";
+"Ratio" = "Ratio";
+
+"Replace" = "Replace";
+"Duplicate" = "Duplicate";
+"save" = "save";
+"FlipH" = "Flip H";
+"Crop" = "Crop";
+"FlipV" = "Flip V";
+"Remove" = "Remove";
+
+"Done" = "Done";
+"General" = "General";
+"Social" = "Social";
+"Print" = "Print";
+
+
+"NoPermission" = "No Permission";
+"photoLibrarySettings" = "Please allow access to the photo library in Settings";
+"Cancel" = "Cancel";
+"GotoSettings" = "Go to Settings";
+

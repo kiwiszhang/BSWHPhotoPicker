@@ -6,17 +6,28 @@ PODS:
   - FBSnapshotTestCase/Core (2.1.4)
   - FBSnapshotTestCase/SwiftSupport (2.1.4):
     - FBSnapshotTestCase/Core
+  - Localize-Swift (3.2.0):
+    - Localize-Swift/LocalizeSwiftCore (= 3.2.0)
+    - Localize-Swift/UIKit (= 3.2.0)
+  - Localize-Swift/LocalizeSwiftCore (3.2.0)
+  - Localize-Swift/UIKit (3.2.0):
+    - Localize-Swift/LocalizeSwiftCore
   - SnapKit (5.7.1)
+  - SwiftGen (6.6.3)
 
 DEPENDENCIES:
   - BSWHPhotoPicker (from `../`)
   - FBSnapshotTestCase (~> 2.1.4)
+  - Localize-Swift (~> 3.2.0)
   - SnapKit
+  - SwiftGen (~> 6.6.3)
 
 SPEC REPOS:
   trunk:
     - FBSnapshotTestCase
+    - Localize-Swift
     - SnapKit
+    - SwiftGen
 
 EXTERNAL SOURCES:
   BSWHPhotoPicker:
@@ -25,8 +36,10 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   BSWHPhotoPicker: e2c434517a1395efa4d711664792c6e7abc723f1
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
+  Localize-Swift: 6f4475136bdb0d7b2882ea3d4ea919d70142b232
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
+  SwiftGen: 4993cbf71cbc4886f775e26f8d5c3a1188ec9f99
 
-PODFILE CHECKSUM: 63c4450148f66f2120bef2bf15d80bab28e4eb89
+PODFILE CHECKSUM: b17208cd1241bf3d836228c04cccf71d24781017
 
 COCOAPODS: 1.16.2

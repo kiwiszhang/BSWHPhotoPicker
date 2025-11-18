@@ -1,0 +1,42 @@
+# 图片资源配置
+xcassets:
+  inputs:
+    - BSWHPhotoPicker/Images.xcassets
+  outputs:
+    templateName: swift5
+    output: BSWHPhotoPicker/generated/Images.swift
+
+# 本地化字符串配置
+strings:
+  inputs:
+    - BSWHPhotoPicker/en.lproj/Localizable.strings
+  outputs:
+    templateName: structured-swift5
+    params:
+        lookupFunction: Localize_Swift_bridge(forKey:table:fallbackValue:)
+    output: BSWHPhotoPicker/generated/Strings.swift
+
+# GIF,MP4
+files:
+  inputs:
+    - BSWHPhotoPicker/other/source/gif
+    - BSWHPhotoPicker/other/source/videos
+  outputs:
+    templateName: structured-swift5
+    output: BSWHPhotoPicker/generated/MediaFiles.swift
+    
+# 字体文件
+fonts:
+  inputs:
+    - BSWHPhotoPicker/other/source/font
+  outputs:
+    templateName: swift5
+    output: BSWHPhotoPicker/generated/Fonts.swift
+
+# JSON 文件
+json:
+  inputs:
+    - BSWHPhotoPicker/other/source/json
+  outputs:
+    templateName: runtime-swift5
+    output: BSWHPhotoPicker/generated/JSON.swift

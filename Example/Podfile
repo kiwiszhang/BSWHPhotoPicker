@@ -5,6 +5,8 @@ platform :ios, '13.0'
 target 'BSWHPhotoPicker_Example' do
   pod 'BSWHPhotoPicker', :path => '../'
   pod 'SnapKit'
+  pod 'Localize-Swift', '~> 3.2.0'
+  pod 'SwiftGen', '~> 6.6.3', :configurations => ['Debug']
 
   target 'BSWHPhotoPicker_Tests' do
     inherit! :search_paths

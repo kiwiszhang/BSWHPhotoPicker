@@ -36,5 +36,7 @@ public struct TemplateConfig {
     public var General = "General"
     public var Social = "Social"
     public var Print = "Print"
-
+    
+    public init() {
+    }
 }
