@@ -32,12 +32,11 @@ Pod::Spec.new do |s|
   s.source_files = 'BSWHPhotoPicker/Classes/**/*'
   s.exclude_files = ["BSWHPhotoPicker/Classes/General/ZLWeakProxy.swift"]
   
-  # s.resource_bundles = {
-  #   'BSWHPhotoPicker' => ['BSWHPhotoPicker/Assets/*.png']
-  # }
+  s.resource_bundles = {
+    'TLPhotoPicker' => [
+      'BSWHPhotoPicker/Resources/**/*.{png,jpg,json,xcassets}'
+    ]
+  }
+  s.resources = 'BSWHPhotoPicker/BSWHPhotoPicker.bundle'
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  
-  # s.dependency 'ZLImageEditor', '~> 2.0.5'
 end

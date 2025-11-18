@@ -17,15 +17,7 @@
 		530C84A92EC56C250037290D /* UIView+Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C84A72EC56C250037290D /* UIView+Create.swift */; };
 		530C84AB2EC56CA80037290D /* UIImageView+Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C84AA2EC56CA80037290D /* UIImageView+Create.swift */; };
 		530C84AD2EC572600037290D /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C84AC2EC572600037290D /* UIFont+Extension.swift */; };
-		533A14A92E9F789700A2E1C6 /* Christmas00.json in Resources */ = {isa = PBXBuildFile; fileRef = 533A14A82E9F789700A2E1C6 /* Christmas00.json */; };
-		533A14AD2E9F887F00A2E1C6 /* Christmas01.json in Resources */ = {isa = PBXBuildFile; fileRef = 533A14AC2E9F887F00A2E1C6 /* Christmas01.json */; };
-		533A14AF2E9F925900A2E1C6 /* Christmas02.json in Resources */ = {isa = PBXBuildFile; fileRef = 533A14AE2E9F925900A2E1C6 /* Christmas02.json */; };
-		533A14B32E9F926B00A2E1C6 /* Christmas06.json in Resources */ = {isa = PBXBuildFile; fileRef = 533A14B22E9F926B00A2E1C6 /* Christmas06.json */; };
-		533A14B52E9F926E00A2E1C6 /* Christmas05.json in Resources */ = {isa = PBXBuildFile; fileRef = 533A14B42E9F926E00A2E1C6 /* Christmas05.json */; };
-		533A14B72E9F927600A2E1C6 /* Christmas04.json in Resources */ = {isa = PBXBuildFile; fileRef = 533A14B62E9F927600A2E1C6 /* Christmas04.json */; };
-		533A14B92E9F927900A2E1C6 /* Christmas03.json in Resources */ = {isa = PBXBuildFile; fileRef = 533A14B82E9F927900A2E1C6 /* Christmas03.json */; };
 		533A14BB2EA08DCB00A2E1C6 /* StickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533A14BA2EA08DCB00A2E1C6 /* StickerManager.swift */; };
-		53734DE62EB8791D0005ED8B /* Wedding00.json in Resources */ = {isa = PBXBuildFile; fileRef = 53734DE52EB8791D0005ED8B /* Wedding00.json */; };
 		53734DFB2EBA02360005ED8B /* DrawViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53734DFA2EBA02360005ED8B /* DrawViewController.swift */; };
 		53734FB22EC1E6780005ED8B /* ToolsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53734FB12EC1E6780005ED8B /* ToolsCollectionView.swift */; };
 		53734FF02EC2E3830005ED8B /* StickerToolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53734FEF2EC2E3830005ED8B /* StickerToolsView.swift */; };
@@ -66,15 +58,7 @@
 		530C84A72EC56C250037290D /* UIView+Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Create.swift"; sourceTree = "<group>"; };
 		530C84AA2EC56CA80037290D /* UIImageView+Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Create.swift"; sourceTree = "<group>"; };
 		530C84AC2EC572600037290D /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
-		533A14A82E9F789700A2E1C6 /* Christmas00.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Christmas00.json; sourceTree = "<group>"; };
-		533A14AC2E9F887F00A2E1C6 /* Christmas01.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Christmas01.json; sourceTree = "<group>"; };
-		533A14AE2E9F925900A2E1C6 /* Christmas02.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Christmas02.json; sourceTree = "<group>"; };
-		533A14B22E9F926B00A2E1C6 /* Christmas06.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Christmas06.json; sourceTree = "<group>"; };
-		533A14B42E9F926E00A2E1C6 /* Christmas05.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Christmas05.json; sourceTree = "<group>"; };
-		533A14B62E9F927600A2E1C6 /* Christmas04.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Christmas04.json; sourceTree = "<group>"; };
-		533A14B82E9F927900A2E1C6 /* Christmas03.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Christmas03.json; sourceTree = "<group>"; };
 		533A14BA2EA08DCB00A2E1C6 /* StickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerManager.swift; sourceTree = "<group>"; };
-		53734DE52EB8791D0005ED8B /* Wedding00.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Wedding00.json; sourceTree = "<group>"; };
 		53734DFA2EBA02360005ED8B /* DrawViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawViewController.swift; sourceTree = "<group>"; };
 		53734FB12EC1E6780005ED8B /* ToolsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolsCollectionView.swift; sourceTree = "<group>"; };
 		53734FEF2EC2E3830005ED8B /* StickerToolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerToolsView.swift; sourceTree = "<group>"; };
@@ -156,21 +140,6 @@
 			path = BaseView;
 			sourceTree = "<group>";
 		};
-		533A14C52EA0CA3300A2E1C6 /* Json */ = {
-			isa = PBXGroup;
-			children = (
-				533A14A82E9F789700A2E1C6 /* Christmas00.json */,
-				533A14AC2E9F887F00A2E1C6 /* Christmas01.json */,
-				533A14AE2E9F925900A2E1C6 /* Christmas02.json */,
-				533A14B82E9F927900A2E1C6 /* Christmas03.json */,
-				533A14B62E9F927600A2E1C6 /* Christmas04.json */,
-				533A14B42E9F926E00A2E1C6 /* Christmas05.json */,
-				533A14B22E9F926B00A2E1C6 /* Christmas06.json */,
-				53734DE52EB8791D0005ED8B /* Wedding00.json */,
-			);
-			path = Json;
-			sourceTree = "<group>";
-		};
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
@@ -197,7 +166,6 @@
 			children = (
 				530C84A12EC56BFB0037290D /* BaseView */,
 				530C849E2EC56B4B0037290D /* Views */,
-				533A14C52EA0CA3300A2E1C6 /* Json */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				530C849C2EC48E770037290D /* TemplateViewController.swift */,
@@ -360,17 +328,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				533A14AF2E9F925900A2E1C6 /* Christmas02.json in Resources */,
-				53734DE62EB8791D0005ED8B /* Wedding00.json in Resources */,
-				533A14B52E9F926E00A2E1C6 /* Christmas05.json in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
-				533A14A92E9F789700A2E1C6 /* Christmas00.json in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
-				533A14AD2E9F887F00A2E1C6 /* Christmas01.json in Resources */,
-				533A14B92E9F927900A2E1C6 /* Christmas03.json in Resources */,
 				9801A70E2E726C2A00607935 /* testImage.png in Resources */,
-				533A14B72E9F927600A2E1C6 /* Christmas04.json in Resources */,
-				533A14B32E9F926B00A2E1C6 /* Christmas06.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
