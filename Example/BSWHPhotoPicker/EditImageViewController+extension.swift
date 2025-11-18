@@ -8,6 +8,7 @@
 
 import UIKit
 import BSWHPhotoPicker
+import Photos
 
 // MARK: - 顶部工具栏 TemplateTopView-TemplateTopViewDelegate
 extension EditImageViewController:TemplateTopViewDelegate {
@@ -33,6 +34,48 @@ extension EditImageViewController:TemplateTopViewDelegate {
     func saveTemplate(_ sender: TemplateTopView) {
         guard let finalImage = renderImage(from: containerView) else { return }
         saveImageToAlbum(finalImage)
+    }
+    
+    
+    func renderImage(from view: UIView) -> UIImage? {
+        let renderer = UIGraphicsImageRenderer(
+            bounds: view.bounds,
+            format: {
+                let f = UIGraphicsImageRendererFormat.default()
+                f.scale = 3 /// 高清比例 1/2/3 可选
+                return f
+            }()
+        )
+        return renderer.image { ctx in
+            view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+        }
+    }
+    
+    func saveImageToAlbum(_ image: UIImage) {
+        PHPhotoLibrary.requestAuthorization { status in
+            if status == .authorized || status == .limited {
+                UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+            } else {
+                DispatchQueue.main.async {
+                    self.showAlbumPermissionAlert()
+                }
+            }
+        }
+    }
+
+    func showAlbumPermissionAlert() {
+        let alert = UIAlertController(
+            title: StickerManager.shared.config.NoPermission,
+            message: StickerManager.shared.config.photoLibrarySettings,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: StickerManager.shared.config.Cancel, style: .cancel))
+        alert.addAction(UIAlertAction(title: StickerManager.shared.config.GotoSettings, style: .default, handler: { _ in
+            if let url = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(url)
+            }
+        }))
+        present(alert, animated: true)
     }
 }
 

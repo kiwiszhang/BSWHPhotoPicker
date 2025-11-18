@@ -101,11 +101,12 @@ class EditImageViewController: ZLEditImageViewController {
         resetContainerViewFrame()
         mainScrollView.backgroundColor = .white
         
+        //根据调整后的containerView布局里面的贴纸
+        convertStickerFrames(stickers: StickerManager.shared.stickerArr, oldSize: UIImage(named: item!.imageBg)!.size, newSize: containerView.frame.size, mode: .fit)
     }
     
     
     @objc private func onClickMenu(_ sender: UIButton) {
-        let alert = UIAlertController(title: "菜单", message: nil, preferredStyle: .actionSheet)
         /// 绘制
         let drawAction = UIAlertAction(title: "Draw", style: .default) { [weak self] _ in
             guard let `self` = self else { return }
@@ -283,47 +284,6 @@ class EditImageViewController: ZLEditImageViewController {
         }else{
             topView.rebackImg.image(UIImage(named: "template-reBack-light"))
         }
-    }
-            
-    func renderImage(from view: UIView) -> UIImage? {
-        let renderer = UIGraphicsImageRenderer(
-            bounds: view.bounds,
-            format: {
-                let f = UIGraphicsImageRendererFormat.default()
-                f.scale = 3 /// 高清比例 1/2/3 可选
-                return f
-            }()
-        )
-        return renderer.image { ctx in
-            view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
-        }
-    }
-
-    func saveImageToAlbum(_ image: UIImage) {
-        PHPhotoLibrary.requestAuthorization { status in
-            if status == .authorized || status == .limited {
-                UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-            } else {
-                DispatchQueue.main.async {
-                    self.showAlbumPermissionAlert()
-                }
-            }
-        }
-    }
-
-    func showAlbumPermissionAlert() {
-        let alert = UIAlertController(
-            title: StickerManager.shared.config.NoPermission,
-            message: StickerManager.shared.config.photoLibrarySettings,
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: StickerManager.shared.config.Cancel, style: .cancel))
-        alert.addAction(UIAlertAction(title: StickerManager.shared.config.GotoSettings, style: .default, handler: { _ in
-            if let url = URL(string: UIApplication.openSettingsURLString) {
-                UIApplication.shared.open(url)
-            }
-        }))
-        present(alert, animated: true)
     }
 
 }
