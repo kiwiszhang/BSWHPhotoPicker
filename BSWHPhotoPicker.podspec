@@ -21,10 +21,10 @@ Pod::Spec.new do |s|
 基于ZLImageEditor封装.
                        DESC
 
-  s.homepage         = 'https://github.com/caoguangming/BSWHPhotoPicker'
+  s.homepage         = 'https://github.com/kiwiszhang/BSWHPhotoPicker'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'caoguangming' => '48467160+caoguangming@users.noreply.github.com' }
-  s.source           = { :git => 'https://github.com/caoguangming/BSWHPhotoPicker.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/kiwiszhang/BSWHPhotoPicker.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '15.0'
   s.swift_versions        = ['5.0', '5.1', '5.2']
@@ -33,11 +33,15 @@ Pod::Spec.new do |s|
   s.exclude_files = ["BSWHPhotoPicker/Classes/General/ZLWeakProxy.swift"]
   
   s.resource_bundles = {
-    'BSWHPhotoPicker' => [
-      'BSWHPhotoPicker/Assets/**/*',
+      'BSWHPhotoPicker' => [
+        'BSWHPhotoPicker/Assets/**/*'
+      ]
+    }
+
+    # ✔ 非 xcassets 文件（例如 json）单独放 resources
+    s.resources = [
       'BSWHPhotoPicker/Resources/**/*'
     ]
-  }
 
 #  s.resources = 'BSWHPhotoPicker/BSWHPhotoPicker.bundle'
 
