@@ -24,14 +24,6 @@ class EditImageViewController: ZLEditImageViewController {
     private lazy var statusView = UIView().backgroundColor(kkColorFromHex("F5F5F5"))
     private lazy var topView = TemplateTopView().backgroundColor(kkColorFromHex("F5F5F5"))
     private lazy var contentView = UIView().backgroundColor(.white)
-    let menuButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setTitle("菜单", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
-        return button
-    }()
-    
     let toolCollectionView:ToolsCollectionView = {
        let view = ToolsCollectionView()
         view.backgroundColor = kkColorFromHex("F5F5F5")
@@ -82,8 +74,6 @@ class EditImageViewController: ZLEditImageViewController {
         }
         toolCollectionView.delegate = self
 
-//        menuButton.addTarget(self, action: #selector(onClickMenu(_:)), for: .touchUpInside)
-
         StickerManager.shared.initCurrentTemplate(jsonName: item!.jsonName, currentVC: self)
         backAndreBackStatus()
         
@@ -120,58 +110,19 @@ class EditImageViewController: ZLEditImageViewController {
         let drawAction = UIAlertAction(title: "Draw", style: .default) { [weak self] _ in
             guard let `self` = self else { return }
 //            self.switchOperation(type: .draw)
-            
             let vc = DrawViewController()
-//            vc.bgImage = originalImage
             vc.bgImageFrame  = imageView.frame
             vc.modalPresentationStyle = .overFullScreen
             vc.onDrawingExported = { [weak self] exportedImage,rect in
                 guard let self = self else { return }
-                
                 self.switchOperation(type: .imageSticker)
                 let state: ImageStickerModel = ImageStickerModel(image: exportedImage,originFrame: CGRect(x: rect.origin.x / (kkScreenWidth / 375.0), y: rect.origin.y / (kkScreenHeight / 812.0), width: rect.size.width / (kkScreenWidth / 375.0), height: rect.size.height / (kkScreenHeight / 812.0)),gesScale: 1,gesRotation: 0,isBgImage: false)
                 let sticker = self.addImageSticker01(state: state)
                 sticker.stickerModel = state
                 StickerManager.shared.modelMap[sticker.id] = state
-                
             }
             present(vc, animated: false)
-
-            
         }
-        /// 马赛克
-        let mosaicAction = UIAlertAction(title: "mosaic", style: .default) { [weak self] _ in
-            guard let `self` = self else { return }
-            self.switchOperation(type: .mosaic)
-        }
-        
-        /// 文字贴纸
-        let textStickerAction = UIAlertAction(title: "文字贴纸", style: .default) { [weak self] _ in
-            guard let `self` = self else { return }
-            self.switchOperation(type: .textSticker)
-            self.addTextSticker(font: UIFont.systemFont(ofSize: 20))
-        }
-        
-        let imageStickerAction = UIAlertAction(title: "添加图片贴纸", style: .default) { [weak self] _ in
-            if let image = UIImage(named: "imageSticker") {
-                self?.switchOperation(type: .imageSticker)
-                let state: ImageStickerModel = ImageStickerModel(imageName: "imageSticker",originFrame: CGRect(x: 40, y: 100, width: 120, height: 120),gesScale: 1,gesRotation: 0,isBgImage: false)
-//                self?.addImageSticker(image: image)
-                let sticker = self?.addImageSticker01(state: state)
-                sticker!.stickerModel = state
-                StickerManager.shared.modelMap[sticker!.id] = state
-            }
-        }
-        
-        let cancelAction = UIAlertAction(title: "取消", style: .destructive) { _ in
-            alert.dismiss(animated: true)
-        }
-        alert.addAction(drawAction)
-        alert.addAction(mosaicAction)
-        alert.addAction(textStickerAction)
-        alert.addAction(imageStickerAction)
-        alert.addAction(cancelAction)
-        self.present(alert, animated: true)
     }
 
     // MARK: - Action

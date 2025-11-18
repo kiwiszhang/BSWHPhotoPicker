@@ -61,14 +61,39 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
                     }
                 }
             }
-//            replaceBgImage(image: UIImage(named: "Christmas00-bg")!)
-//            resetContainerViewFrame()
         }else if indexPath.row == 1 {
 //            showBottomPanel()
+            StickerManager.shared.delegate?.replaceBackgroundWith(controller: self,imageRect: imageView.frame) { [weak self] image in
+                guard let self = self else { return }
+                if let img = image {
+                    print("🎉 收到代理返回的图片：\(img)")
+                    replaceBgImage(image: img)
+                    resetContainerViewFrame()
+                } else {
+                    print("⚠️ 没有返回图片")
+                }
+            }
         }else if indexPath.row == 2 {
             StickerManager.shared.checkPhotoAuthorizationAndPresentPicker(presentTypeFrom: 1)
         }else if indexPath.row == 3 {
-
+            StickerManager.shared.delegate?.addStickerImage(controller: self) { [weak self] image in
+                print("添加贴纸")
+                if let img = image {
+                    DispatchQueue.main.async {
+                        self!.switchOperation(type: .imageSticker)
+                        let state: ImageStickerModel = ImageStickerModel(imageName: "empty",imageData:img.pngData(), originFrame: CGRect(x: 240, y: 100, width: 120, height: 120),gesScale: 1,gesRotation: 0,overlayRect: CGRect(x:0,y: 0,width: 1,height: 1) ,isBgImage: true)
+                        let sticker = self!.addImageSticker01(state: state)
+                        sticker.stickerModel = state
+                        StickerManager.shared.modelMap[sticker.id] = state
+                        StickerManager.shared.stickerArr.append(sticker)
+                        if let image = sticker.stickerModel?.stickerImage {
+                            sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
+                        }
+                    }
+                } else {
+                    
+                }
+            }
         }else if indexPath.row == 4 {
             showRatioBottomPanel()
         }
@@ -84,6 +109,15 @@ extension EditImageViewController:StickerToolsViewDelegate {
         }else if indexPath.row == 1 {
             NotificationCenter.default.post(name: Notification.Name("duplicateSticker"), object: ["sticker": currentSticker])
         }else if indexPath.row == 2 {
+            if let sticker = currentSticker {
+                print("裁剪后的照片")
+                StickerManager.shared.delegate?.cropStickerImage(controller: self) { image in
+                    if let img = image {
+                        sticker.updateImage(img, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
+                    } else {
+                    }
+                }
+            }
             
         }else if indexPath.row == 3 {
             if let sticker = currentSticker {

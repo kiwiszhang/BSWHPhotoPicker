@@ -15,6 +15,22 @@ import BSWHPhotoPicker
 
 @objc protocol StickerManagerDelegate: AnyObject {
     func stickerAddImage(_ sender: StickerManager)
+    /// 替换背景，传入本控制器和返回图片的大小，返回处理好的图片
+    func replaceBackgroundWith(
+            controller: EditImageViewController,
+            imageRect:CGRect,
+            completion: @escaping (UIImage?) -> Void
+        )
+    /// 添加贴纸，传入本控制器，返回选择的贴纸图片
+    func addStickerImage(
+            controller: EditImageViewController,
+            completion: @escaping (UIImage?) -> Void
+        )
+    /// 裁剪贴纸，传入本控制器，返回裁剪编辑后的图片
+    func cropStickerImage(
+            controller: EditImageViewController,
+            completion: @escaping (UIImage?) -> Void
+        )
 }
 
 // MARK: - StickerManager
