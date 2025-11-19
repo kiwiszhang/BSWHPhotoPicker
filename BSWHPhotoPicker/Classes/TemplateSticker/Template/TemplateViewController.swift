@@ -141,7 +141,7 @@ extension TemplateViewController: ContentCellDelegate {
     func contentCell(_ cell: ContentCell, didSelectItem item: TemplateModel, at index: IndexPath) {
         guard let image = BSWHBundle.image(named: item.imageBg) else { return }
         let controller = EditImageViewController(image: image)
-        controller.item = items[index.section][index.row]
+        controller.item = item
         controller.modalPresentationStyle = .fullScreen
         self.present(controller, animated: true)
     }
