@@ -7,6 +7,25 @@
 
 import UIKit
 
+class ImageHeightCache {
+    static let shared = ImageHeightCache()
+    private init() {}
+
+    private var cache: [String: [CGFloat: CGFloat]] = [:]
+
+    func get(imageName: String, width: CGFloat) -> CGFloat? {
+        return cache[imageName]?[width]
+    }
+
+    func set(imageName: String, width: CGFloat, height: CGFloat) {
+        if cache[imageName] == nil {
+            cache[imageName] = [:]
+        }
+        cache[imageName]?[width] = height
+    }
+}
+
+
 struct RatioToolsModel {
     var text:String = "Text"
     var imageName:String = "template-text"
@@ -28,7 +47,7 @@ public struct TemplateModel {
 class ConfigDataItem {
     
     static func getTemplateTabData() -> [String] {
-        let items = [StickerManager.shared.config.all, StickerManager.shared.config.Christmas]
+        let items = [StickerManager.shared.config.all, StickerManager.shared.config.Christmas,"Baby"]
         return items
     }
     
@@ -40,7 +59,15 @@ class ConfigDataItem {
         let item04 = TemplateModel(imageName: "5",imageBg: "Christmas04-bg",jsonName: "Christmas04")
         let item05 = TemplateModel(imageName: "6",imageBg: "Christmas05-bg",jsonName: "Christmas05")
         let item06 = TemplateModel(imageName: "7",imageBg: "Christmas06-bg",jsonName: "Christmas06")
-        let items = [[item00,item01,item02,item03,item04,item05,item06],[item00,item01,item02,item03,item04,item05,item06]]
+        
+        let item10 = TemplateModel(imageName: "baby01",imageBg: "baby01-bg",jsonName: "baby01")
+        let item11 = TemplateModel(imageName: "baby02",imageBg: "baby02-bg",jsonName: "baby02")
+        let item12 = TemplateModel(imageName: "baby03",imageBg: "baby03-bg",jsonName: "baby03")
+        let item13 = TemplateModel(imageName: "baby04",imageBg: "baby04-bg",jsonName: "baby04")
+        let item14 = TemplateModel(imageName: "baby05",imageBg: "baby05-bg",jsonName: "baby05")
+        let item15 = TemplateModel(imageName: "baby06",imageBg: "baby06-bg",jsonName: "baby06")
+
+        let items = [[item00,item01,item02,item03,item04,item05,item06,item10,item11,item12,item13,item14,item15],[item00,item01,item02,item03,item04,item05,item06],[item10,item11,item12,item13,item14,item15]]
         
         return items
     }

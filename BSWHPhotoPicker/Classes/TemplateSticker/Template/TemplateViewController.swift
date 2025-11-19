@@ -206,29 +206,42 @@ class ContentCell: UICollectionViewCell {
     
     private func reloadCollectionView() {
         layout.itemHeights = itemHeights
-        layout.invalidateLayout()
         collectionView.reloadData()
-        collectionView.layoutIfNeeded() // ✅ 保证第一次显示就正确
-    }
-    
-    // MARK: - Calculate Item Heights
-    
-    private func calculateItemHeights() {
-        let screenWidth = UIScreen.main.bounds.width
-        let columnCount: CGFloat = CGFloat(layout.columnCount)
-        let spacing: CGFloat = layout.sectionInset.left + layout.sectionInset.right + layout.columnSpacing * (columnCount - 1)
-        let itemWidth = (screenWidth - spacing) / columnCount
-        
-        for item in items {
-            if let img = BSWHBundle.image(named: item.imageName) {
-                let ratio = img.size.height / img.size.width
-                let height = itemWidth * ratio
-                itemHeights.append(height)
-            } else {
-                itemHeights.append(itemWidth) // fallback: 正方形
-            }
+        // 确保在当前 runloop 后再刷新布局（避免闪动）
+        DispatchQueue.main.async { [weak self] in
+            self?.layout.invalidateLayout()
         }
     }
+
+    
+    // MARK: - Calculate Item Heights
+    private func calculateItemHeights() {
+        collectionView.layoutIfNeeded()
+        let totalWidth = collectionView.bounds.width
+        let columnCount: CGFloat = CGFloat(layout.columnCount)
+        let spacing = layout.sectionInset.left
+                    + layout.sectionInset.right
+                    + layout.columnSpacing * (columnCount - 1)
+
+        let itemWidth = (totalWidth - spacing) / columnCount
+
+        itemHeights = items.map { item in
+            let imageName = item.imageName
+            if let cached = ImageHeightCache.shared.get(imageName: imageName, width: itemWidth) {
+                return cached
+            }
+            let height: CGFloat
+            if let img = BSWHBundle.image(named: imageName) {
+                let ratio = img.size.height / img.size.width
+                height = itemWidth * ratio
+            } else {
+                height = itemWidth
+            }
+            ImageHeightCache.shared.set(imageName: imageName, width: itemWidth, height: height)
+            return height
+        }
+    }
+
 }
 
 // MARK: - UICollectionViewDataSource & Delegate
@@ -270,6 +283,10 @@ class WaterfallImageCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        imgView.frame = contentView.bounds
+    }
 
     
     func setItem(item: TemplateModel) {
@@ -287,6 +304,10 @@ class WaterfallLayout: UICollectionViewLayout {
     var itemHeights: [CGFloat] = [] // 外部传入的动态高度数组
     private var attributes: [UICollectionViewLayoutAttributes] = []
     private var contentHeight: CGFloat = 0
+
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        return true
+    }
 
     override func prepare() {
         guard let collectionView = collectionView else { return }
@@ -313,7 +334,7 @@ class WaterfallLayout: UICollectionViewLayout {
             attributes.append(attr)
 
             columnHeights[minColumn] = attr.frame.maxY + rowSpacing
-            contentHeight = max(contentHeight, columnHeights[minColumn])
+            contentHeight = max(contentHeight, attr.frame.maxY)
         }
     }
 
