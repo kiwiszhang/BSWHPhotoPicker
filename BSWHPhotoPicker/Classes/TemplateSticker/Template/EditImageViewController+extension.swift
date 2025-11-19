@@ -98,6 +98,8 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
                         sticker.stickerModel = state
                         StickerManager.shared.modelMap[sticker.id] = state
                         StickerManager.shared.stickerArr.append(sticker)
+                        let tap = UITapGestureRecognizer(target: StickerManager.shared, action: #selector(StickerManager.shared.stickerTapped(_:)))
+                        sticker.addGestureRecognizer(tap)
                         if let image = sticker.stickerModel?.stickerImage {
                             sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
                         }
@@ -129,6 +131,8 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
                         sticker.stickerModel = state
                         StickerManager.shared.modelMap[sticker.id] = state
                         StickerManager.shared.stickerArr.append(sticker)
+                        let tap = UITapGestureRecognizer(target: StickerManager.shared, action: #selector(StickerManager.shared.stickerTapped(_:)))
+                        sticker.addGestureRecognizer(tap)
                         if let image = sticker.stickerModel?.stickerImage {
                             sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
                         }

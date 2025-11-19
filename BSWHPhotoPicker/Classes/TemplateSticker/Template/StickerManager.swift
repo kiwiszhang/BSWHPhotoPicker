@@ -295,13 +295,15 @@ extension StickerManager: PHPickerViewControllerDelegate {
                 provider.loadObject(ofClass: UIImage.self) { [weak self] image, _ in
                     guard let self = self,
                     let newImage:UIImage = image as? UIImage else { return }
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [self] in
                         self.controller!.switchOperation(type: .imageSticker)
                         let state: ImageStickerModel = ImageStickerModel(imageName: "empty",imageData:newImage.pngData(), originFrame: CGRect(x: 40, y: 100, width: 120, height: 120),gesScale: 1,gesRotation: 0,overlayRect: CGRect(x:0,y: 0,width: 1,height: 1) ,isBgImage: true)
                         let sticker = self.controller!.addImageSticker01(state: state)
                         sticker.stickerModel = state
                         StickerManager.shared.modelMap[sticker.id] = state
                         StickerManager.shared.stickerArr.append(sticker)
+                        let tap = UITapGestureRecognizer(target: self, action: #selector(self.stickerTapped(_:)))
+                        sticker.addGestureRecognizer(tap)
                         if let image = sticker.stickerModel?.stickerImage {
                             sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
                         }
