@@ -52,6 +52,7 @@ open class ZLImageStickerView: ZLBaseStickerView {
             isBgImage: isBgImage,
             bgAddImageType: bgAddImageType,
             imageMask: imageMask,
+            cornerRadiusScale:cornerRadiusScale,
             imageData: (imageData ?? UIImage(named: "addWhiteImage")?.pngData())!
         )
     }
@@ -74,6 +75,7 @@ open class ZLImageStickerView: ZLBaseStickerView {
             bgAddImageType: state.bgAddImageType,
             imageMask: state.imageMask,
             imageData: state.imageData,
+            cornerRadiusScale:state.cornerRadiusScale,
             showBorder: false
         )
     }
@@ -91,6 +93,7 @@ open class ZLImageStickerView: ZLBaseStickerView {
         bgAddImageType:String = "addGrayImage",
         imageMask:String = "",
         imageData:Data? = nil,
+        cornerRadiusScale:Double = 0.1,
         showBorder: Bool = true
     ) {
         self.image = image
@@ -106,6 +109,7 @@ open class ZLImageStickerView: ZLBaseStickerView {
             bgAddImageType: bgAddImageType,
             imageMask: imageMask,
             imageData: imageData,
+            cornerRadiusScale:cornerRadiusScale,
             showBorder: showBorder
         )
         

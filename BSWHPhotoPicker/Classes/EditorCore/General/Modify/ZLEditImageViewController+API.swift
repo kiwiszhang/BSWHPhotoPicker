@@ -294,6 +294,7 @@ public class ImageStickerModel: Codable {
     public var overlayRectHeight:Double? = nil
     /// 添加的照片显示类型
     public var imageType:ImageAddType? = .square
+    public var cornerRadiusScale:Double? = 0.1
     /// 异形显示的遮罩图片
     public var imageMask:String? = ""
     /// 是否是可以添加照片的贴图
@@ -322,6 +323,7 @@ public class ImageStickerModel: Codable {
         case overlayRectWidth
         case overlayRectHeight
         case imageType
+        case cornerRadiusScale
         case imageMask
         case isBgImage
         case bgAddImageType
@@ -352,6 +354,7 @@ public class ImageStickerModel: Codable {
         overlayRectWidth = try container.decodeIfPresent(Double.self, forKey: .overlayRectWidth)
         overlayRectHeight = try container.decodeIfPresent(Double.self, forKey: .overlayRectHeight)
         imageType = try container.decodeIfPresent(ImageAddType.self, forKey: .imageType)
+        cornerRadiusScale = try container.decodeIfPresent(Double.self, forKey: .cornerRadiusScale) ?? 0.1
         imageMask = try container.decodeIfPresent(String.self, forKey: .imageMask)
         isBgImage = try container.decodeIfPresent(Bool.self, forKey: .isBgImage) ?? false
         bgAddImageType = try container.decodeIfPresent(String.self, forKey: .bgAddImageType) ?? "addGrayImage"
@@ -380,6 +383,7 @@ public class ImageStickerModel: Codable {
         try container.encodeIfPresent(overlayRectWidth, forKey: .overlayRectWidth)
         try container.encodeIfPresent(overlayRectHeight, forKey: .overlayRectHeight)
         try container.encodeIfPresent(imageType, forKey: .imageType)
+        try container.encodeIfPresent(cornerRadiusScale, forKey: .cornerRadiusScale)
         try container.encodeIfPresent(imageMask, forKey: .imageMask)
         try container.encode(isBgImage, forKey: .isBgImage)
         try container.encode(bgAddImageType, forKey: .bgAddImageType)
@@ -399,6 +403,7 @@ public class ImageStickerModel: Codable {
         gesRotation: Double = 0.0,
         overlayRect: CGRect? = nil,
         imageType: ImageAddType? = nil,
+        cornerRadiusScale:Double = 0.1,
         isBgImage: Bool = false,
         bgAddImageType:String = "addGrayImage",
     ) {
@@ -414,6 +419,7 @@ public class ImageStickerModel: Codable {
         self.gesScale = gesScale
         self.gesRotation = gesRotation
         self.imageType = imageType
+        self.cornerRadiusScale = cornerRadiusScale
         self.isBgImage = isBgImage
         self.bgAddImageType = bgAddImageType
         if let rect = overlayRect {
@@ -451,6 +457,7 @@ public extension ImageStickerModel {
                 return nil
             }(),
             imageType: self.imageType,
+            cornerRadiusScale:self.cornerRadiusScale ?? 0.1,
             isBgImage: self.isBgImage
         )
         return copy
@@ -473,6 +480,7 @@ public class EditableStickerView: ZLImageStickerView {
             totalTranslationPoint: state.totalTranslationPoint,
             isBgImage: state.isBgImage,
             imageMask: state.imageMask,
+            cornerRadiusScale:state.cornerRadiusScale,
             showBorder: false
         )
         self.refreshResizeButtonPosition()
@@ -492,6 +500,7 @@ public class EditableStickerView: ZLImageStickerView {
         bgAddImageType:String = "addGrayImage",
         imageMask:String = "",
         imageData:Data? = nil,
+        cornerRadiusScale:Double? = 0.1,
         showBorder: Bool = false
         
     ) {
@@ -508,6 +517,7 @@ public class EditableStickerView: ZLImageStickerView {
             bgAddImageType: bgAddImageType,
             imageMask: imageMask,
             imageData: imageData,
+            cornerRadiusScale:cornerRadiusScale ?? 0.1,
             showBorder: showBorder
         )
         borderView.layer.borderWidth = borderWidth

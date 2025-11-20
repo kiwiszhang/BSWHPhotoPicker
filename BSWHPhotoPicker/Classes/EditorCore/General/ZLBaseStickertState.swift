@@ -39,6 +39,7 @@ public class ZLBaseStickertState: NSObject {
     var bgAddImageType:String
     public var imageMask:String
     public var imageData: Data
+    public var cornerRadiusScale:Double
     public init(
         id: String,
         image: UIImage,
@@ -51,6 +52,7 @@ public class ZLBaseStickertState: NSObject {
         isBgImage:Bool,
         bgAddImageType:String,
         imageMask:String,
+        cornerRadiusScale:Double,
         imageData:Data
     ) {
         self.id = id
@@ -64,6 +66,7 @@ public class ZLBaseStickertState: NSObject {
         self.isBgImage = isBgImage
         self.bgAddImageType = bgAddImageType
         self.imageMask = imageMask
+        self.cornerRadiusScale = cornerRadiusScale
         self.imageData = imageData
         super.init()
     }
@@ -93,6 +96,7 @@ public class ZLTextStickerState: ZLBaseStickertState {
         isBgImage:Bool,
         bgAddImageType:String,
         imageMask:String,
+        cornerRadiusScale:Double,
         imageData:Data
     ) {
         self.text = text
@@ -111,6 +115,7 @@ public class ZLTextStickerState: ZLBaseStickertState {
             isBgImage: isBgImage,
             bgAddImageType: bgAddImageType,
             imageMask: imageMask,
+            cornerRadiusScale:cornerRadiusScale,
             imageData: imageData
         )
     }
