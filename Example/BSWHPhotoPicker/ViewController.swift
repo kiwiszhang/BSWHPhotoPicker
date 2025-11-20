@@ -119,7 +119,6 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: StickerManagerDelegate {
-    
     func replaceBackgroundWith(controller: BSWHPhotoPicker.EditImageViewController, imageRect: CGRect, completion: @escaping (UIImage?) -> Void) {
         
     }
@@ -135,7 +134,5 @@ extension ViewController: StickerManagerDelegate {
         print("image")
         completion(img)
     }
-    
-    
 }
 

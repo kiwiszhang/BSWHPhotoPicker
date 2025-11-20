@@ -636,14 +636,18 @@ public class EditableStickerView: ZLImageStickerView {
     
     @objc private func handleLeftTopButtonTap() {
         NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":self,"leftTopTap":1])
-        UIView.animate(withDuration: 0.2, animations: {
-            self.alpha = 0
-            self.leftTopButton.alpha = 0
-            self.resizeButton.alpha = 0
-            self.rightTopButton.alpha = 0
-        }) { _ in
-            self.removeFromSuperview()
-        }
+//        UIView.animate(withDuration: 0.2, animations: {
+//            self.alpha = 0
+//            self.leftTopButton.alpha = 0
+//            self.resizeButton.alpha = 0
+//            self.rightTopButton.alpha = 0
+//        }) { _ in
+//            self.removeFromSuperview()
+//        }
+        setOperation(true)
+        gesTranslationPoint = CGPoint(x: 10000, y: 10000)
+        updateTransform01()
+        setOperation(false)
     }
 
     private func enableTapSelection() {

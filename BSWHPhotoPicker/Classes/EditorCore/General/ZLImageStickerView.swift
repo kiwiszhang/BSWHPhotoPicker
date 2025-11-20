@@ -53,7 +53,7 @@ open class ZLImageStickerView: ZLBaseStickerView {
             bgAddImageType: bgAddImageType,
             imageMask: imageMask,
             cornerRadiusScale:cornerRadiusScale,
-            imageData: (imageData ?? UIImage(named: "addWhiteImage")?.pngData())!
+            imageData: (imageData ?? BSWHBundle.image(named: "addWhiteImage")!.pngData())!
         )
     }
     

@@ -538,9 +538,9 @@ public enum ZLInputTextStyle {
     fileprivate var btnImage: UIImage? {
         switch self {
         case .normal:
-            return UIImage(named: "zl_input_font")
+            return BSWHBundle.image(named: "zl_input_font")
         case .bg:
-            return UIImage(named: "zl_input_font_bg")
+            return BSWHBundle.image(named: "zl_input_font_bg")
         }
     }
 }
