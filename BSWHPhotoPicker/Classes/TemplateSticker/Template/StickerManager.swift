@@ -386,7 +386,7 @@ extension ZLImageStickerView {
                     case "square":
                         return UIBezierPath(rect: overlayRect)
                     case "rectangle":
-                        let cornerRadius = min(overlayRect.width, overlayRect.height) * stickerModel.cornerRadiusScale ?? 0.1
+                        let cornerRadius = min(overlayRect.width, overlayRect.height) * (stickerModel.cornerRadiusScale ?? 0.1) 
                         return UIBezierPath(roundedRect: overlayRect, cornerRadius: cornerRadius)
                     default:
                         return UIBezierPath(rect: overlayRect)

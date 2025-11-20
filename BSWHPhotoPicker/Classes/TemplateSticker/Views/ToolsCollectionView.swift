@@ -109,7 +109,7 @@ class ToolCollectionViewCell: UICollectionViewCell {
     }
 
     private func setupUI() {
-        containerView.backgroundColor(kkColorFromHex("F5F5F5"))
+        containerView.backgroundColor(kkColorFromHex("EBEBEB"))
         contentView.addSubview(containerView)
         containerView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()

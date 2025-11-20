@@ -121,7 +121,7 @@ class StickerToolCollectionViewCell: UICollectionViewCell {
 
         imgView.snp.makeConstraints { make in
             make.center.equalToSuperview()
-            make.size.equalTo(CGSize(width: 26.w, height: 26.w))
+            make.size.equalTo(CGSize(width: 36.w, height: 36.w))
         }
 
         titleLab.snp.makeConstraints { make in

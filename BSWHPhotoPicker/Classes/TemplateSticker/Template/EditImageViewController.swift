@@ -98,7 +98,7 @@ public class EditImageViewController: ZLEditImageViewController {
         }
         contentView.layoutIfNeeded()
         resetContainerViewFrame()
-        mainScrollView.backgroundColor = .white
+        mainScrollView.backgroundColor = kkColorFromHex("F5F5F5")
         
         //根据调整后的containerView布局里面的贴纸
         convertStickerFrames(stickers: StickerManager.shared.stickerArr, oldSize: BSWHBundle.image(named: item!.imageBg)!.size, newSize: containerView.frame.size, mode: .fit)
