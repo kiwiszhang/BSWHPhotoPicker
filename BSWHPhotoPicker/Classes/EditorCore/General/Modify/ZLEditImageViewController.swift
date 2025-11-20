@@ -1339,7 +1339,6 @@ extension ZLEditImageViewController: ZLStickerViewDelegate {
     func stickerEndOperation(_ sticker: ZLBaseStickerView, panGes: UIPanGestureRecognizer) {
         
         let endState: ZLBaseStickertState? = sticker.state
-        
         editorManager.storeAction(.sticker(oldState: preStickerState, newState: endState))
         preStickerState = nil
         
@@ -1348,7 +1347,11 @@ extension ZLEditImageViewController: ZLStickerViewDelegate {
         }
     }
     
-    func stickerEndOperation01(_ sticker: ZLBaseStickerView, panGes: UIPanGestureRecognizer) {
+    func stickerEndOperation01(_ sticker: ZLBaseStickerView, panGes: UIPanGestureRecognizer,oldState:ZLBaseStickertState,newState:ZLBaseStickertState) {
+
+        editorManager.storeAction(.sticker(oldState: oldState, newState: newState))
+        preStickerState = nil
+        
         stickersContainer.subviews.forEach { view in
             (view as? ZLStickerViewAdditional)?.gesIsEnabled = true
         }
@@ -1507,6 +1510,7 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
             if let sticker = EditableStickerView.initWithState(newState) {
                 addSticker(sticker)
                 if newState.isBgImage == true {
+//                    NotificationCenter.default.post(name: Notification.Name(rawValue: "duplicateStickerDDDDD"), object: ["state":newState,"sticker":sticker])
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "stickerImageAddTap"), object: ["sticker":sticker])
                 }
             }

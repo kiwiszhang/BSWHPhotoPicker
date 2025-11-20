@@ -36,7 +36,7 @@ protocol ZLStickerViewDelegate: NSObject {
     
     /// Called after scale or rotate or move.
     func stickerEndOperation(_ sticker: ZLBaseStickerView, panGes: UIPanGestureRecognizer)
-    func stickerEndOperation01(_ sticker: ZLBaseStickerView, panGes: UIPanGestureRecognizer)
+    func stickerEndOperation01(_ sticker: ZLBaseStickerView, panGes: UIPanGestureRecognizer,oldState:ZLBaseStickertState,newState:ZLBaseStickertState)
 
     /// Called when tap sticker.
     func stickerDidTap(_ sticker: ZLBaseStickerView)
@@ -323,7 +323,6 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
             delegate?.stickerBeginOperation(self)
         } else if !isOn, onOperation {
             onOperation = false
-//            startTimer()
             delegate?.stickerEndOperation(self, panGes: panGes)
         }
     }
@@ -336,7 +335,19 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
             delegate?.stickerBeginOperation01(self)
         } else if !isOn, onOperation {
             onOperation = false
-            delegate?.stickerEndOperation01(self, panGes: panGes)
+//            delegate?.stickerEndOperation01(self, panGes: panGes)
+        }
+    }
+    
+    public func setOperation02(_ isOn: Bool,oldState:ZLBaseStickertState,newState:ZLBaseStickertState) {
+        if isOn, !onOperation {
+            onOperation = true
+            cleanTimer()
+            borderView.layer.borderColor = UIColor.white.cgColor
+            delegate?.stickerBeginOperation01(self)
+        } else if !isOn, onOperation {
+            onOperation = false
+            delegate?.stickerEndOperation01(self, panGes: panGes,oldState:oldState,newState:newState)
         }
     }
     

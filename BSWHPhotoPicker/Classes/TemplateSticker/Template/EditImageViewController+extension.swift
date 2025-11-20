@@ -189,15 +189,19 @@ extension EditImageViewController:StickerToolsViewDelegate {
             }
         }else if indexPath.row == 5 {
             if let sticker = currentSticker {
-                UIView.animate(withDuration: 0.2) {
-                    sticker.alpha = 0
-                    sticker.leftTopButton.alpha = 0
-                    sticker.resizeButton.alpha = 0
-                    sticker.rightTopButton.alpha = 0
-                } completion: { _ in
-                    sticker.removeFromSuperview()
-                }
-                hideBottomPanel()
+//                UIView.animate(withDuration: 0.2) {
+//                    sticker.alpha = 0
+//                    sticker.leftTopButton.alpha = 0
+//                    sticker.resizeButton.alpha = 0
+//                    sticker.rightTopButton.alpha = 0
+//                } completion: { _ in
+//                    sticker.removeFromSuperview()
+//                }
+//                hideBottomPanel()
+                sticker.setOperation(true)
+                sticker.gesTranslationPoint = CGPoint(x: 10000, y: 10000)
+                sticker.updateTransform01()
+                sticker.setOperation(false)
             }
         }
     }

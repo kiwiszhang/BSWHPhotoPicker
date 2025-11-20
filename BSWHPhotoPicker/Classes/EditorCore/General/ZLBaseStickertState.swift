@@ -28,7 +28,7 @@ import UIKit
 
 public class ZLBaseStickertState: NSObject {
     let id: String
-    let image: UIImage
+    public var image: UIImage
     public var originScale: CGFloat
     public var originAngle: CGFloat
     public var originFrame: CGRect
@@ -73,6 +73,25 @@ public class ZLBaseStickertState: NSObject {
 }
 
 public class ZLImageStickerState: ZLBaseStickertState { }
+
+extension ZLBaseStickertState {
+    func copy() -> ZLBaseStickertState {
+        return ZLBaseStickertState(id: id,
+                                   image: image,
+                                   originScale: originScale,
+                                   originAngle: originAngle,
+                                   originFrame: originFrame,
+                                   gesScale: gesScale,
+                                   gesRotation: gesRotation,
+                                   totalTranslationPoint: totalTranslationPoint,
+                                   isBgImage: isBgImage,
+                                   bgAddImageType: bgAddImageType,
+                                   imageMask: imageMask,
+                                   cornerRadiusScale: cornerRadiusScale,
+                                   imageData: imageData)
+    }
+}
+
 
 public class ZLTextStickerState: ZLBaseStickertState {
     let text: String

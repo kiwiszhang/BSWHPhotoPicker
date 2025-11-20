@@ -84,7 +84,11 @@ extension RatioCollectionView: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 58.w, height: 120.h)
+        if currentIndex == 2 {
+            return CGSize(width: 68.w, height: 120.h)
+        }else{
+            return CGSize(width: 58.w, height: 120.h)
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

@@ -480,6 +480,7 @@ public class EditableStickerView: ZLImageStickerView {
             totalTranslationPoint: state.totalTranslationPoint,
             isBgImage: state.isBgImage,
             imageMask: state.imageMask,
+            imageData: state.imageData,
             cornerRadiusScale:state.cornerRadiusScale,
             showBorder: false
         )
@@ -759,10 +760,12 @@ public class EditableStickerView: ZLImageStickerView {
             let startDistance = hypot(startDx, startDy)
             let startAngle = atan2(startDy, startDx)
 
-            let scale = startDistance > 0 ? distance / startDistance : 1
-            let rotation = angle - startAngle
+            let rawScale = startDistance > 0 ? distance / startDistance : 1
+            var finalScale = originScale * rawScale
+            finalScale = min(max(finalScale, 0.3), 2)
+            gesScale = finalScale / originScale
 
-            gesScale = scale
+            let rotation = angle - startAngle
             gesRotation = rotation
             updateTransform()
         case .ended, .cancelled:
@@ -835,7 +838,12 @@ public class EditableStickerView: ZLImageStickerView {
             hiddenButton()
             isPanGes = false
         case .changed:
-            gestureScale = gesture.scale
+            let rawScale = gesture.scale
+            var finalScale = originScale * rawScale
+            finalScale = min(max(finalScale, 0.3), 2)
+            let scale = finalScale / originScale
+            
+            gestureScale = scale
             gesScale = gestureScale
             updateTransform02()
         case .ended, .cancelled:

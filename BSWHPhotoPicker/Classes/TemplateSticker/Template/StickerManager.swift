@@ -48,6 +48,9 @@ public final class StickerManager: NSObject {
             name: Notification.Name("duplicateSticker"),
             object: nil
         )
+//        NotificationCenter.default.post(name: Notification.Name(rawValue: "duplicateStickerDDDDD"), object: ["state":state])
+        NotificationCenter.default.addObserver(self, selector: #selector(addTapTest(_:)), name: Notification.Name(rawValue: "duplicateStickerDDDDD"), object: nil)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(addTap(_:)), name: Notification.Name(rawValue: "stickerImageAddTap"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(duplicateTextSticker(_:)), name: Notification.Name(rawValue: "duplicateTextSticker"), object: nil)
     }
@@ -90,6 +93,18 @@ public final class StickerManager: NSObject {
     }
 
 // MARK: - 点击事件处理
+    @objc func addTapTest(_ notification: Notification){
+        let dict = notification.object as! [String:Any]
+        let state:ZLImageStickerState = dict["state"] as! ZLImageStickerState
+        let sticker:EditableStickerView = dict["sticker"] as! EditableStickerView
+        let stateTmp:ImageStickerModel = StickerManager.shared.modelMap[sticker.id]!;
+        let selectedImage: UIImage = BSWHBundle.image(named: "1")!
+        stateTmp.image = selectedImage
+        stateTmp.imageData = selectedImage.pngData()
+        sticker.stickerModel = stateTmp
+        sticker.updateImage(selectedImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
+    }
+    
     @objc func duplicateSticker(_ notification: Notification){
         let dict = notification.object as! [String:Any]
         let stickerOld:EditableStickerView = dict["sticker"] as! EditableStickerView
@@ -280,13 +295,19 @@ extension StickerManager: PHPickerViewControllerDelegate {
                     let newImage:UIImage = image as? UIImage,
                     let stickerView = self.currentStickerView else { return }
                     DispatchQueue.main.async {
-                        
+//                        stickerView.setOperation(true)
+//                        let oldState = stickerView.state
+//                        let oldState = stickerView.state.copy()
                         if stickerView.stickerModel?.isBgImage == true {
                             if let imageData = newImage.pngData() {
                                 stickerView.stickerModel?.imageData = imageData
                             }
                             stickerView.updateImage(newImage, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image)
                         }
+//                        stickerView.imageData = newImage.pngData()
+//                        stickerView.state.imageData = newImage.pngData()!
+//                        let newState = stickerView.state
+//                        stickerView.setOperation02(false,oldState:oldState,newState:newState)
                     }
                 }
             }
@@ -386,7 +407,7 @@ extension ZLImageStickerView {
                     case "square":
                         return UIBezierPath(rect: overlayRect)
                     case "rectangle":
-                        let cornerRadius = min(overlayRect.width, overlayRect.height) * (stickerModel.cornerRadiusScale ?? 0.1) 
+                        let cornerRadius = min(overlayRect.width, overlayRect.height) * (stickerModel.cornerRadiusScale ?? 0.1)
                         return UIBezierPath(roundedRect: overlayRect, cornerRadius: cornerRadius)
                     default:
                         return UIBezierPath(rect: overlayRect)
