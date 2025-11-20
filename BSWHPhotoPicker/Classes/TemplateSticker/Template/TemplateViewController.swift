@@ -31,6 +31,7 @@ public class TemplateViewController: UIViewController, UIScrollViewDelegate {
         
         setupTabView()
         setupCollectionView()
+        tabView.delegate?.scrViewDidSelect(index: StickerManager.shared.selectedTemplateIndex)
     }
     
     private func setupTabView() {

@@ -114,6 +114,7 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
                     print("🎉 收到代理返回的图片：\(img)")
                     replaceBgImage(image: img)
                     resetContainerViewFrame()
+//                    convertStickerFrames(stickers: StickerManager.shared.stickerArr, oldSize: BSWHBundle.image(named: item!.imageBg)!.size, newSize: containerView.frame.size, mode: .fit)
                 } else {
                     print("⚠️ 没有返回图片")
                 }

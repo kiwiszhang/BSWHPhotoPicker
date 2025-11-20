@@ -74,18 +74,26 @@ class ViewController: UIViewController {
         lang01Button.addTarget(self, action: #selector(onClickLang01(_:)), for: .touchUpInside)
     }
     @objc private func onClickBack(_ sender: UIButton) {
+        presentVC()
+    }
+    @objc private func onClickLang00(_ sender: UIButton) {
+        Localize.setCurrentLanguage("en")
+        StickerManager.shared.selectedTemplateIndex = 1
+        presentVC()
+    }
+    @objc private func onClickLang01(_ sender: UIButton) {
+        Localize.setCurrentLanguage("zh")
+        StickerManager.shared.selectedTemplateIndex = 2
+        presentVC()
+    }
+    
+    func presentVC(){
         let config = genarateConfig()
         StickerManager.shared.config = config
         let vc = UINavigationController(rootViewController: TemplateViewController())
         StickerManager.shared.delegate = self
         vc.modalPresentationStyle = .overFullScreen
         self.present(vc, animated: true)
-    }
-    @objc private func onClickLang00(_ sender: UIButton) {
-        Localize.setCurrentLanguage("en")
-    }
-    @objc private func onClickLang01(_ sender: UIButton) {
-        Localize.setCurrentLanguage("zh")
     }
     
     func genarateConfig() -> TemplateConfig {
@@ -119,8 +127,11 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: StickerManagerDelegate {
+    
     func replaceBackgroundWith(controller: BSWHPhotoPicker.EditImageViewController, imageRect: CGRect, completion: @escaping (UIImage?) -> Void) {
-        
+        let img = UIImage(named: "Christmas02-bg")
+        print("image")
+        completion(img)
     }
     
     func addStickerImage(controller: BSWHPhotoPicker.EditImageViewController, completion: @escaping (UIImage?) -> Void) {
