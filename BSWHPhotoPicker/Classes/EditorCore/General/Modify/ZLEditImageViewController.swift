@@ -1311,7 +1311,7 @@ extension ZLEditImageViewController: UIScrollViewDelegate {
 
 extension ZLEditImageViewController: ZLStickerViewDelegate {
     func stickerBeginOperation(_ sticker: ZLBaseStickerView) {
-        stickersContainer.bringSubviewToFront(sticker)
+//        stickersContainer.bringSubviewToFront(sticker)
         preStickerState = sticker.state
         
         stickersContainer.subviews.forEach { view in
@@ -1323,7 +1323,7 @@ extension ZLEditImageViewController: ZLStickerViewDelegate {
     }
     
     func stickerBeginOperation01(_ sticker: ZLBaseStickerView) {
-        stickersContainer.bringSubviewToFront(sticker)
+//        stickersContainer.bringSubviewToFront(sticker)
         stickersContainer.subviews.forEach { view in
             if view !== sticker {
                 (view as? ZLStickerViewAdditional)?.resetState()
@@ -1347,10 +1347,11 @@ extension ZLEditImageViewController: ZLStickerViewDelegate {
         }
     }
     
-    func stickerEndOperation01(_ sticker: ZLBaseStickerView, panGes: UIPanGestureRecognizer,oldState:ZLBaseStickertState,newState:ZLBaseStickertState) {
+    func stickerEndOperation01(_ sticker: ZLBaseStickerView, panGes: UIPanGestureRecognizer) {
 
-        editorManager.storeAction(.sticker(oldState: oldState, newState: newState))
-        preStickerState = nil
+//        let endState: ZLBaseStickertState? = sticker.state
+//        editorManager.storeAction(.sticker(oldState: preStickerState, newState: endState))
+//        preStickerState = nil
         
         stickersContainer.subviews.forEach { view in
             (view as? ZLStickerViewAdditional)?.gesIsEnabled = true

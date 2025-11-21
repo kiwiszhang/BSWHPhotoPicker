@@ -141,6 +141,7 @@ public class EditImageViewController: ZLEditImageViewController {
             hideBottomPanel()
             return
         }
+        
         currentSticker = sticker
         if sticker.isEditingCustom {
             showBottomPanel()
@@ -148,6 +149,7 @@ public class EditImageViewController: ZLEditImageViewController {
         } else {
             hideBottomPanel()
         }
+
     }
     
     // MARK: - ratioToolView 隐藏显示处理
@@ -175,7 +177,7 @@ public class EditImageViewController: ZLEditImageViewController {
         resetContainerViewFrame()
         
         self.ratioToolViewBottomConstraint?.update(offset: 0)
-        UIView.animate(withDuration: 0.25) {
+        UIView.animate(withDuration: 0.25) { [self] in
             self.view.layoutIfNeeded()
         }
     }
@@ -205,7 +207,7 @@ public class EditImageViewController: ZLEditImageViewController {
         resetContainerViewFrame()
         
         self.ratioToolViewBottomConstraint?.update(offset: kRatioToolsViewHeight)
-        UIView.animate(withDuration: 0.25) {
+        UIView.animate(withDuration: 0.25) { [self] in
             self.view.layoutIfNeeded()
         }
     }
@@ -235,8 +237,14 @@ public class EditImageViewController: ZLEditImageViewController {
         resetContainerViewFrame()
         
         self.stickerToolsViewBottomConstraint?.update(offset: 0)
-        UIView.animate(withDuration: 0.25) {
+        UIView.animate(withDuration: 0.25) { [self] in
             self.view.layoutIfNeeded()
+            if let sticker = currentSticker {
+                sticker.setOperation01(true)
+                sticker.isEditingCustom = true
+                sticker.syncResizeButtonToOverlay()
+                sticker.setOperation01(false)
+            }
         }
     }
 
@@ -268,8 +276,14 @@ public class EditImageViewController: ZLEditImageViewController {
             sticker.isEditingCustom = false
         }
         self.stickerToolsViewBottomConstraint?.update(offset: kstickerToolsViewHeight)
-        UIView.animate(withDuration: 0.25) {
+        UIView.animate(withDuration: 0.25) { [self] in
             self.view.layoutIfNeeded()
+            if let sticker = currentSticker {
+                sticker.setOperation01(true)
+                sticker.isEditingCustom = false
+                sticker.syncResizeButtonToOverlay()
+                sticker.setOperation01(false)
+            }
         }
     }
     

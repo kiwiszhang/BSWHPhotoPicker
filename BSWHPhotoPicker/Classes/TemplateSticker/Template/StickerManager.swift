@@ -179,9 +179,7 @@ public final class StickerManager: NSObject {
         let point = sender.location(in: stickerView)
         
         if stickerView.stickerModel?.imageName == "empty" {
-            stickerView.setOperation01(true)
             stickerView.isEditingCustom = !stickerView.isEditingCustom
-            stickerView.setOperation01(false)
             NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":stickerView])
             return
         }
@@ -189,33 +187,15 @@ public final class StickerManager: NSObject {
         if overlayRect.contains(point) {
             print("👉 点击在 overlay 区域内")
             
-//            PHPhotoLibrary.requestAuthorization { status in
-//                guard status == .authorized || status == .limited else { return }
-//                DispatchQueue.main.async {
-//                    var config = PHPickerConfiguration(photoLibrary: .shared())
-//                    config.filter = .images
-//                    config.selectionLimit = 1
-//                    let picker = PHPickerViewController(configuration: config)
-//                    picker.delegate = self
-//                    self.controller?.present(picker, animated: true)
-//                }
-//            }
-            
-//            self.delegate?.stickerAddImage(self)
-            
             if let _ = stickerView.stickerModel?.imageData {
-                stickerView.setOperation01(true)
                 stickerView.isEditingCustom = !stickerView.isEditingCustom
-                stickerView.setOperation01(false)
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":stickerView])
             }else{
                 checkPhotoAuthorizationAndPresentPicker()
             }
         } else {
             print("👉 点击在 overlay 区域外")
-            stickerView.setOperation01(true)
             stickerView.isEditingCustom = !stickerView.isEditingCustom
-            stickerView.setOperation01(false)
             NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":stickerView])
         }
     }

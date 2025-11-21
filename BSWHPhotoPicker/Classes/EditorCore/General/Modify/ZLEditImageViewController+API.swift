@@ -659,11 +659,12 @@ public class EditableStickerView: ZLImageStickerView {
     }
 
     @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
-        setOperation01(true)
         isEditingCustom.toggle()
-        syncResizeButtonToOverlay()
-        setOperation01(false)
         NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":self])
+//        setOperation01(true)
+//        isEditingCustom.toggle()
+//        syncResizeButtonToOverlay()
+//        setOperation01(false)
     }
 
     public override func didMoveToSuperview() {
@@ -676,7 +677,7 @@ public class EditableStickerView: ZLImageStickerView {
         updateResizeButtonPosition()
     }
 
-    private func syncResizeButtonToOverlay() {
+    public func syncResizeButtonToOverlay() {
         guard let overlay = overlaySuperview else { return }
         if resizeButton.superview != overlay {
             resizeButton.removeFromSuperview()
