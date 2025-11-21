@@ -8,7 +8,6 @@
 
 "save" = "保存";
 "ALL" = "所有";
-"Christmas" = "圣诞节";
 "ChooseATemplate" = "选择模版";
 
 "Text" = "文字";
@@ -34,3 +33,9 @@
 "photoLibrarySettings" = "请在设置中允许访问照片的权限";
 "Cancel" = "取消";
 "GotoSettings" = "去设置";
+
+"Christmas" = "圣诞节";
+"WeddingParty" = "婚礼/派对";
+"Baby" = "宝宝";
+"Birthday" = "生日";
+

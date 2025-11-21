@@ -8,7 +8,6 @@
 
 "save" = "save";
 "ALL" = "ALL";
-"Christmas" = "Christmas";
 "ChooseATemplate" = "Choose A Template";
 
 "Text" = "Text";
@@ -36,3 +35,7 @@
 "Cancel" = "Cancel";
 "GotoSettings" = "Go to Settings";
 
+"Christmas" = "Christmas";
+"WeddingParty" = "Wedding/Party";
+"Baby" = "Baby";
+"Birthday" = "Birthday";

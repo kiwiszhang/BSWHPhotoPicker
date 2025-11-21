@@ -48,7 +48,7 @@ public struct TemplateModel {
 class ConfigDataItem {
     
     static func getTemplateTabData() -> [String] {
-        let items = [StickerManager.shared.config.all, StickerManager.shared.config.Christmas,"Baby","Birthday"]
+        let items = [StickerManager.shared.config.all, StickerManager.shared.config.Christmas,StickerManager.shared.config.Baby,StickerManager.shared.config.Birthday,StickerManager.shared.config.WeddingParty]
         return items
     }
     
@@ -74,11 +74,17 @@ class ConfigDataItem {
         let item24 = TemplateModel(imageName: "Birthday04",imageBg: "Birthday04-bg",jsonName: "Birthday04")
         let item25 = TemplateModel(imageName: "Birthday05",imageBg: "Birthday05-bg",jsonName: "Birthday05")
 
+        let item31 = TemplateModel(imageName: "Wedding01",imageBg: "wedding01-bg",jsonName: "Wedding01",isNeedFit: true)
+        let item32 = TemplateModel(imageName: "Wedding02",imageBg: "wedding02-bg",jsonName: "Wedding02")
+        let item33 = TemplateModel(imageName: "Wedding03",imageBg: "wedding03-bg",jsonName: "Wedding03")
+        let item34 = TemplateModel(imageName: "Wedding04",imageBg: "wedding04-bg",jsonName: "Wedding04")
 
-        let items = [[item00,item01,item02,item03,item04,item05,item06,item10,item11,item12,item13,item14,item15,item21,item23,item24,item25],
+        
+        let items = [[item00,item01,item02,item03,item04,item05,item06,item10,item11,item12,item13,item14,item15,item21,item23,item24,item25,item31,item32,item33,item34],
             [item00,item01,item02,item03,item04,item05,item06],
             [item10,item11,item12,item13,item14,item15],
-            [item21,item23,item24,item25]
+            [item21,item23,item24,item25],
+            [item31,item32,item33,item34]
         ]
         
         return items

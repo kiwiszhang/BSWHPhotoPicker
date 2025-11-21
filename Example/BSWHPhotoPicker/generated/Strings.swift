@@ -12,8 +12,12 @@ import Foundation
 internal enum L10n {
   /// ALL
   internal static var all: String { return L10n.tr("Localizable", "ALL", fallback: "ALL") }
+  /// Baby
+  internal static var baby: String { return L10n.tr("Localizable", "Baby", fallback: "Baby") }
   /// Background
   internal static var background: String { return L10n.tr("Localizable", "Background", fallback: "Background") }
+  /// Birthday
+  internal static var birthday: String { return L10n.tr("Localizable", "Birthday", fallback: "Birthday") }
   /// Cancel
   internal static var cancel: String { return L10n.tr("Localizable", "Cancel", fallback: "Cancel") }
   /// Choose A Template
@@ -56,6 +60,8 @@ internal enum L10n {
   internal static var stickers: String { return L10n.tr("Localizable", "Stickers", fallback: "Stickers") }
   /// Text
   internal static var text: String { return L10n.tr("Localizable", "Text", fallback: "Text") }
+  /// Wedding/Party
+  internal static var weddingParty: String { return L10n.tr("Localizable", "WeddingParty", fallback: "Wedding/Party") }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces

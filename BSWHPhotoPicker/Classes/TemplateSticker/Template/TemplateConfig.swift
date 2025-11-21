@@ -11,7 +11,6 @@ import UIKit
 public struct TemplateConfig {
     public var save = "save"
     public var all = "ALL"
-    public var Christmas = "Christmas"
     public var ChooseATemplate = "Choose A Template"
     
     public var Text = "Text"
@@ -37,6 +36,12 @@ public struct TemplateConfig {
     public var Social = "Social"
     public var Print = "Print"
     
+    public var Christmas = "Christmas"
+    public var Baby = "Baby"
+    public var Birthday = "Birthday"
+    public var WeddingParty = "Wedding/Party"
+
     public init() {
     }
 }
+

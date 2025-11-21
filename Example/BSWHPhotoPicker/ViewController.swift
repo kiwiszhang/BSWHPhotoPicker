@@ -122,6 +122,9 @@ class ViewController: UIViewController {
         config.General = L10n.general
         config.Social = L10n.social
         config.Print = L10n.print
+        config.Baby = L10n.baby
+        config.Birthday = L10n.birthday
+        config.WeddingParty = L10n.weddingParty
         return config
     }
     
