@@ -261,6 +261,8 @@ public enum ImageAddType:String,Codable {
     case ellipse = "ellipse"
     /// 异形
     case IrregularShape = "IrregularShape"
+    /// 异形带蒙版
+    case IrregularMask = "IrregularMask"
 }
 
 // MARK: - 模型定义

@@ -78,13 +78,14 @@ class ConfigDataItem {
         let item32 = TemplateModel(imageName: "Wedding02",imageBg: "wedding02-bg",jsonName: "Wedding02")
         let item33 = TemplateModel(imageName: "Wedding03",imageBg: "wedding03-bg",jsonName: "Wedding03")
         let item34 = TemplateModel(imageName: "Wedding04",imageBg: "wedding04-bg",jsonName: "Wedding04")
+        let item35 = TemplateModel(imageName: "Wedding05",imageBg: "wedding05-bg",jsonName: "Wedding05")
 
         
         let items = [[item00,item01,item02,item03,item04,item05,item06,item10,item11,item12,item13,item14,item15,item21,item23,item24,item25,item31,item32,item33,item34],
             [item00,item01,item02,item03,item04,item05,item06],
             [item10,item11,item12,item13,item14,item15],
             [item21,item23,item24,item25],
-            [item31,item32,item33,item34]
+            [item31,item32,item33,item34,item35]
         ]
         
         return items

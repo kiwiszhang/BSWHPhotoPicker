@@ -360,6 +360,14 @@ extension ZLImageStickerView {
                 
                 finalImage = overlayImageWithFrame(newImage, baseImage: base, frameImage: frame)
             }
+        }else if imageTypeRaw == "IrregularMask" {
+            if !stickerModel.imageName.isEmpty,
+               !stickerModel.imageMask!.isEmpty,
+               let base = BSWHBundle.image(named: stickerModel.imageName),
+               let frame = BSWHBundle.image(named: stickerModel.imageMask!) {
+                
+                finalImage = IrregularMaskOverlayImageWithFrame(newImage, baseImage: base, frameImage: frame)
+            }
         } else {
             // MARK: - 常规形状
             guard let base = baseImage else {
@@ -495,6 +503,74 @@ extension ZLImageStickerView {
             frameImage.draw(in: CGRect(origin: .zero, size: size))
         }
     }
+    
+    func IrregularMaskOverlayImageWithFrame(_ newImage: UIImage,
+                                   baseImage: UIImage,
+                                   frameImage: UIImage) -> UIImage {
+
+            let size = frameImage.size
+            let inset: CGFloat = 20
+
+            return UIGraphicsImageRenderer(size: size).image { ctx in
+                // 计算 baseImage 的绘制区域（Fit 模式）
+                let drawRect = CGRect(
+                    x: inset,
+                    y: inset,
+                    width: size.width - inset * 2,
+                    height: size.height - inset * 2
+                )
+
+                let bw = baseImage.size.width
+                let bh = baseImage.size.height
+                let scaleFit = min(drawRect.width / bw, drawRect.height / bh)
+                let baseW = bw * scaleFit
+                let baseH = bh * scaleFit
+                let baseRect = CGRect(
+                    x: drawRect.midX - baseW / 2,
+                    y: drawRect.midY - baseH / 2,
+                    width: baseW,
+                    height: baseH
+                )
+
+                // 1️⃣ 先绘制 baseImage
+                baseImage.draw(in: baseRect)
+
+                // 2️⃣ 使用 baseImage 的 alpha 作为裁剪区域
+                if let cgBase = baseImage.cgImage {
+                    ctx.cgContext.saveGState()
+
+                    // 将 context 移动到 baseRect 的位置
+                    ctx.cgContext.translateBy(x: baseRect.origin.x, y: baseRect.origin.y)
+                    ctx.cgContext.scaleBy(x: baseRect.width / CGFloat(cgBase.width),
+                                          y: baseRect.height / CGFloat(cgBase.height))
+
+                    // 使用 alpha 通道裁剪：非透明部分可绘制，透明部分不可绘制
+                    ctx.cgContext.clip(to: CGRect(x: 0, y: 0,
+                                                  width: cgBase.width,
+                                                  height: cgBase.height),
+                                       mask: cgBase)
+
+                    // 3️⃣ 绘制 newImage（Fill 模式，铺满整个 baseImage 区域）
+                    let nw = newImage.size.width
+                    let nh = newImage.size.height
+                    let scaleFill = max(CGFloat(cgBase.width) / nw, CGFloat(cgBase.height) / nh)
+                    let newW = nw * scaleFill
+                    let newH = nh * scaleFill
+                    let newRect = CGRect(
+                        x: 0 + (CGFloat(cgBase.width) - newW) / 2,
+                        y: 0 + (CGFloat(cgBase.height) - newH) / 2,
+                        width: newW,
+                        height: newH
+                    )
+                    newImage.draw(in: newRect)
+
+                    ctx.cgContext.restoreGState()
+                }
+
+                // 4️⃣ 最后绘制 frameImage
+                frameImage.draw(in: CGRect(origin: .zero, size: size))
+            }
+        }
 }
 
 
