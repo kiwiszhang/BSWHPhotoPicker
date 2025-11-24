@@ -260,30 +260,23 @@ extension StickerManager: PHPickerViewControllerDelegate {
                     guard let self = self,
                     let newImage:UIImage = image as? UIImage,
                     let stickerView = self.currentStickerView else { return }
-                    DispatchQueue.main.async {
-                        
-                        stickerView.setOperation(true)
-                        let oldState = stickerView.state
-                        if stickerView.stickerModel?.isBgImage == true {
-                            if let imageData = newImage.pngData() {
-                                stickerView.stickerModel?.imageData = imageData
+                    
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        if let imageData = newImage.pngData() {
+                            DispatchQueue.main.async {
+                                stickerView.setOperation(true)
+                                let oldState = stickerView.state
+                                if stickerView.stickerModel?.isBgImage == true {
+                                    stickerView.stickerModel?.imageData = imageData
+                                    stickerView.updateImage(newImage, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image)
+                                    
+                                    stickerView.imageData = imageData
+                                    stickerView.state.imageData = imageData
+                                    let newState = stickerView.state
+                                    stickerView.setOperation02(false,oldState:oldState,newState:newState)
+                                }
                             }
-                            stickerView.updateImage(newImage, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image)
                         }
-                        
-                        let start = CFAbsoluteTimeGetCurrent()
-
-                        stickerView.imageData = newImage.pngData()
-                        stickerView.state.imageData = newImage.pngData()!
-                        
-                        let end = CFAbsoluteTimeGetCurrent()
-                        print("⏱ [CFAbsoluteTimeGetCurrent] 耗时：\((end - start) * 1000) ms")
-                        
-                        let newState = stickerView.state
-                        stickerView.setOperation02(false,oldState:oldState,newState:newState)
-                        
-                        
-
                     }
                 }
             }
@@ -360,8 +353,15 @@ extension ZLImageStickerView {
                !stickerModel.imageMask!.isEmpty,
                let base = BSWHBundle.image(named: stickerModel.imageName),
                let frame = BSWHBundle.image(named: stickerModel.imageMask!) {
-                
-                finalImage = IrregularMaskOverlayImageWithFrame(newImage, baseImage: base, frameImage: frame)
+                var inset = 20.0
+                var xset = 0.0
+                var yset = 0.0
+                if stickerModel.imageMask == "baby04-sticker-bg00" {
+                    inset = 25
+                    xset = 0.0
+                    yset = -5.0
+                }
+                finalImage = IrregularMaskOverlayImageWithFrame(newImage, baseImage: base, frameImage: frame,inset: inset,xSet: xset,ySet: yset)
             }
         } else {
             // MARK: - 常规形状
@@ -501,16 +501,14 @@ extension ZLImageStickerView {
     
     func IrregularMaskOverlayImageWithFrame(_ newImage: UIImage,
                                    baseImage: UIImage,
-                                   frameImage: UIImage) -> UIImage {
+                                            frameImage: UIImage,inset:CGFloat = 20,xSet:CGFloat = 0,ySet:CGFloat = 0) -> UIImage {
 
             let size = frameImage.size
-            let inset: CGFloat = 20
-
             return UIGraphicsImageRenderer(size: size).image { ctx in
                 // 计算 baseImage 的绘制区域（Fit 模式）
                 let drawRect = CGRect(
-                    x: inset,
-                    y: inset,
+                    x: inset + xSet,
+                    y: inset + ySet,
                     width: size.width - inset * 2,
                     height: size.height - inset * 2
                 )

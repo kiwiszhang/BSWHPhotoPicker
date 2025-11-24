@@ -12,8 +12,8 @@
     "overlayRectY": 0.1,
     "overlayRectWidth": 0.8,
     "overlayRectHeight": 0.8,
-    "imageType": "IrregularShape",
-    "imageMask": "baby04-sticker-bg02",
+    "imageType": "IrregularMask",
+    "imageMask": "baby04-sticker-bg00",
     "isBgImage": true,
     "bgAddImageType":"addWhiteImage"
   },{
