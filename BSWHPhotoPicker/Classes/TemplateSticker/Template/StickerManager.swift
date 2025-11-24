@@ -49,9 +49,6 @@ public final class StickerManager: NSObject {
             name: Notification.Name("duplicateSticker"),
             object: nil
         )
-//        NotificationCenter.default.post(name: Notification.Name(rawValue: "duplicateStickerDDDDD"), object: ["state":state])
-        NotificationCenter.default.addObserver(self, selector: #selector(addTapTest(_:)), name: Notification.Name(rawValue: "duplicateStickerDDDDD"), object: nil)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(addTap(_:)), name: Notification.Name(rawValue: "stickerImageAddTap"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(duplicateTextSticker(_:)), name: Notification.Name(rawValue: "duplicateTextSticker"), object: nil)
     }
@@ -94,18 +91,6 @@ public final class StickerManager: NSObject {
     }
 
 // MARK: - 点击事件处理
-    @objc func addTapTest(_ notification: Notification){
-        let dict = notification.object as! [String:Any]
-        let state:ZLImageStickerState = dict["state"] as! ZLImageStickerState
-        let sticker:EditableStickerView = dict["sticker"] as! EditableStickerView
-        let stateTmp:ImageStickerModel = StickerManager.shared.modelMap[sticker.id]!;
-        let selectedImage: UIImage = BSWHBundle.image(named: "1")!
-        stateTmp.image = selectedImage
-        stateTmp.imageData = selectedImage.pngData()
-        sticker.stickerModel = stateTmp
-        sticker.updateImage(selectedImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
-    }
-    
     @objc func duplicateSticker(_ notification: Notification){
         let dict = notification.object as! [String:Any]
         let stickerOld:EditableStickerView = dict["sticker"] as! EditableStickerView
@@ -160,7 +145,8 @@ public final class StickerManager: NSObject {
         let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
         sticker.addGestureRecognizer(tap)
         sticker.isUserInteractionEnabled = true
-        let selectedImage: UIImage = sticker.stickerModel?.stickerImage ?? BSWHBundle.image(named: (sticker.stickerModel?.bgAddImageType)!)!
+//        let selectedImage: UIImage = sticker.stickerModel?.stickerImage ?? BSWHBundle.image(named: (sticker.stickerModel?.bgAddImageType)!)!
+        let selectedImage: UIImage = UIImage(data: sticker.state.imageData)!
         sticker.updateImage(selectedImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
     }
     
@@ -177,7 +163,6 @@ public final class StickerManager: NSObject {
         )
         
         let point = sender.location(in: stickerView)
-        
         if stickerView.stickerModel?.imageName == "empty" {
             stickerView.isEditingCustom = !stickerView.isEditingCustom
             NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":stickerView])
@@ -187,7 +172,7 @@ public final class StickerManager: NSObject {
         if overlayRect.contains(point) {
             print("👉 点击在 overlay 区域内")
             
-            if let _ = stickerView.stickerModel?.imageData {
+            if stickerView.state.imageData != BSWHBundle.image(named: stickerView.stickerModel!.bgAddImageType!)?.pngData(){
                 stickerView.isEditingCustom = !stickerView.isEditingCustom
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":stickerView])
             }else{
@@ -276,19 +261,29 @@ extension StickerManager: PHPickerViewControllerDelegate {
                     let newImage:UIImage = image as? UIImage,
                     let stickerView = self.currentStickerView else { return }
                     DispatchQueue.main.async {
-//                        stickerView.setOperation(true)
-//                        let oldState = stickerView.state
-//                        let oldState = stickerView.state.copy()
+                        
+                        stickerView.setOperation(true)
+                        let oldState = stickerView.state
                         if stickerView.stickerModel?.isBgImage == true {
                             if let imageData = newImage.pngData() {
                                 stickerView.stickerModel?.imageData = imageData
                             }
                             stickerView.updateImage(newImage, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image)
                         }
-//                        stickerView.imageData = newImage.pngData()
-//                        stickerView.state.imageData = newImage.pngData()!
-//                        let newState = stickerView.state
-//                        stickerView.setOperation02(false,oldState:oldState,newState:newState)
+                        
+                        let start = CFAbsoluteTimeGetCurrent()
+
+                        stickerView.imageData = newImage.pngData()
+                        stickerView.state.imageData = newImage.pngData()!
+                        
+                        let end = CFAbsoluteTimeGetCurrent()
+                        print("⏱ [CFAbsoluteTimeGetCurrent] 耗时：\((end - start) * 1000) ms")
+                        
+                        let newState = stickerView.state
+                        stickerView.setOperation02(false,oldState:oldState,newState:newState)
+                        
+                        
+
                     }
                 }
             }

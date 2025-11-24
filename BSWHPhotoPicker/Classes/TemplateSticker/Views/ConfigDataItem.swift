@@ -10,13 +10,10 @@ import UIKit
 class ImageHeightCache {
     static let shared = ImageHeightCache()
     private init() {}
-
     private var cache: [String: [CGFloat: CGFloat]] = [:]
-
     func get(imageName: String, width: CGFloat) -> CGFloat? {
         return cache[imageName]?[width]
     }
-
     func set(imageName: String, width: CGFloat, height: CGFloat) {
         if cache[imageName] == nil {
             cache[imageName] = [:]
@@ -81,7 +78,7 @@ class ConfigDataItem {
         let item35 = TemplateModel(imageName: "Wedding05",imageBg: "wedding05-bg",jsonName: "Wedding05")
 
         
-        let items = [[item00,item01,item02,item03,item04,item05,item06,item10,item11,item12,item13,item14,item15,item21,item23,item24,item25,item31,item32,item33,item34],
+        let items = [[item00,item01,item02,item03,item04,item05,item06,item10,item11,item12,item13,item14,item15,item21,item23,item24,item25,item31,item32,item33,item34,item35],
             [item00,item01,item02,item03,item04,item05,item06],
             [item10,item11,item12,item13,item14,item15],
             [item21,item23,item24,item25],
