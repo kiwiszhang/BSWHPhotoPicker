@@ -61,3 +61,31 @@ open class BSWHBundle {
 //    print(fileURL)
 //}
 
+public class BSWHPhotoPickerLocalization {
+
+    public static let shared = BSWHPhotoPickerLocalization()
+    public var currentLanguage: String = Locale.current.identifier {
+        didSet {
+            bundle = bundleForLanguage(currentLanguage)
+        }
+    }
+
+    private var bundle: Bundle?
+
+    private init() {
+        bundle = bundleForLanguage(currentLanguage)
+    }
+
+    private func bundleForLanguage(_ lang: String) -> Bundle? {
+        let podBundle = BSWHBundle.bundle()
+        guard let path = podBundle.path(forResource: lang, ofType: "lproj"),
+              let langBundle = Bundle(path: path) else {
+            return podBundle
+        }
+        return langBundle
+    }
+
+    public func localized(_ key: String) -> String {
+        return bundle?.localizedString(forKey: key, value: nil, table: nil) ?? key
+    }
+}

@@ -45,7 +45,11 @@ public struct TemplateModel {
 class ConfigDataItem {
     
     static func getTemplateTabData() -> [String] {
-        let items = [StickerManager.shared.config.all, StickerManager.shared.config.Christmas,StickerManager.shared.config.Baby,StickerManager.shared.config.Birthday,StickerManager.shared.config.WeddingParty]
+        let items = [BSWHPhotoPickerLocalization.shared.localized("ALL"),
+                     BSWHPhotoPickerLocalization.shared.localized("Christmas"),
+                     BSWHPhotoPickerLocalization.shared.localized("Baby"),
+                     BSWHPhotoPickerLocalization.shared.localized("Birthday"),
+                     BSWHPhotoPickerLocalization.shared.localized("WeddingParty")]
         return items
     }
     
@@ -90,22 +94,22 @@ class ConfigDataItem {
     
     
     static func getTemplateToolsData() -> [ToolsModel] {
-        let item00 = ToolsModel(text: StickerManager.shared.config.Text,imageName: "template-text")
-        let item01 = ToolsModel(text: StickerManager.shared.config.Background,imageName: "template-Background")
-        let item02 = ToolsModel(text: StickerManager.shared.config.Photos,imageName: "template-photos")
-        let item03 = ToolsModel(text: StickerManager.shared.config.Stickers,imageName: "template-stickers")
-        let item04 = ToolsModel(text: StickerManager.shared.config.Ratio,imageName: "template-ratio")
+        let item00 = ToolsModel(text: BSWHPhotoPickerLocalization.shared.localized("Text"),imageName: "template-text")
+        let item01 = ToolsModel(text: BSWHPhotoPickerLocalization.shared.localized("Background"),imageName: "template-Background")
+        let item02 = ToolsModel(text: BSWHPhotoPickerLocalization.shared.localized("Photos"),imageName: "template-photos")
+        let item03 = ToolsModel(text: BSWHPhotoPickerLocalization.shared.localized("Stickers"),imageName: "template-stickers")
+        let item04 = ToolsModel(text: BSWHPhotoPickerLocalization.shared.localized("Ratio"),imageName: "template-ratio")
         let items = [item00,item01,item02,item03,item04]
         return items
     }
     
     static func getStickerToolsData() -> [ToolsModel] {
-        let item00 = ToolsModel(text: StickerManager.shared.config.Replace,imageName: "template-replace")
-        let item01 = ToolsModel(text: StickerManager.shared.config.Duplicate,imageName: "template-duplicate")
-        let item02 = ToolsModel(text: StickerManager.shared.config.Crop,imageName: "template-crop")
-        let item03 = ToolsModel(text: StickerManager.shared.config.FlipH,imageName: "template-FlipH")
-        let item04 = ToolsModel(text: StickerManager.shared.config.FlipV,imageName: "template-FlipV")
-        let item05 = ToolsModel(text: StickerManager.shared.config.Remove,imageName: "template-remove")
+        let item00 = ToolsModel(text: BSWHPhotoPickerLocalization.shared.localized("Replace"),imageName: "template-replace")
+        let item01 = ToolsModel(text: BSWHPhotoPickerLocalization.shared.localized("Duplicate"),imageName: "template-duplicate")
+        let item02 = ToolsModel(text: BSWHPhotoPickerLocalization.shared.localized("Crop"),imageName: "template-crop")
+        let item03 = ToolsModel(text: BSWHPhotoPickerLocalization.shared.localized("FlipH"),imageName: "template-FlipH")
+        let item04 = ToolsModel(text: BSWHPhotoPickerLocalization.shared.localized("FlipV"),imageName: "template-FlipV")
+        let item05 = ToolsModel(text: BSWHPhotoPickerLocalization.shared.localized("Remove"),imageName: "template-remove")
         let items = [item00,item01,item02,item03,item04,item05]
         return items
     }

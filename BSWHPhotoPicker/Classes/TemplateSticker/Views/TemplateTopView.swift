@@ -27,7 +27,7 @@ class TemplateTopView: SuperView {
     lazy var rebackImg = UIImageView().image(BSWHBundle.image(named: "template-reBack")).enable(true).onTap { [self] in
         delegate?.reBackTemplate(self)
     }
-    private lazy var saveBtn = UILabel().text(StickerManager.shared.config.save).backgroundColor(kkColorFromHex("A216FF")).color(.white).centerAligned().hnFont(size: 14.h, weight: .boldBase).cornerRadius(8.h).onTap { [self] in
+    private lazy var saveBtn = UILabel().text(BSWHPhotoPickerLocalization.shared.localized("save")).backgroundColor(kkColorFromHex("A216FF")).color(.white).centerAligned().hnFont(size: 14.h, weight: .boldBase).cornerRadius(8.h).onTap { [self] in
         delegate?.saveTemplate(self)
     }
     override func setUpUI() {

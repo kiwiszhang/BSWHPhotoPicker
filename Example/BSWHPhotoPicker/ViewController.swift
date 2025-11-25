@@ -78,56 +78,22 @@ class ViewController: UIViewController {
         presentVC()
     }
     @objc private func onClickLang00(_ sender: UIButton) {
-        Localize.setCurrentLanguage("en")
+        BSWHPhotoPickerLocalization.shared.currentLanguage = "en"
         StickerManager.shared.selectedTemplateIndex = 1
         presentVC()
     }
     @objc private func onClickLang01(_ sender: UIButton) {
-        Localize.setCurrentLanguage("zh")
+        BSWHPhotoPickerLocalization.shared.currentLanguage = "zh"
         StickerManager.shared.selectedTemplateIndex = 2
         presentVC()
     }
     
     func presentVC(){
-        let config = genarateConfig()
-        StickerManager.shared.config = config
         let vc = UINavigationController(rootViewController: TemplateViewController())
         StickerManager.shared.delegate = self
         vc.modalPresentationStyle = .overFullScreen
         self.present(vc, animated: true)
     }
-    
-    func genarateConfig() -> TemplateConfig {
-        var config = TemplateConfig()
-        config.save = L10n.save
-        config.all = L10n.all
-        config.Christmas = L10n.christmas
-        config.ChooseATemplate = L10n.chooseATemplate
-        config.Text = L10n.text
-        config.Background = L10n.background
-        config.Photos = L10n.photos
-        config.Stickers = L10n.stickers
-        config.Ratio = L10n.ratio
-        config.Replace = L10n.replace
-        config.Duplicate = L10n.duplicate
-        config.Crop = L10n.crop
-        config.FlipH = L10n.flipH
-        config.FlipV = L10n.flipV
-        config.Remove = L10n.remove
-        config.NoPermission = L10n.noPermission
-        config.photoLibrarySettings = L10n.photoLibrarySettings
-        config.Cancel = L10n.cancel
-        config.GotoSettings = L10n.gotoSettings
-        config.Done = L10n.done
-        config.General = L10n.general
-        config.Social = L10n.social
-        config.Print = L10n.print
-        config.Baby = L10n.baby
-        config.Birthday = L10n.birthday
-        config.WeddingParty = L10n.weddingParty
-        return config
-    }
-    
 }
 
 extension ViewController: StickerManagerDelegate {

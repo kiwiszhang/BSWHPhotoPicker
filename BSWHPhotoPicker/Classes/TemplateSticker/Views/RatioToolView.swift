@@ -22,7 +22,9 @@ class RatioToolView:UIView {
     }
     private lazy var listView = RatioScrViewList()
     lazy var ratioCollectionView = RatioCollectionView().backgroundColor(.white)
-    private let titles = [StickerManager.shared.config.General, StickerManager.shared.config.Social,StickerManager.shared.config.Print]
+    private let titles = [BSWHPhotoPickerLocalization.shared.localized("General"),
+                          BSWHPhotoPickerLocalization.shared.localized("Social"),
+                          BSWHPhotoPickerLocalization.shared.localized("Print")]
     var items:[[RatioToolsModel]] = []
     override init(frame: CGRect) {
         super.init(frame: frame)

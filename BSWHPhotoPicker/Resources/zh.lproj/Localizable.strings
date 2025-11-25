@@ -1,0 +1,40 @@
+/* 
+  Localizable.strings
+  Pods
+
+  Created by 笔尚文化 on 2025/11/25.
+  
+*/
+
+"save" = "保存";
+"ALL" = "所有";
+"ChooseATemplate" = "选择模版";
+
+"Text" = "文字";
+"Background" = "背景";
+"Photos" = "照片";
+"Stickers" = "贴纸";
+"Ratio" = "比例";
+
+"Replace" = "替换";
+"Duplicate" = "复制";
+"FlipH" = "水平翻转";
+"Crop" = "裁剪";
+"FlipV" = "垂直翻转";
+"Remove" = "移除";
+
+"Done" = "完成";
+"General" = "常用";
+"Social" = "社交";
+"Print" = "打印";
+
+
+"NoPermission" = "没有权限";
+"photoLibrarySettings" = "请在设置中允许访问照片的权限";
+"Cancel" = "取消";
+"GotoSettings" = "去设置";
+
+"Christmas" = "圣诞节";
+"WeddingParty" = "婚礼/派对";
+"Baby" = "宝宝";
+"Birthday" = "生日";

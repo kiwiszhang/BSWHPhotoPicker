@@ -69,7 +69,7 @@ public class TemplateViewController: UIViewController, UIScrollViewDelegate {
             make.left.equalToSuperview().offset(36.w)
             make.right.equalToSuperview().offset(-36.w)
         }
-        titleLab.text = StickerManager.shared.config.ChooseATemplate
+        titleLab.text = BSWHPhotoPickerLocalization.shared.localized("ChooseATemplate")
         
     }
     

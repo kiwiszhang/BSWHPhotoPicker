@@ -37,7 +37,7 @@ Pod::Spec.new do |s|
   s.resource_bundles = {
     'BSWHPhotoPicker' => [
       'BSWHPhotoPicker/Assets/StickerAssets.xcassets',
-      'BSWHPhotoPicker/Resources/**/*.json'
+      'BSWHPhotoPicker/Resources/**/*'
     ]
   }
 

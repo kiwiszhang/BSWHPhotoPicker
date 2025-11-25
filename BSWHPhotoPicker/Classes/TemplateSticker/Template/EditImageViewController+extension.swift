@@ -65,12 +65,12 @@ extension EditImageViewController:TemplateTopViewDelegate {
 
     func showAlbumPermissionAlert() {
         let alert = UIAlertController(
-            title: StickerManager.shared.config.NoPermission,
-            message: StickerManager.shared.config.photoLibrarySettings,
+            title: BSWHPhotoPickerLocalization.shared.localized("NoPermission"),
+            message: BSWHPhotoPickerLocalization.shared.localized("photoLibrarySettings"),
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: StickerManager.shared.config.Cancel, style: .cancel))
-        alert.addAction(UIAlertAction(title: StickerManager.shared.config.GotoSettings, style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: BSWHPhotoPickerLocalization.shared.localized("Cancel"), style: .cancel))
+        alert.addAction(UIAlertAction(title: BSWHPhotoPickerLocalization.shared.localized("GotoSettings"), style: .default, handler: { _ in
             if let url = URL(string: UIApplication.openSettingsURLString) {
                 UIApplication.shared.open(url)
             }

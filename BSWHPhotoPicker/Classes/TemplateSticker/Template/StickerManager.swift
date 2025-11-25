@@ -33,7 +33,7 @@ public protocol StickerManagerDelegate: AnyObject {
 // MARK: - StickerManager
 public final class StickerManager: NSObject {
     weak var controller: EditImageViewController?
-    public var config = TemplateConfig()
+//    public var config = TemplateConfig()
     private weak var currentStickerView: ZLImageStickerView?
     var modelMap: [String: ImageStickerModel] = [:]
     var stickerArr: [EditableStickerView] = []
@@ -391,7 +391,8 @@ extension ZLImageStickerView {
                     case "square":
                         return UIBezierPath(rect: overlayRect)
                     case "rectangle":
-                        let cornerRadius = min(overlayRect.width, overlayRect.height) * (stickerModel.cornerRadiusScale ?? 0.1)
+//                        let cornerRadius = min(overlayRect.width, overlayRect.height) * (stickerModel.cornerRadiusScale ?? 0.1)
+                        let cornerRadius = 16.0.h
                         return UIBezierPath(roundedRect: overlayRect, cornerRadius: cornerRadius)
                     default:
                         return UIBezierPath(rect: overlayRect)
@@ -570,13 +571,13 @@ extension ZLImageStickerView {
 extension StickerManager {
     func showPhotoPermissionAlert() {
         let alert = UIAlertController(
-            title: StickerManager.shared.config.NoPermission,
-            message: StickerManager.shared.config.photoLibrarySettings,
+            title: BSWHPhotoPickerLocalization.shared.localized("NoPermission"),
+            message: BSWHPhotoPickerLocalization.shared.localized("photoLibrarySettings"),
             preferredStyle: .alert
         )
 
-        alert.addAction(UIAlertAction(title: StickerManager.shared.config.Cancel, style: .cancel))
-        alert.addAction(UIAlertAction(title: StickerManager.shared.config.GotoSettings, style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title:BSWHPhotoPickerLocalization.shared.localized("Cancel"), style: .cancel))
+        alert.addAction(UIAlertAction(title: BSWHPhotoPickerLocalization.shared.localized("GotoSettings"), style: .default, handler: { _ in
             if let url = URL(string: UIApplication.openSettingsURLString) {
                 UIApplication.shared.open(url)
             }
