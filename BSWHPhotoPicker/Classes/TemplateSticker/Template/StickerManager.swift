@@ -33,7 +33,6 @@ public protocol StickerManagerDelegate: AnyObject {
 // MARK: - StickerManager
 public final class StickerManager: NSObject {
     weak var controller: EditImageViewController?
-//    public var config = TemplateConfig()
     private weak var currentStickerView: ZLImageStickerView?
     var modelMap: [String: ImageStickerModel] = [:]
     var stickerArr: [EditableStickerView] = []
@@ -185,33 +184,6 @@ public final class StickerManager: NSObject {
         }
     }
 }
-///// 选择照片
-//extension StickerManager: PHPickerViewControllerDelegate {
-//    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-//        picker.dismiss(animated: true)
-//
-//        guard let result = results.first else { return }
-//        let provider = result.itemProvider
-//
-//        if provider.canLoadObject(ofClass: UIImage.self) {
-//            provider.loadObject(ofClass: UIImage.self) { [weak self] image, _ in
-//                guard let self = self,
-//                let newImage:UIImage = image as? UIImage,
-//                let stickerView = self.currentStickerView else { return }
-//                DispatchQueue.main.async {
-//                    
-//                    if stickerView.stickerModel?.isBgImage == true {
-//                        if let imageData = newImage.pngData() {
-//                            stickerView.stickerModel?.imageData = imageData
-//                        }
-//                        stickerView.updateImage(newImage, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image)
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    
-//}
 
 extension StickerManager: PHPickerViewControllerDelegate {
 
@@ -392,7 +364,10 @@ extension ZLImageStickerView {
                         return UIBezierPath(rect: overlayRect)
                     case "rectangle":
 //                        let cornerRadius = min(overlayRect.width, overlayRect.height) * (stickerModel.cornerRadiusScale ?? 0.1)
-                        let cornerRadius = 16.0.h
+                        var cornerRadius = 16.0.h
+                        if stickerModel.imageName == "Travel-sticker-bg03" {
+                            cornerRadius = 61.0.h
+                        }
                         return UIBezierPath(roundedRect: overlayRect, cornerRadius: cornerRadius)
                     default:
                         return UIBezierPath(rect: overlayRect)

@@ -74,7 +74,7 @@ class ViewController: UIViewController {
         lang01Button.addTarget(self, action: #selector(onClickLang01(_:)), for: .touchUpInside)
     }
     @objc private func onClickBack(_ sender: UIButton) {
-        StickerManager.shared.selectedTemplateIndex = 0
+        StickerManager.shared.selectedTemplateIndex = 5
         presentVC()
     }
     @objc private func onClickLang00(_ sender: UIButton) {

@@ -84,7 +84,7 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
     func cellDidSelectItemAt(_ sender: ToolsCollectionView, indexPath: IndexPath) {
         if indexPath.row == 0 {
             self.switchOperation(type: .textSticker)
-            self.addTextSticker01(font: UIFont.systemFont(ofSize: 20)) { result in
+            self.addTextSticker01(font: UIFont.systemFont(ofSize: 25)) { result in
                 if let result = result {
                     let sticker = result.sticker
                     sticker.frame = result.frame

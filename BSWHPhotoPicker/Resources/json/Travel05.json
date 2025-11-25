@@ -1,0 +1,38 @@
+[{
+    "imageName": "Travel-sticker-bg04",
+    "originScale": 1,
+    "originAngle": 0,
+    "originFrameX": 18,
+    "originFrameY": 23,
+    "originFrameWidth": 339,
+    "originFrameHeight": 545,
+    "gesScale": 1,
+    "gesRotation": 0,
+    "isBgImage": true,
+    "overlayRectX": 0,
+    "overlayRectY": 0,
+    "overlayRectWidth": 1,
+    "overlayRectHeight": 1,
+    "imageType": "rectangle",
+    "bgAddImageType":"addWhiteImage"
+},{
+    "imageName": "empty",
+    "originScale": 1,
+    "originAngle": 0,
+    "originFrameX": 188,
+    "originFrameY": 493,
+    "originFrameWidth": 156,
+    "originFrameHeight": 64,
+    "gesScale": 1,
+    "gesRotation": 0,
+    "isBgImage": true,
+    "overlayRectX": 0,
+    "overlayRectY": 0,
+    "overlayRectWidth": 1,
+    "overlayRectHeight": 1,
+    "imageType": "square",
+    "bgAddImageType":"Travel04-sticker00"
+}
+]
+
+

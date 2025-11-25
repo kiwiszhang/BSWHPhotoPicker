@@ -1,0 +1,21 @@
+[{
+    "imageName": "Travel-sticker-bg03",
+    "originScale": 1,
+    "originAngle": 0,
+    "originFrameX": 87,
+    "originFrameY": 148,
+    "originFrameWidth": 202,
+    "originFrameHeight": 313,
+    "gesScale": 1,
+    "gesRotation": 0,
+    "isBgImage": true,
+    "overlayRectX": 0,
+    "overlayRectY": 0,
+    "overlayRectWidth": 1,
+    "overlayRectHeight": 1,
+    "imageType": "rectangle",
+    "bgAddImageType":"addWhiteImage"
+}
+]
+
+

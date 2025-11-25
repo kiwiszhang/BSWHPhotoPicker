@@ -49,7 +49,8 @@ class ConfigDataItem {
                      BSWHPhotoPickerLocalization.shared.localized("Christmas"),
                      BSWHPhotoPickerLocalization.shared.localized("Baby"),
                      BSWHPhotoPickerLocalization.shared.localized("Birthday"),
-                     BSWHPhotoPickerLocalization.shared.localized("WeddingParty")]
+                     BSWHPhotoPickerLocalization.shared.localized("WeddingParty"),
+                     BSWHPhotoPickerLocalization.shared.localized("Travel")]
         return items
     }
     
@@ -81,12 +82,19 @@ class ConfigDataItem {
         let item34 = TemplateModel(imageName: "Wedding04",imageBg: "wedding04-bg",jsonName: "Wedding04")
         let item35 = TemplateModel(imageName: "Wedding05",imageBg: "wedding05-bg",jsonName: "Wedding05")
 
-        
+        let item41 = TemplateModel(imageName: "Travel01",imageBg: "Travel01-bg",jsonName: "Travel01",isNeedFit: true)
+        let item42 = TemplateModel(imageName: "Travel02",imageBg: "Travel02-bg",jsonName: "Travel02")
+        let item43 = TemplateModel(imageName: "Travel03",imageBg: "Travel03-bg",jsonName: "Travel03")
+        let item44 = TemplateModel(imageName: "Travel04",imageBg: "Travel04-bg",jsonName: "Travel04")
+        let item45 = TemplateModel(imageName: "Travel05",imageBg: "Travel05-bg",jsonName: "Travel05")
+        let item46 = TemplateModel(imageName: "Travel06",imageBg: "Travel06-bg",jsonName: "Travel06")
+
         let items = [[item00,item01,item02,item03,item04,item05,item06,item10,item11,item12,item13,item14,item15,item21,item23,item24,item25,item31,item32,item33,item34,item35],
             [item00,item01,item02,item03,item04,item05,item06],
             [item10,item11,item12,item13,item14,item15],
             [item21,item23,item24,item25],
-            [item31,item32,item33,item34,item35]
+            [item31,item32,item33,item34,item35],
+            [item41,item42,item43,item44,item45,item46]
         ]
         
         return items
