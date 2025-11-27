@@ -169,7 +169,7 @@ extension ZLEditImageViewController {
         }else{
             clearImage = state.image ?? BSWHBundle.image(named: state.imageName)!
         }
-        let imageSticker = EditableStickerView(image:clearImage!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX.w, y: state.originFrameY.h, width: state.originFrameWidth.w, height: state.originFrameHeight.h),gesRotation: state.gesRotation,isBgImage: state.isBgImage,bgAddImageType: state.bgAddImageType!,imageMask: state.imageMask ?? "",imageData: state.imageData ?? BSWHBundle.image(named: state.bgAddImageType!)?.pngData())
+        let imageSticker = EditableStickerView(image:clearImage!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX.w, y: state.originFrameY.h, width: state.originFrameWidth.w, height: state.originFrameHeight.h),gesRotation: state.gesRotation,isBgImage: state.isBgImage,bgAddImageType: state.bgAddImageType!,imageMask: state.imageMask ?? "",imageData: state.imageData ?? BSWHBundle.image(named: state.bgAddImageType!)?.pngData(),zIndex: state.zIndex)
         addSticker(imageSticker)
         view.layoutIfNeeded()
         editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
@@ -308,6 +308,7 @@ public class ImageStickerModel: Codable {
     public var stickerImage: UIImage? {
         UIImage(data: (imageData ?? BSWHBundle.image(named: bgAddImageType!)!.pngData())!)
     }
+    public var zIndex:Int? = 0
     
     enum CodingKeys: String, CodingKey {
         case imageName
@@ -329,6 +330,7 @@ public class ImageStickerModel: Codable {
         case imageMask
         case isBgImage
         case bgAddImageType
+        case zIndex
     }
 
     
@@ -360,6 +362,7 @@ public class ImageStickerModel: Codable {
         imageMask = try container.decodeIfPresent(String.self, forKey: .imageMask)
         isBgImage = try container.decodeIfPresent(Bool.self, forKey: .isBgImage) ?? false
         bgAddImageType = try container.decodeIfPresent(String.self, forKey: .bgAddImageType) ?? "addGrayImage"
+        zIndex = try container.decodeIfPresent(Int.self, forKey: .zIndex) ?? 0
     }
 
     
@@ -389,6 +392,7 @@ public class ImageStickerModel: Codable {
         try container.encodeIfPresent(imageMask, forKey: .imageMask)
         try container.encode(isBgImage, forKey: .isBgImage)
         try container.encode(bgAddImageType, forKey: .bgAddImageType)
+        try container.encode(zIndex, forKey: .zIndex)
     }
 
     
@@ -408,6 +412,7 @@ public class ImageStickerModel: Codable {
         cornerRadiusScale:Double = 0.1,
         isBgImage: Bool = false,
         bgAddImageType:String = "addGrayImage",
+        zIndex:Int = 0
     ) {
         self._image = image
         self.imageName = imageName
@@ -424,6 +429,7 @@ public class ImageStickerModel: Codable {
         self.cornerRadiusScale = cornerRadiusScale
         self.isBgImage = isBgImage
         self.bgAddImageType = bgAddImageType
+        self.zIndex = zIndex
         if let rect = overlayRect {
             self.overlayRectX = rect.origin.x
             self.overlayRectY = rect.origin.y
@@ -460,7 +466,8 @@ public extension ImageStickerModel {
             }(),
             imageType: self.imageType,
             cornerRadiusScale:self.cornerRadiusScale ?? 0.1,
-            isBgImage: self.isBgImage
+            isBgImage: self.isBgImage,
+            zIndex: self.zIndex ?? 0
         )
         return copy
     }
@@ -484,7 +491,8 @@ public class EditableStickerView: ZLImageStickerView {
             imageMask: state.imageMask,
             imageData: state.imageData,
             cornerRadiusScale:state.cornerRadiusScale,
-            showBorder: false
+            showBorder: false,
+            zIndex: state.zIndex
         )
         self.refreshResizeButtonPosition()
     }
@@ -504,8 +512,8 @@ public class EditableStickerView: ZLImageStickerView {
         imageMask:String = "",
         imageData:Data? = nil,
         cornerRadiusScale:Double? = 0.1,
-        showBorder: Bool = false
-        
+        showBorder: Bool = false,
+        zIndex:Int = 0
     ) {
         super.init(
             id: id,
@@ -521,7 +529,8 @@ public class EditableStickerView: ZLImageStickerView {
             imageMask: imageMask,
             imageData: imageData,
             cornerRadiusScale:cornerRadiusScale ?? 0.1,
-            showBorder: showBorder
+            showBorder: showBorder,
+            zIndex: zIndex
         )
         borderView.layer.borderWidth = borderWidth
         borderView.layer.borderColor = UIColor.clear.cgColor
@@ -531,8 +540,8 @@ public class EditableStickerView: ZLImageStickerView {
         enableTapSelection()
     }
 
-    init(image: UIImage, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect,gesRotation:CGFloat, isBgImage: Bool,bgAddImageType:String,imageMask:String,imageData:Data?) {
-        super.init(image: image, originScale: originScale, originAngle: originAngle, originFrame: originFrame,gesRotation: gesRotation, isBgImage: isBgImage,bgAddImageType:bgAddImageType,imageMask: imageMask,imageData: imageData!)
+    init(image: UIImage, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect,gesRotation:CGFloat, isBgImage: Bool,bgAddImageType:String,imageMask:String,imageData:Data?,zIndex:Int?) {
+        super.init(image: image, originScale: originScale, originAngle: originAngle, originFrame: originFrame,gesRotation: gesRotation, isBgImage: isBgImage,bgAddImageType:bgAddImageType,imageMask: imageMask,imageData: imageData!,zIndex: zIndex ?? 0)
         addButton()
         enableTapSelection()
     }

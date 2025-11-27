@@ -71,7 +71,8 @@ public class ZLTextStickerView: ZLBaseStickerView {
             bgAddImageType: bgAddImageType,
             imageMask: imageMask,
             cornerRadiusScale:cornerRadiusScale,
-            imageData: imageData!
+            imageData: imageData!,
+            zIndex: zIndex
         )
     }
     

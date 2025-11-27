@@ -91,7 +91,7 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     public var gesScale: CGFloat = 1
     public var cornerRadiusScale: Double = 0.1
-
+    public var zIndex = 0
     var onOperation = false
     
     var gesIsEnabled = true
@@ -149,7 +149,8 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         imageMask:String = "",
         imageData: Data? = nil,
         cornerRadiusScale:Double = 0.1,
-        showBorder: Bool = false
+        showBorder: Bool = false,
+        zIndex:Int = 0
     ) {
         self.id = id
         self.isBgImage = isBgImage
@@ -161,6 +162,7 @@ open class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         maxGesScale = 4 / originScale
         self.imageData = imageData
         self.cornerRadiusScale = cornerRadiusScale
+        self.zIndex = zIndex
         super.init(frame: .zero)
         
         self.gesScale = gesScale

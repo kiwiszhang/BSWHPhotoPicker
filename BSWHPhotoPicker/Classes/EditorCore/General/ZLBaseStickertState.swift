@@ -40,6 +40,7 @@ public class ZLBaseStickertState: NSObject {
     public var imageMask:String
     public var imageData: Data
     public var cornerRadiusScale:Double
+    public var zIndex:Int
     public init(
         id: String,
         image: UIImage,
@@ -53,7 +54,8 @@ public class ZLBaseStickertState: NSObject {
         bgAddImageType:String,
         imageMask:String,
         cornerRadiusScale:Double,
-        imageData:Data
+        imageData:Data,
+        zIndex:Int
     ) {
         self.id = id
         self.image = image
@@ -68,6 +70,7 @@ public class ZLBaseStickertState: NSObject {
         self.imageMask = imageMask
         self.cornerRadiusScale = cornerRadiusScale
         self.imageData = imageData
+        self.zIndex = zIndex
         super.init()
     }
 }
@@ -88,7 +91,9 @@ extension ZLBaseStickertState {
                                    bgAddImageType: bgAddImageType,
                                    imageMask: imageMask,
                                    cornerRadiusScale: cornerRadiusScale,
-                                   imageData: imageData)
+                                   imageData: imageData,
+                                   zIndex: zIndex
+        )
     }
 }
 
@@ -116,7 +121,8 @@ public class ZLTextStickerState: ZLBaseStickertState {
         bgAddImageType:String,
         imageMask:String,
         cornerRadiusScale:Double,
-        imageData:Data
+        imageData:Data,
+        zIndex:Int
     ) {
         self.text = text
         self.textColor = textColor
@@ -135,7 +141,7 @@ public class ZLTextStickerState: ZLBaseStickertState {
             bgAddImageType: bgAddImageType,
             imageMask: imageMask,
             cornerRadiusScale:cornerRadiusScale,
-            imageData: imageData
+            imageData: imageData, zIndex: zIndex
         )
     }
 }

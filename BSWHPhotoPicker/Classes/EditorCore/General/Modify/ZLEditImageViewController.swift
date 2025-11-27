@@ -1027,6 +1027,18 @@ open class ZLEditImageViewController: UIViewController {
         configSticker(sticker)
     }
     
+    func addSticker01(_ sticker: ZLBaseStickerView, at index: Int? = nil) {
+        if let idx = index, idx < stickersContainer.subviews.count {
+            stickersContainer.insertSubview(sticker, at: idx)
+        } else {
+            stickersContainer.addSubview(sticker)
+        }
+
+        sticker.frame = sticker.originFrame
+        configSticker(sticker)
+    }
+
+    
     private func removeSticker(id: String?) {
         guard let id else { return }
         
@@ -1498,7 +1510,8 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
             }
         }else{
             if let sticker = EditableStickerView.initWithState(oldState) {
-                addSticker(sticker)
+//                addSticker(sticker)
+                addSticker01(sticker, at: oldState.zIndex)
                 if oldState.isBgImage == true {
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "stickerImageAddTap"), object: ["sticker":sticker])
                 }
@@ -1521,7 +1534,8 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
             }
         }else{
             if let sticker = EditableStickerView.initWithState(newState) {
-                addSticker(sticker)
+//                addSticker(sticker)
+                addSticker01(sticker, at: newState.zIndex)
                 if newState.isBgImage == true {
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "stickerImageAddTap"), object: ["sticker":sticker])
                 }

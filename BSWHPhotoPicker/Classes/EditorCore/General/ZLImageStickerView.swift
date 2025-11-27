@@ -53,7 +53,8 @@ open class ZLImageStickerView: ZLBaseStickerView {
             bgAddImageType: bgAddImageType,
             imageMask: imageMask,
             cornerRadiusScale:cornerRadiusScale,
-            imageData: (imageData ?? BSWHBundle.image(named: "addWhiteImage")!.pngData())!
+            imageData: (imageData ?? BSWHBundle.image(named: "addWhiteImage")!.pngData())!,
+            zIndex: zIndex
         )
     }
     
@@ -76,7 +77,8 @@ open class ZLImageStickerView: ZLBaseStickerView {
             imageMask: state.imageMask,
             imageData: state.imageData,
             cornerRadiusScale:state.cornerRadiusScale,
-            showBorder: false
+            showBorder: false,
+            zIndex: state.zIndex
         )
     }
     
@@ -94,7 +96,8 @@ open class ZLImageStickerView: ZLBaseStickerView {
         imageMask:String = "",
         imageData:Data? = nil,
         cornerRadiusScale:Double = 0.1,
-        showBorder: Bool = true
+        showBorder: Bool = true,
+        zIndex:Int = 0
     ) {
         self.image = image
         super.init(
@@ -110,7 +113,8 @@ open class ZLImageStickerView: ZLBaseStickerView {
             imageMask: imageMask,
             imageData: imageData,
             cornerRadiusScale:cornerRadiusScale,
-            showBorder: showBorder
+            showBorder: showBorder,
+            zIndex: zIndex
         )
         
         borderView.addSubview(imageView)

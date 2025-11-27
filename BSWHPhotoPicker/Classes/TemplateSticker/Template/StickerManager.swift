@@ -58,7 +58,8 @@ public final class StickerManager: NSObject {
         StickerManager.shared.modelMap.removeAll()
         StickerManager.shared.stickerArr.removeAll()
         controller = currentVC
-        for state in items! {
+        for (index,state) in items!.enumerated() {
+            state.zIndex = index
             let sticker = currentVC.addImageSticker01(state: state)
             sticker.stickerModel = state
             StickerManager.shared.modelMap[sticker.id] = state
@@ -366,7 +367,7 @@ extension ZLImageStickerView {
 //                        let cornerRadius = min(overlayRect.width, overlayRect.height) * (stickerModel.cornerRadiusScale ?? 0.1)
                         var cornerRadius = 16.0.h
                         if stickerModel.imageName == "Travel-sticker-bg03" {
-                            cornerRadius = 61.0.h
+                            cornerRadius = 57.h
                         }
                         return UIBezierPath(roundedRect: overlayRect, cornerRadius: cornerRadius)
                     default:
