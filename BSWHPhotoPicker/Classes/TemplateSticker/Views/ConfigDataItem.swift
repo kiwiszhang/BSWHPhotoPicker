@@ -50,7 +50,9 @@ class ConfigDataItem {
                      BSWHPhotoPickerLocalization.shared.localized("Baby"),
                      BSWHPhotoPickerLocalization.shared.localized("Birthday"),
                      BSWHPhotoPickerLocalization.shared.localized("WeddingParty"),
-                     BSWHPhotoPickerLocalization.shared.localized("Travel")]
+                     BSWHPhotoPickerLocalization.shared.localized("Travel"),
+                     BSWHPhotoPickerLocalization.shared.localized("Scrapbook"),
+                     BSWHPhotoPickerLocalization.shared.localized("photoframe")]
         return items
     }
     
@@ -89,12 +91,21 @@ class ConfigDataItem {
         let item45 = TemplateModel(imageName: "Travel05",imageBg: "Travel05-bg",jsonName: "Travel05")
         let item46 = TemplateModel(imageName: "Travel06",imageBg: "Travel06-bg",jsonName: "Travel06")
 
+        let item51 = TemplateModel(imageName: "Scrapbook01",imageBg: "Scrapbook01-bg",jsonName: "Scrapbook01")
+        let item52 = TemplateModel(imageName: "Scrapbook02",imageBg: "Scrapbook02-bg",jsonName: "Scrapbook02",isNeedFit: true)
+        let item53 = TemplateModel(imageName: "Scrapbook03",imageBg: "Scrapbook03-bg",jsonName: "Scrapbook03")
+        let item54 = TemplateModel(imageName: "Scrapbook04",imageBg: "Scrapbook04-bg",jsonName: "Scrapbook04")
+        let item55 = TemplateModel(imageName: "Scrapbook05",imageBg: "Scrapbook05-bg",jsonName: "Scrapbook05")
+
+        
         let items = [[item00,item01,item02,item03,item04,item05,item06,item10,item11,item12,item13,item14,item15,item21,item23,item24,item25,item31,item32,item33,item34,item35],
             [item00,item01,item02,item03,item04,item05,item06],
             [item10,item11,item12,item13,item14,item15],
             [item21,item23,item24,item25],
             [item31,item32,item33,item34,item35],
-            [item41,item42,item43,item44,item45,item46]
+            [item41,item42,item43,item44,item45,item46],
+            [item51,item52,item53,item54,item55],
+            [item51]
         ]
         
         return items
