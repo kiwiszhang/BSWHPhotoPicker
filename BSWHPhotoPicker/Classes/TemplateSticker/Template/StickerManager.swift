@@ -146,7 +146,10 @@ public final class StickerManager: NSObject {
         sticker.addGestureRecognizer(tap)
         sticker.isUserInteractionEnabled = true
 //        let selectedImage: UIImage = sticker.stickerModel?.stickerImage ?? BSWHBundle.image(named: (sticker.stickerModel?.bgAddImageType)!)!
-        let selectedImage: UIImage = UIImage(data: sticker.state.imageData)!
+        var selectedImage: UIImage = UIImage(data: sticker.state.imageData)!
+        if sticker.state.imageData == BSWHBundle.image(named: "addEmptyImage")?.pngData() {
+            selectedImage = BSWHBundle.image(named: "Birthday02-bg")!
+        }
         sticker.updateImage(selectedImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: controller!)
     }
     
@@ -320,10 +323,10 @@ extension ZLImageStickerView {
                let base = BSWHBundle.image(named: stickerModel.imageName),
                let frame = BSWHBundle.image(named: stickerModel.imageMask!) {
                 
-                if stickerModel.imageMask == "addTest" {
+                if stickerModel.imageMask == "addEmptyImage" {
                     var tempImg:UIImage? = nil
                     vc.imageView.contentMode(.scaleAspectFill)
-                    if self.imageData == BSWHBundle.image(named: "addTest")?.pngData() {
+                    if stickerModel.imageData == nil {
                         tempImg = BSWHBundle.image(named: "Birthday02-bg")!
                         vc.imageView.image = BSWHBundle.image(named: "Birthday02-bg")
                     }else{

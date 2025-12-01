@@ -13,9 +13,9 @@
     "overlayRectWidth": 1,
     "overlayRectHeight": 1,
     "imageType": "IrregularShape",
-    "imageMask": "addTest",
+    "imageMask": "addEmptyImage",
     "isBgImage": true,
-    "bgAddImageType":"addTest"
+    "bgAddImageType":"addEmptyImage"
 }
 ]
 

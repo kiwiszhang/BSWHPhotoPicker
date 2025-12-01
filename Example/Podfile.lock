@@ -34,7 +34,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  BSWHPhotoPicker: e2c434517a1395efa4d711664792c6e7abc723f1
+  BSWHPhotoPicker: 68cb4f2ccd33612b0a5ee452e0c914edff92ffd2
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   Localize-Swift: 6f4475136bdb0d7b2882ea3d4ea919d70142b232
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a

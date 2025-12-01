@@ -79,7 +79,7 @@ public class EditImageViewController: ZLEditImageViewController {
         stickerToolsView.onClose = {
             self.hideBottomPanel()
             if let sticker = self.currentSticker {
-                if sticker.imageMask == "addTest" {
+                if sticker.imageMask == "addEmptyImage" {
                     self.imageView.image = UIImage(data: self.currentSticker!.imageData!)
                 }
             }
@@ -87,7 +87,7 @@ public class EditImageViewController: ZLEditImageViewController {
         ratioToolView.onClose = {
             self.hideRatioBottomPanel()
             if let sticker = self.currentSticker {
-                if sticker.imageMask == "addTest" {
+                if sticker.imageMask == "addEmptyImage" {
                     self.imageView.image = UIImage(data: self.currentSticker!.imageData!)
                 }
             }
@@ -167,7 +167,7 @@ public class EditImageViewController: ZLEditImageViewController {
         }
 
         if sticker.stickerModel?.imageName == "Birthday02-sticker-bg00" {
-            if sticker.stickerModel?.imageData == BSWHBundle.image(named: "addTest")?.pngData() {
+            if sticker.imageData != BSWHBundle.image(named: "addEmptyImage")?.pngData() {
                 imageView.image = UIImage(data: (sticker.stickerModel?.imageData)!)
             }else{
                 imageView.image = BSWHBundle.image(named: "Birthday02-bg")

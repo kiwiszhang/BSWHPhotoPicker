@@ -144,7 +144,7 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
         }else if indexPath.row == 4 {
             showRatioBottomPanel()
             if let sticker = self.currentSticker {
-                if sticker.imageMask == "addTest" {
+                if sticker.imageMask == "addEmptyImage" {
                     self.imageView.image = UIImage(data: self.currentSticker!.imageData!)
                 }
             }
