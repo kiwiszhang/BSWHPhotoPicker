@@ -166,8 +166,12 @@ public class EditImageViewController: ZLEditImageViewController {
             hideBottomPanel()
         }
 
-        if sticker.imageMask == "addTest" {
-            imageView.image = UIImage(data: sticker.imageData!)
+        if sticker.stickerModel?.imageName == "Birthday02-sticker-bg00" {
+            if sticker.stickerModel?.imageData == BSWHBundle.image(named: "addTest")?.pngData() {
+                imageView.image = UIImage(data: (sticker.stickerModel?.imageData)!)
+            }else{
+                imageView.image = BSWHBundle.image(named: "Birthday02-bg")
+            }
         }
     }
     

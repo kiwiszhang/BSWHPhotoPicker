@@ -74,7 +74,7 @@ class ConfigDataItem {
         let item15 = TemplateModel(imageName: "baby06",imageBg: "baby06-bg",jsonName: "baby06")
         
         let item21 = TemplateModel(imageName: "Birthday01",imageBg: "Birthday01-bg",jsonName: "Birthday01")
-        let item22 = TemplateModel(imageName: "Birthday02",imageBg: "Birthday02-bg",jsonName: "Birthday02")
+        let item22 = TemplateModel(imageName: "Birthday02",imageBg: "Birthday02",jsonName: "Birthday02")
         let item23 = TemplateModel(imageName: "Birthday03",imageBg: "Birthday03-bg",jsonName: "Birthday03")
         let item24 = TemplateModel(imageName: "Birthday04",imageBg: "Birthday04-bg",jsonName: "Birthday04")
         let item25 = TemplateModel(imageName: "Birthday05",imageBg: "Birthday05-bg",jsonName: "Birthday05")

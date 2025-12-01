@@ -322,15 +322,15 @@ extension ZLImageStickerView {
                 
                 if stickerModel.imageMask == "addTest" {
                     var tempImg:UIImage? = nil
-                    if stickerModel.imageData == nil {
-                        tempImg = BSWHBundle.image(named: "addGrayImage")!
+                    vc.imageView.contentMode(.scaleAspectFill)
+                    if self.imageData == BSWHBundle.image(named: "addTest")?.pngData() {
+                        tempImg = BSWHBundle.image(named: "Birthday02-bg")!
+                        vc.imageView.image = BSWHBundle.image(named: "Birthday02-bg")
                     }else{
                         tempImg = newImage
-                    }
+                        vc.imageView.image = newImage
+                     }
                     finalImage = overlayImageWithFrame(BSWHBundle.image(named: "Birthday02-sticker-bg00")!, baseImage: base, frameImage: frame)
-                    vc.imageView.contentMode(.scaleAspectFill)
-                    vc.imageView.image = tempImg
-                    
                 }else{
                     finalImage = overlayImageWithFrame(newImage, baseImage: base, frameImage: frame)
                 }
