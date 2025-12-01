@@ -38,18 +38,17 @@ extension EditImageViewController:TemplateTopViewDelegate {
     
     
     func renderImage(from view: UIView) -> UIImage? {
-        let renderer = UIGraphicsImageRenderer(
-            bounds: view.bounds,
-            format: {
-                let f = UIGraphicsImageRendererFormat.default()
-                f.scale = 3 /// 高清比例 1/2/3 可选
-                return f
-            }()
-        )
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 3
+        format.opaque = false   // 关键：允许透明，避免黑色背景
+
+        let renderer = UIGraphicsImageRenderer(size: view.bounds.size, format: format)
+
         return renderer.image { ctx in
-            view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+            view.layer.render(in: ctx.cgContext) // 用 layer 渲染取代 drawHierarchy
         }
     }
+
     
     func saveImageToAlbum(_ image: UIImage) {
         PHPhotoLibrary.requestAuthorization { status in
@@ -101,7 +100,7 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
                         let tap = UITapGestureRecognizer(target: StickerManager.shared, action: #selector(StickerManager.shared.stickerTapped(_:)))
                         sticker.addGestureRecognizer(tap)
                         if let image = sticker.stickerModel?.stickerImage {
-                            sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
+                            sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: self)
                         }
                     }
                 }
@@ -135,7 +134,7 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
                         let tap = UITapGestureRecognizer(target: StickerManager.shared, action: #selector(StickerManager.shared.stickerTapped(_:)))
                         sticker.addGestureRecognizer(tap)
                         if let image = sticker.stickerModel?.stickerImage {
-                            sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
+                            sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: self!)
                         }
                     }
                 } else {
@@ -144,6 +143,11 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
             }
         }else if indexPath.row == 4 {
             showRatioBottomPanel()
+            if let sticker = self.currentSticker {
+                if sticker.imageMask == "addTest" {
+                    self.imageView.image = UIImage(data: self.currentSticker!.imageData!)
+                }
+            }
         }
     }
 }
@@ -164,7 +168,7 @@ extension EditImageViewController:StickerToolsViewDelegate {
                         if let imageData = img.pngData() {
                             sticker.stickerModel?.imageData = imageData
                         }
-                        sticker.updateImage(img, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
+                        sticker.updateImage(img, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: self)
                     } else {
                     }
                 }
@@ -176,7 +180,7 @@ extension EditImageViewController:StickerToolsViewDelegate {
                     if let imageData = newImage.pngData() {
                         sticker.stickerModel?.imageData = imageData
                     }
-                    sticker.updateImage(newImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
+                    sticker.updateImage(newImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: self)
                 }
             }
         }else if indexPath.row == 4 {
@@ -185,7 +189,7 @@ extension EditImageViewController:StickerToolsViewDelegate {
                     if let imageData = newImage.pngData() {
                         sticker.stickerModel?.imageData = imageData
                     }
-                    sticker.updateImage(newImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
+                    sticker.updateImage(newImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: self)
                 }
             }
         }else if indexPath.row == 5 {
@@ -230,59 +234,61 @@ extension EditImageViewController:RatioToolViewDelegate {
         }
     }
     
-    func convertStickerFrames(
-        stickers: [EditableStickerView],
-        oldSize: CGSize,
-        newSize: CGSize,
-        mode: CanvasResizeMode
-    ) {
-        guard oldSize.width > 0, oldSize.height > 0 else { return }
+    
 
-        // 计算 scale
-        let scaleByWidth = newSize.width / oldSize.width
-        let scaleByHeight = newSize.height / oldSize.height
+}
 
-        let scale: CGFloat
-        switch mode {
-        case .byWidth:
-            scale = scaleByWidth
-        case .byHeight:
-            scale = scaleByHeight
-        case .fit:
-            scale = min(scaleByWidth, scaleByHeight)
-        }
+func convertStickerFrames(
+    stickers: [EditableStickerView],
+    oldSize: CGSize,
+    newSize: CGSize,
+    mode: CanvasResizeMode
+) {
+    guard oldSize.width > 0, oldSize.height > 0 else { return }
 
-        let scaledCanvasW = oldSize.width * scale
-        let scaledCanvasH = oldSize.height * scale
-        let offsetX = (newSize.width - scaledCanvasW) / 2.0
-        let offsetY = (newSize.height - scaledCanvasH) / 2.0
+    // 计算 scale
+    let scaleByWidth = newSize.width / oldSize.width
+    let scaleByHeight = newSize.height / oldSize.height
 
-        for sticker in stickers {
-            let oldCenter = sticker.center
-            let newCenter = CGPoint(x: oldCenter.x * scale + offsetX,
-                                    y: oldCenter.y * scale + offsetY)
-
-            sticker.totalTranslationPoint.x *= scale
-            sticker.totalTranslationPoint.y *= scale
-
-            sticker.originScale *= scale
-
-            sticker.gesScale = 1
-            // sticker.gesRotation = 0
-
-            sticker.updateTransform()
-
-            sticker.center = newCenter
-
-            sticker.setNeedsLayout()
-            sticker.layoutIfNeeded()
-            sticker.refreshResizeButtonPosition()
-
-            sticker.originFrame = sticker.frame
-            sticker.originTransform = sticker.transform
-        }
+    let scale: CGFloat
+    switch mode {
+    case .byWidth:
+        scale = scaleByWidth
+    case .byHeight:
+        scale = scaleByHeight
+    case .fit:
+        scale = min(scaleByWidth, scaleByHeight)
     }
 
+    let scaledCanvasW = oldSize.width * scale
+    let scaledCanvasH = oldSize.height * scale
+    let offsetX = (newSize.width - scaledCanvasW) / 2.0
+    let offsetY = (newSize.height - scaledCanvasH) / 2.0
+
+    for sticker in stickers {
+        let oldCenter = sticker.center
+        let newCenter = CGPoint(x: oldCenter.x * scale + offsetX,
+                                y: oldCenter.y * scale + offsetY)
+
+        sticker.totalTranslationPoint.x *= scale
+        sticker.totalTranslationPoint.y *= scale
+
+        sticker.originScale *= scale
+
+        sticker.gesScale = 1
+        // sticker.gesRotation = 0
+
+        sticker.updateTransform()
+
+        sticker.center = newCenter
+
+        sticker.setNeedsLayout()
+        sticker.layoutIfNeeded()
+        sticker.refreshResizeButtonPosition()
+
+        sticker.originFrame = sticker.frame
+        sticker.originTransform = sticker.transform
+    }
 }
 
 enum CanvasResizeMode {

@@ -361,13 +361,13 @@ open class ZLEditImageViewController: UIViewController {
     
     public func replaceBgImage(image:UIImage,editModel: ZLEditImageModel? = nil) {
         var image = image
-        if image.scale != 1,
-           let cgImage = image.cgImage {
-            image = image.zl.resize_vI(
-                CGSize(width: cgImage.width, height: cgImage.height),
-                scale: 1
-            ) ?? image
-        }
+//        if image.scale != 1,
+//           let cgImage = image.cgImage {
+//            image = image.zl.resize_vI(
+//                CGSize(width: cgImage.width, height: cgImage.height),
+//                scale: 1
+//            ) ?? image
+//        }
         
         originalImage = image.zl.fixOrientation()
         editImage = originalImage

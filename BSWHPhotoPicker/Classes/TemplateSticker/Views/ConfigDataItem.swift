@@ -40,6 +40,7 @@ public struct TemplateModel {
     var imageBg:String = "Christmas00-bg"
     var jsonName:String = "Christmas00"
     var isNeedFit:Bool = false
+    var cornerRadius:Double = 0.0
 }
 
 class ConfigDataItem {
@@ -73,7 +74,7 @@ class ConfigDataItem {
         let item15 = TemplateModel(imageName: "baby06",imageBg: "baby06-bg",jsonName: "baby06")
         
         let item21 = TemplateModel(imageName: "Birthday01",imageBg: "Birthday01-bg",jsonName: "Birthday01")
-//        let item22 = TemplateModel(imageName: "Birthday02",imageBg: "Birthday02-bg",jsonName: "Birthday02")
+        let item22 = TemplateModel(imageName: "Birthday02",imageBg: "Birthday02-bg",jsonName: "Birthday02")
         let item23 = TemplateModel(imageName: "Birthday03",imageBg: "Birthday03-bg",jsonName: "Birthday03")
         let item24 = TemplateModel(imageName: "Birthday04",imageBg: "Birthday04-bg",jsonName: "Birthday04")
         let item25 = TemplateModel(imageName: "Birthday05",imageBg: "Birthday05-bg",jsonName: "Birthday05")
@@ -97,15 +98,23 @@ class ConfigDataItem {
         let item54 = TemplateModel(imageName: "Scrapbook04",imageBg: "Scrapbook04-bg",jsonName: "Scrapbook04")
         let item55 = TemplateModel(imageName: "Scrapbook05",imageBg: "Scrapbook05-bg",jsonName: "Scrapbook05")
 
+        let item61 = TemplateModel(imageName: "PhotoFrame01",imageBg: "PhotoFrame01-bg",jsonName: "PhotoFrame01")
+        let item62 = TemplateModel(imageName: "PhotoFrame02",imageBg: "PhotoFrame02-bg",jsonName: "PhotoFrame02",cornerRadius: 48.h)
+        let item63 = TemplateModel(imageName: "PhotoFrame03",imageBg: "PhotoFrame03-bg",jsonName: "PhotoFrame03",cornerRadius: 48.h)
+        let item64 = TemplateModel(imageName: "PhotoFrame04",imageBg: "PhotoFrame04-bg",jsonName: "PhotoFrame04")
+        let item65 = TemplateModel(imageName: "PhotoFrame05",imageBg: "PhotoFrame05-bg",jsonName: "PhotoFrame05")
+        let item66 = TemplateModel(imageName: "PhotoFrame06",imageBg: "PhotoFrame06-bg",jsonName: "PhotoFrame06")
+        let item67 = TemplateModel(imageName: "PhotoFrame07",imageBg: "PhotoFrame07-bg",jsonName: "PhotoFrame07")
+
         
         let items = [[item00,item01,item02,item03,item04,item05,item06,item10,item11,item12,item13,item14,item15,item21,item23,item24,item25,item31,item32,item33,item34,item35],
             [item00,item01,item02,item03,item04,item05,item06],
             [item10,item11,item12,item13,item14,item15],
-            [item21,item23,item24,item25],
+            [item21,item22,item23,item24,item25],
             [item31,item32,item33,item34,item35],
             [item41,item42,item43,item44,item45,item46],
             [item51,item52,item53,item54,item55],
-            [item51]
+            [item61,item62,item63,item64,item65,item66,item67]
         ]
         
         return items

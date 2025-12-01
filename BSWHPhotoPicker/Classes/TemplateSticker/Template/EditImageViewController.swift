@@ -76,11 +76,21 @@ public class EditImageViewController: ZLEditImageViewController {
         StickerManager.shared.initCurrentTemplate(jsonName: item!.jsonName, currentVC: self)
         backAndreBackStatus()
         
-        stickerToolsView.onClose = { [weak self] in
-            self?.hideBottomPanel()
+        stickerToolsView.onClose = {
+            self.hideBottomPanel()
+            if let sticker = self.currentSticker {
+                if sticker.imageMask == "addTest" {
+                    self.imageView.image = UIImage(data: self.currentSticker!.imageData!)
+                }
+            }
         }
         ratioToolView.onClose = {
             self.hideRatioBottomPanel()
+            if let sticker = self.currentSticker {
+                if sticker.imageMask == "addTest" {
+                    self.imageView.image = UIImage(data: self.currentSticker!.imageData!)
+                }
+            }
         }
         
         contentView.snp.makeConstraints { make in
@@ -99,10 +109,15 @@ public class EditImageViewController: ZLEditImageViewController {
         contentView.layoutIfNeeded()
         resetContainerViewFrame()
         mainScrollView.backgroundColor = kkColorFromHex("F5F5F5")
-        
+        mainScrollView.showsVerticalScrollIndicator = false
+        mainScrollView.showsHorizontalScrollIndicator = false
         //根据调整后的containerView布局里面的贴纸
         if item?.isNeedFit == true {
             convertStickerFrames(stickers: StickerManager.shared.stickerArr, oldSize: BSWHBundle.image(named: item!.imageBg)!.size, newSize: containerView.frame.size, mode: .fit)
+        }
+        
+        if item?.cornerRadius != 0.0 {
+            containerView.cornerRadius(item!.cornerRadius)
         }
     }
     
@@ -130,12 +145,13 @@ public class EditImageViewController: ZLEditImageViewController {
     // MARK: - Action
     @objc func tapStickerOutOverlay(_ notification: Notification){
         let dict = notification.object as! [String:Any]
+        let sticker:EditableStickerView = dict["sticker"] as! EditableStickerView
+    
         if let _ = dict["leftTopTap"] as? Int {
             hideRatioBottomPanel()
             hideBottomPanel()
             return
         }
-        let sticker:EditableStickerView = dict["sticker"] as! EditableStickerView
         hideRatioBottomPanel()
         guard let _ = sticker.stickerModel else {
             hideBottomPanel()
@@ -150,6 +166,9 @@ public class EditImageViewController: ZLEditImageViewController {
             hideBottomPanel()
         }
 
+        if sticker.imageMask == "addTest" {
+            imageView.image = UIImage(data: sticker.imageData!)
+        }
     }
     
     // MARK: - ratioToolView 隐藏显示处理

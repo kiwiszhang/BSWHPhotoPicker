@@ -1,0 +1,22 @@
+[{
+    "imageName": "PhotoFrame04-sticker-bg01",
+    "originScale": 1,
+    "originAngle": 0,
+    "originFrameX": 35,
+    "originFrameY": 54,
+    "originFrameWidth": 255,
+    "originFrameHeight": 284,
+    "gesScale": 1,
+    "gesRotation": 0,
+    "overlayRectX": 0.1,
+    "overlayRectY": 0.1,
+    "overlayRectWidth": 0.8,
+    "overlayRectHeight": 0.8,
+    "imageType": "IrregularShape",
+    "imageMask": "PhotoFrame04-sticker-bg00",
+    "isBgImage": true,
+    "bgAddImageType":"addWhiteImage"
+  }
+]
+
+

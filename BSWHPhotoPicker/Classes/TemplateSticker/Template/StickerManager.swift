@@ -69,7 +69,7 @@ public final class StickerManager: NSObject {
                 sticker.addGestureRecognizer(tap)
                 sticker.isUserInteractionEnabled = true
                 if let image = sticker.stickerModel?.stickerImage {
-                    sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
+                    sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: controller!)
                 }
             }
         }
@@ -117,7 +117,7 @@ public final class StickerManager: NSObject {
             sticker.addGestureRecognizer(tap)
             sticker.isUserInteractionEnabled = true
             let selectedImage: UIImage = (sticker.stickerModel?.stickerImage)!
-            sticker.updateImage(selectedImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
+            sticker.updateImage(selectedImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: controller!)
         }
     }
 
@@ -147,7 +147,7 @@ public final class StickerManager: NSObject {
         sticker.isUserInteractionEnabled = true
 //        let selectedImage: UIImage = sticker.stickerModel?.stickerImage ?? BSWHBundle.image(named: (sticker.stickerModel?.bgAddImageType)!)!
         let selectedImage: UIImage = UIImage(data: sticker.state.imageData)!
-        sticker.updateImage(selectedImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
+        sticker.updateImage(selectedImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: controller!)
     }
     
     @objc func stickerTapped(_ sender: UITapGestureRecognizer) {
@@ -236,13 +236,14 @@ extension StickerManager: PHPickerViewControllerDelegate {
                     
                     DispatchQueue.global(qos: .userInitiated).async {
                         if let imageData = newImage.pngData() {
-                            DispatchQueue.main.async {
+                            DispatchQueue.main.async { [self] in
                                 stickerView.setOperation(true)
                                 let oldState = stickerView.state
                                 if stickerView.stickerModel?.isBgImage == true {
                                     stickerView.stickerModel?.imageData = imageData
-                                    stickerView.updateImage(newImage, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image)
                                     
+                                    stickerView.updateImage(newImage, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image,vc: self.controller!)
+                    
                                     stickerView.imageData = imageData
                                     stickerView.state.imageData = imageData
                                     let newState = stickerView.state
@@ -268,7 +269,7 @@ extension StickerManager: PHPickerViewControllerDelegate {
                         let tap = UITapGestureRecognizer(target: self, action: #selector(self.stickerTapped(_:)))
                         sticker.addGestureRecognizer(tap)
                         if let image = sticker.stickerModel?.stickerImage {
-                            sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image)
+                            sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: self.controller!)
                         }
                     }
                 }
@@ -282,12 +283,12 @@ extension StickerManager {
     public func pickerImage(_ image: UIImage) {
         let newImage:UIImage = image
         guard let stickerView = self.currentStickerView else { return }
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [self] in
             if stickerView.stickerModel?.isBgImage == true {
                 if let imageData = newImage.pngData() {
                     stickerView.stickerModel?.imageData = imageData
                 }
-                stickerView.updateImage(newImage, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image)
+                stickerView.updateImage(newImage, stickerModel: stickerView.stickerModel!, withBaseImage: stickerView.image,vc: self.controller!)
             }
         }
     }
@@ -307,7 +308,7 @@ extension ZLImageStickerView {
         set { objc_setAssociatedObject(self, &stickerModelKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
-    func updateImage(_ newImage: UIImage, stickerModel: ImageStickerModel, withBaseImage baseImage: UIImage? = nil) {
+    func updateImage(_ newImage: UIImage, stickerModel: ImageStickerModel, withBaseImage baseImage: UIImage? = nil,vc:EditImageViewController) {
         
         let imageTypeRaw = stickerModel.imageType?.rawValue
         var finalImage: UIImage?
@@ -319,7 +320,20 @@ extension ZLImageStickerView {
                let base = BSWHBundle.image(named: stickerModel.imageName),
                let frame = BSWHBundle.image(named: stickerModel.imageMask!) {
                 
-                finalImage = overlayImageWithFrame(newImage, baseImage: base, frameImage: frame)
+                if stickerModel.imageMask == "addTest" {
+                    var tempImg:UIImage? = nil
+                    if stickerModel.imageData == nil {
+                        tempImg = BSWHBundle.image(named: "addGrayImage")!
+                    }else{
+                        tempImg = newImage
+                    }
+                    finalImage = overlayImageWithFrame(BSWHBundle.image(named: "Birthday02-sticker-bg00")!, baseImage: base, frameImage: frame)
+                    vc.imageView.contentMode(.scaleAspectFill)
+                    vc.imageView.image = tempImg
+                    
+                }else{
+                    finalImage = overlayImageWithFrame(newImage, baseImage: base, frameImage: frame)
+                }
             }
         }else if imageTypeRaw == "IrregularMask" {
             if !stickerModel.imageName.isEmpty,

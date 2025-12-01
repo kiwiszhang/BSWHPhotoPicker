@@ -1,0 +1,56 @@
+[{
+    "imageName": "PhotoFrame05-sticker-bg01",
+    "originScale": 1,
+    "originAngle": 0,
+    "originFrameX": 10,
+    "originFrameY": 55,
+    "originFrameWidth": 356,
+    "originFrameHeight": 450,
+    "gesScale": 1,
+    "gesRotation": 0,
+    "overlayRectX": 0.1,
+    "overlayRectY": 0.1,
+    "overlayRectWidth": 0.8,
+    "overlayRectHeight": 0.8,
+    "imageType": "IrregularShape",
+    "imageMask": "PhotoFrame05-sticker-bg00",
+    "isBgImage": true,
+    "bgAddImageType":"addWhiteImage"
+  },{
+      "imageName": "empty",
+      "originScale": 1,
+      "originAngle": 0,
+      "originFrameX": 171,
+      "originFrameY": 0,
+      "originFrameWidth": 228,
+      "originFrameHeight": 172,
+      "gesScale": 1,
+      "gesRotation": 0,
+      "isBgImage": true,
+      "overlayRectX": 0,
+      "overlayRectY": 0,
+      "overlayRectWidth": 1,
+      "overlayRectHeight": 1,
+      "imageType": "square",
+      "bgAddImageType":"PhotoFrame05-sticker01"
+  },{
+      "imageName": "empty",
+      "originScale": 1,
+      "originAngle": 0,
+      "originFrameX": -20,
+      "originFrameY": 227,
+      "originFrameWidth": 154,
+      "originFrameHeight": 365,
+      "gesScale": 1,
+      "gesRotation": 0,
+      "isBgImage": true,
+      "overlayRectX": 0,
+      "overlayRectY": 0,
+      "overlayRectWidth": 1,
+      "overlayRectHeight": 1,
+      "imageType": "square",
+      "bgAddImageType":"PhotoFrame05-sticker00"
+  }
+]
+
+

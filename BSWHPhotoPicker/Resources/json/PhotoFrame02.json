@@ -1,0 +1,21 @@
+[{
+    "imageName": "PhotoFrame-sticker-bg01",
+    "originScale": 1,
+    "originAngle": 0,
+    "originFrameX": 26,
+    "originFrameY": 45,
+    "originFrameWidth": 323,
+    "originFrameHeight": 408,
+    "gesScale": 1,
+    "gesRotation": 0,
+    "isBgImage": true,
+    "overlayRectX": 0,
+    "overlayRectY": 0,
+    "overlayRectWidth": 1,
+    "overlayRectHeight": 1,
+    "imageType": "rectangle",
+    "bgAddImageType":"addGrayImage"
+}
+]
+
+
