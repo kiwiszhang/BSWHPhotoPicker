@@ -40,14 +40,15 @@ extension EditImageViewController:TemplateTopViewDelegate {
     func renderImage(from view: UIView) -> UIImage? {
         let format = UIGraphicsImageRendererFormat()
         format.scale = 3
-        format.opaque = false   // 关键：允许透明，避免黑色背景
+        format.opaque = false
 
         let renderer = UIGraphicsImageRenderer(size: view.bounds.size, format: format)
 
-        return renderer.image { ctx in
-            view.layer.render(in: ctx.cgContext) // 用 layer 渲染取代 drawHierarchy
+        return renderer.image { _ in
+            view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
         }
     }
+
 
     
     func saveImageToAlbum(_ image: UIImage) {

@@ -26,6 +26,7 @@ public class TemplateViewController: UIViewController, UIScrollViewDelegate {
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        StickerManager.shared.templateOrBackground = 1
         titles = ConfigDataItem.getTemplateTabData()
         items = ConfigDataItem.getTemplateListData()
         

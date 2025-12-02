@@ -18,6 +18,7 @@ public class BackGroundViewController: UIViewController, UIScrollViewDelegate {
     var collectionView: UICollectionView!
     private var titles:[String] = []
     var items:[[TemplateModel]] = []
+    var colorItem:TemplateModel? = nil
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.hidden(true)
@@ -25,6 +26,7 @@ public class BackGroundViewController: UIViewController, UIScrollViewDelegate {
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        StickerManager.shared.templateOrBackground = 2
         titles = ConfigDataItem.getBackgroundTabData()
         items = ConfigDataItem.getBackgroundListData()
         
@@ -141,28 +143,58 @@ extension BackGroundViewController: BackgroundContentCellDelegate {
     func backgroundContentCell(_ cell: BackgroundContentCell, didSelectItem item: TemplateModel, at index: IndexPath) {
         var imageBG:UIImage? = nil
         if item.imageBg.hasPrefix("#") {
-            if let img = imageFromHex(item.imageBg) {
+            if let img = kkCommon.imageFromHex(item.imageBg) {
                 imageBG = img
             }
-        }else{
+            guard let image = imageBG else { return }
+            persentVC(item: item, image: image)
+        }else if item.imageBg == "BackgroundNoColor" {
+            if let img = kkCommon.imageFromHex("#FFFFFF",alpha: 0) {
+                imageBG = img
+            }
+            guard let image = imageBG else { return }
+            persentVC(item: item, image: image)
+        }else if item.imageBg == "BackgroundPicker" {
+            colorItem = item
+            let picker = UIColorPickerViewController()
+            picker.delegate = self
+            picker.supportsAlpha = true
+            picker.modalPresentationStyle = .automatic
+            present(picker, animated: true, completion: nil)
+        }else {
             imageBG = BSWHBundle.image(named: item.imageBg)
+            guard let image = imageBG else { return }
+            persentVC(item: item, image: image)
         }
-        guard let image = imageBG else { return }
+        
+    }
+    
+    func persentVC(item: TemplateModel,image:UIImage){
         let controller = EditImageViewController(image: image)
         controller.item = item
         controller.modalPresentationStyle = .fullScreen
         self.present(controller, animated: true)
     }
-    
-    func imageFromHex(_ hex: String, size: CGSize = CGSize(width: 10, height: 10)) -> UIImage? {
-        // 将 hex 转换成 UIColor
-        guard let color = UIColor(hex: hex) else { return nil }
-        let renderer = UIGraphicsImageRenderer(size: size)
-        return renderer.image { ctx in
-            color.setFill()
-            ctx.fill(CGRect(origin: .zero, size: size))
+}
+
+extension BackGroundViewController: UIColorPickerViewControllerDelegate {
+    public func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
+
+    }
+
+    public func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController){
+        let color = viewController.selectedColor
+        print("选中的颜色:", color)
+        if let cItem = colorItem {
+            viewController.dismiss(animated: false)
+            let img = UIImage.from(color: color, size: CGSize(width: 10, height: 10))
+            let controller = EditImageViewController(image: img)
+            controller.item = cItem
+            controller.modalPresentationStyle = .fullScreen
+            self.present(controller, animated: true)
         }
     }
+
 }
 
 protocol BackgroundContentCellDelegate: AnyObject {
@@ -262,21 +294,11 @@ class BackGroundImageCell: UICollectionViewCell {
 
     func setItem(item: TemplateModel) {
         if item.imageBg.hasPrefix("#") {
-            if let img = imageFromHex(item.imageBg) {
+            if let img = kkCommon.imageFromHex(item.imageBg) {
                 imgView.image = img
             }
         }else{
             imgView.image = BSWHBundle.image(named: item.imageBg)
-        }
-    }
-    
-    func imageFromHex(_ hex: String, size: CGSize = CGSize(width: 10, height: 10)) -> UIImage? {
-        // 将 hex 转换成 UIColor
-        guard let color = UIColor(hex: hex) else { return nil }
-        let renderer = UIGraphicsImageRenderer(size: size)
-        return renderer.image { ctx in
-            color.setFill()
-            ctx.fill(CGRect(origin: .zero, size: size))
         }
     }
 }

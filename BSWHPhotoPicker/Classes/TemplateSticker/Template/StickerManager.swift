@@ -38,6 +38,7 @@ public final class StickerManager: NSObject {
     var stickerArr: [EditableStickerView] = []
     public weak var delegate: StickerManagerDelegate?
     var persentType:Int = 0
+    var templateOrBackground:Int = 0
     public var selectedTemplateIndex = 0
     public static let shared = StickerManager()
     private override init() {
