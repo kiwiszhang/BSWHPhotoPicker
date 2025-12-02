@@ -1,0 +1,56 @@
+[{
+    "imageName": "Travel-sticker-bg06",
+    "originScale": 1,
+    "originAngle": 0.1,
+    "originFrameX": 50,
+    "originFrameY": 60,
+    "originFrameWidth": 273,
+    "originFrameHeight": 495,
+    "gesScale": 1,
+    "gesRotation": 0.1,
+    "overlayRectX": 0,
+    "overlayRectY": 0,
+    "overlayRectWidth": 1,
+    "overlayRectHeight": 1,
+    "imageType": "IrregularShape",
+    "imageMask": "addEmptyImage",
+    "isBgImage": true,
+    "bgAddImageType":"addEmptyImage"
+},{
+      "imageName": "empty",
+      "originScale": 1,
+      "originAngle": 0.1,
+      "originFrameX": 257,
+      "originFrameY": 32,
+      "originFrameWidth": 107,
+      "originFrameHeight": 90,
+      "gesScale": 1,
+      "gesRotation": 0.1,
+      "isBgImage": true,
+      "overlayRectX": 0,
+      "overlayRectY": 0,
+      "overlayRectWidth": 1,
+      "overlayRectHeight": 1,
+      "imageType": "square",
+      "bgAddImageType":"Travel07-sticker01"
+  },{
+      "imageName": "empty",
+      "originScale": 1,
+      "originAngle": 0.1,
+      "originFrameX": 264,
+      "originFrameY": 112,
+      "originFrameWidth": 93,
+      "originFrameHeight": 69,
+      "gesScale": 1,
+      "gesRotation": 0.1,
+      "isBgImage": true,
+      "overlayRectX": 0,
+      "overlayRectY": 0,
+      "overlayRectWidth": 1,
+      "overlayRectHeight": 1,
+      "imageType": "square",
+      "bgAddImageType":"Travel07-sticker00"
+  }
+]
+
+

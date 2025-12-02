@@ -1,28 +1,11 @@
 [{
-    "imageName": "Travel-sticker-bg04",
-    "originScale": 1,
-    "originAngle": 0,
-    "originFrameX": 0,
-    "originFrameY": 0,
-    "originFrameWidth": 375,
-    "originFrameHeight": 591,
-    "gesScale": 1,
-    "gesRotation": 0,
-    "isBgImage": true,
-    "overlayRectX": 0,
-    "overlayRectY": 0,
-    "overlayRectWidth": 1,
-    "overlayRectHeight": 1,
-    "imageType": "square",
-    "bgAddImageType":"addWhiteImage"
-},{
     "imageName": "empty",
     "originScale": 1,
     "originAngle": 0,
-    "originFrameX": 6,
-    "originFrameY": 420,
-    "originFrameWidth": 253,
-    "originFrameHeight": 128,
+    "originFrameX": 39,
+    "originFrameY": 30,
+    "originFrameWidth": 232,
+    "originFrameHeight": 268,
     "gesScale": 1,
     "gesRotation": 0,
     "isBgImage": true,
@@ -31,8 +14,43 @@
     "overlayRectWidth": 1,
     "overlayRectHeight": 1,
     "imageType": "square",
-    "bgAddImageType":"Travel05-sticker00"
-}
+    "bgAddImageType":"Travel06-sticker00"
+},{
+    "imageName": "Travel06-sticker-bg01",
+    "originScale": 1,
+    "originAngle": 0,
+    "originFrameX": 50,
+    "originFrameY": 41,
+    "originFrameWidth": 176,
+    "originFrameHeight": 174,
+    "gesScale": 1,
+    "gesRotation": 0,
+    "overlayRectX": 0.1,
+    "overlayRectY": 0.1,
+    "overlayRectWidth": 0.8,
+    "overlayRectHeight": 0.8,
+    "imageType": "IrregularShape",
+    "imageMask": "Travel06-sticker-bg00",
+    "isBgImage": true,
+    "bgAddImageType":"addGrayImage"
+  },{
+      "imageName": "Travel-sticker-bg05",
+      "originScale": 1,
+      "originAngle": 0,
+      "originFrameX": 57,
+      "originFrameY": 442,
+      "originFrameWidth": 124,
+      "originFrameHeight": 124,
+      "gesScale": 1,
+      "gesRotation": 0,
+      "overlayRectX": 0,
+      "overlayRectY": 0,
+      "overlayRectWidth": 1,
+      "overlayRectHeight": 1,
+      "imageType": "square",
+      "isBgImage": true,
+      "bgAddImageType":"addGrayImage"
+  }
 ]
 
 

@@ -1,7 +1,7 @@
 [{
     "imageName": "wedding-sticker-bg07",
     "originScale": 1,
-    "originAngle": 0,
+    "originAngle": -0.1,
     "originFrameX": -32,
     "originFrameY": 48,
     "originFrameWidth": 223,
@@ -18,7 +18,7 @@
 },{
     "imageName": "wedding-sticker-bg07",
     "originScale": 1,
-    "originAngle": 0,
+    "originAngle": -0.1,
     "originFrameX": 176,
     "originFrameY": 145,
     "originFrameWidth": 206,
@@ -35,7 +35,7 @@
 },{
     "imageName": "wedding-sticker-bg06",
     "originScale": 1,
-    "originAngle": 0,
+    "originAngle": 0.1,
     "originFrameX": -20,
     "originFrameY": 328,
     "originFrameWidth": 254,

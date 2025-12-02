@@ -91,6 +91,7 @@ class ConfigDataItem {
         let item44 = TemplateModel(imageName: "Travel04",imageBg: "Travel04-bg",jsonName: "Travel04")
         let item45 = TemplateModel(imageName: "Travel05",imageBg: "Travel05-bg",jsonName: "Travel05")
         let item46 = TemplateModel(imageName: "Travel06",imageBg: "Travel06-bg",jsonName: "Travel06")
+        let item47 = TemplateModel(imageName: "Travel07",imageBg: "Travel07-bg",jsonName: "Travel07")
 
         let item51 = TemplateModel(imageName: "Scrapbook01",imageBg: "Scrapbook01-bg",jsonName: "Scrapbook01")
         let item52 = TemplateModel(imageName: "Scrapbook02",imageBg: "Scrapbook02-bg",jsonName: "Scrapbook02",isNeedFit: true)
@@ -107,12 +108,12 @@ class ConfigDataItem {
         let item67 = TemplateModel(imageName: "PhotoFrame07",imageBg: "PhotoFrame07-bg",jsonName: "PhotoFrame07")
 
         
-        let items = [[item00,item01,item02,item03,item04,item05,item06,item10,item11,item12,item13,item14,item15,item21,item23,item24,item25,item31,item32,item33,item34,item35],
+        let items = [[item00,item01,item02,item03,item04,item05,item06,item10,item11,item12,item13,item14,item15,item21,item23,item24,item25,item31,item32,item33,item34,item35,item41,item42,item43,item44,item45,item46,item47,item51,item52,item53,item54,item55,item61,item62,item63,item64,item65,item66,item67],
             [item00,item01,item02,item03,item04,item05,item06],
             [item10,item11,item12,item13,item14,item15],
             [item21,item22,item23,item24,item25],
             [item31,item32,item33,item34,item35],
-            [item41,item42,item43,item44,item45,item46],
+            [item41,item42,item43,item44,item45,item46,item47],
             [item51,item52,item53,item54,item55],
             [item61,item62,item63,item64,item65,item66,item67]
         ]

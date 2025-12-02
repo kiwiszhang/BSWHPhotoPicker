@@ -16,6 +16,23 @@
     "imageMask": "addEmptyImage",
     "isBgImage": true,
     "bgAddImageType":"addEmptyImage"
+},{
+    "imageName": "empty",
+    "originScale": 1,
+    "originAngle": 0,
+    "originFrameX": 81,
+    "originFrameY": 421,
+    "originFrameWidth": 213,
+    "originFrameHeight": 89,
+    "gesScale": 1,
+    "gesRotation": 0,
+    "isBgImage": true,
+    "overlayRectX": 0,
+    "overlayRectY": 0,
+    "overlayRectWidth": 1,
+    "overlayRectHeight": 1,
+    "imageType": "square",
+    "bgAddImageType":"Birthday02-sticker01"
 }
 ]
 
