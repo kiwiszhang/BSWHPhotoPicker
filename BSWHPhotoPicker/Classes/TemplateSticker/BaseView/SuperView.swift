@@ -137,3 +137,24 @@ public let kkNAVIGATION_BAR_HEIGHT = kkNAV_HEIGHT + kkSTATUS_BAR_HEIGHT
 
 /// Tab栏总高度（Tab栏+底部安全区域）
 public let kkTAB_BAR_TOTAL_HEIGHT = kkTABBAR_HEIGHT + kkSAFE_AREA_BOTTOM
+
+extension UIColor {
+    convenience init?(hex: String) {
+        var hexString = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if hexString.hasPrefix("#") {
+            hexString.removeFirst()
+        }
+
+        guard hexString.count == 6 else { return nil }
+        
+        var rgbValue: UInt64 = 0
+        Scanner(string: hexString).scanHexInt64(&rgbValue)
+
+        let r = CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0
+        let g = CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0
+        let b = CGFloat(rgbValue & 0x0000FF) / 255.0
+
+        self.init(red: r, green: g, blue: b, alpha: 1.0)
+    }
+}

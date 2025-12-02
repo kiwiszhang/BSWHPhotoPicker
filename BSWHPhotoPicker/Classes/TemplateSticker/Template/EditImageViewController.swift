@@ -72,8 +72,11 @@ public class EditImageViewController: ZLEditImageViewController {
             make.height.equalTo(120.h)
         }
         toolCollectionView.delegate = self
-
-        StickerManager.shared.initCurrentTemplate(jsonName: item!.jsonName, currentVC: self)
+        if let name = item?.jsonName, name.count > 0 {
+            StickerManager.shared.initCurrentTemplate(jsonName: item!.jsonName!, currentVC: self)
+        }else{
+            StickerManager.shared.getCurrentVC(currentVC: self)
+        }
         backAndreBackStatus()
         
         stickerToolsView.onClose = {
@@ -119,6 +122,25 @@ public class EditImageViewController: ZLEditImageViewController {
         if item?.cornerRadius != 0.0 {
             containerView.cornerRadius(item!.cornerRadius)
         }
+    }
+    
+    override public func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        contentView.snp.makeConstraints { make in
+            make.width.equalTo(kkScreenWidth)
+            make.left.equalToSuperview().offset(0)
+            make.height.equalTo(kkScreenHeight - kstickerToolsViewHeight - kkSAFE_AREA_TOP)
+            make.top.equalTo(topView.snp.bottom).offset(0)
+        }
+        contentView.addSubview(mainScrollView)
+        mainScrollView.snp.makeConstraints { make in
+            make.width.equalTo(kkScreenWidth)
+            make.left.equalToSuperview().offset(0)
+            make.height.equalToSuperview()
+            make.top.equalTo(topView.snp.bottom).offset(0)
+        }
+        contentView.layoutIfNeeded()
+        resetContainerViewFrame()
     }
     
     

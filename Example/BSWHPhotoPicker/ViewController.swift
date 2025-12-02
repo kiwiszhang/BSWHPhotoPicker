@@ -16,6 +16,15 @@ import UIKit
 import BSWHPhotoPicker
 
 class ViewController: UIViewController {
+    let backButton01: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setTitle("背景列表", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        button.backgroundColor = .blue
+        return button
+    }()
+    
     let backButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("模版列表", for: .normal)
@@ -46,11 +55,19 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        view.addSubview(backButton01)
         view.addSubview(backButton)
         view.addSubview(lang00Button)
         view.addSubview(lang01Button)
         backButton.snp.makeConstraints { make in
             make.center.equalToSuperview()
+            make.width.equalTo(120)
+            make.height.equalTo(50)
+        }
+        
+        backButton01.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalTo(backButton.snp.top).offset(-80)
             make.width.equalTo(120)
             make.height.equalTo(50)
         }
@@ -70,8 +87,12 @@ class ViewController: UIViewController {
         }
         
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
+        backButton01.addTarget(self, action: #selector(onClickBack01(_:)), for: .touchUpInside)
         lang00Button.addTarget(self, action: #selector(onClickLang00(_:)), for: .touchUpInside)
         lang01Button.addTarget(self, action: #selector(onClickLang01(_:)), for: .touchUpInside)
+    }
+    @objc private func onClickBack01(_ sender: UIButton) {
+        presentBgVC()
     }
     @objc private func onClickBack(_ sender: UIButton) {
         StickerManager.shared.selectedTemplateIndex = 5
@@ -91,6 +112,12 @@ class ViewController: UIViewController {
     func presentVC(){
         let vc = UINavigationController(rootViewController: TemplateViewController())
         StickerManager.shared.delegate = self
+        vc.modalPresentationStyle = .overFullScreen
+        self.present(vc, animated: true)
+    }
+    
+    func presentBgVC(){
+        let vc = UINavigationController(rootViewController: BackGroundViewController())
         vc.modalPresentationStyle = .overFullScreen
         self.present(vc, animated: true)
     }

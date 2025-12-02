@@ -74,6 +74,10 @@ public final class StickerManager: NSObject {
             }
         }
     }
+    
+    func getCurrentVC(currentVC:EditImageViewController) {
+        controller = currentVC
+    }
     // MARK: 加载本地 JSON
     func loadLocalJSON<T: Decodable>(fileName: String, type: T.Type) -> T? {
         let bundle = BSWHBundle.bundle() 

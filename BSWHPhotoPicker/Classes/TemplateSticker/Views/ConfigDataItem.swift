@@ -36,14 +36,148 @@ struct ToolsModel {
 }
 
 public struct TemplateModel {
-    var imageName:String = "1"
+    var imageName:String?
     var imageBg:String = "Christmas00-bg"
-    var jsonName:String = "Christmas00"
+    var jsonName:String?
     var isNeedFit:Bool = false
     var cornerRadius:Double = 0.0
 }
 
+//public struct BackgroundModel {
+//    var imageBg:String = "Christmas00-bg"
+//}
+
 class ConfigDataItem {
+    
+    static func getBackgroundTabData() -> [String] {
+        let items = [BSWHPhotoPickerLocalization.shared.localized("Color"),
+                     BSWHPhotoPickerLocalization.shared.localized("Texture"),
+                     BSWHPhotoPickerLocalization.shared.localized("Geometric"),
+                     BSWHPhotoPickerLocalization.shared.localized("Pattern"),]
+        return items
+    }
+    
+    static func getBackgroundListData() -> [[TemplateModel]] {
+        let item00 = TemplateModel(imageBg: "BackgroundPicker")
+        let item01 = TemplateModel(imageBg: "BackgroundNoColor")
+        let item02 = TemplateModel(imageBg: "#99EDFF")
+        let item03 = TemplateModel(imageBg: "#00C9FF")
+        let item04 = TemplateModel(imageBg: "#D1E82D")
+        let item05 = TemplateModel(imageBg: "#9200FF")
+        let item06 = TemplateModel(imageBg: "#8F9562")
+        let item07 = TemplateModel(imageBg: "#D9D9D9")
+        let item08 = TemplateModel(imageBg: "#2F4D49")
+        let item09 = TemplateModel(imageBg: "#FFED00")
+        let item10 = TemplateModel(imageBg: "#495E26")
+        let item11 = TemplateModel(imageBg: "#FAB226")
+        let item12 = TemplateModel(imageBg: "#8ED830")
+        let item13 = TemplateModel(imageBg: "#FF614F")
+        let item14 = TemplateModel(imageBg: "#C970EB")
+        let item15 = TemplateModel(imageBg: "#76939A")
+        let item16 = TemplateModel(imageBg: "#4D316D")
+        let item17 = TemplateModel(imageBg: "#3265E4")
+
+        
+        let item100 = TemplateModel(imageBg: "Texture00")
+        let item101 = TemplateModel(imageBg: "Texture01")
+        let item102 = TemplateModel(imageBg: "Texture02")
+        let item103 = TemplateModel(imageBg: "Texture03")
+        let item104 = TemplateModel(imageBg: "Texture04")
+        let item105 = TemplateModel(imageBg: "Texture05")
+        let item106 = TemplateModel(imageBg: "Texture06")
+        let item107 = TemplateModel(imageBg: "Texture07")
+        let item108 = TemplateModel(imageBg: "Texture08")
+        let item109 = TemplateModel(imageBg: "Texture09")
+        let item110 = TemplateModel(imageBg: "Texture10")
+        let item112 = TemplateModel(imageBg: "Texture11")
+        let item113 = TemplateModel(imageBg: "Texture12")
+        let item114 = TemplateModel(imageBg: "Texture13")
+        let item115 = TemplateModel(imageBg: "Texture14")
+        let item116 = TemplateModel(imageBg: "Texture15")
+        let item117 = TemplateModel(imageBg: "Texture16")
+        let item118 = TemplateModel(imageBg: "Texture17")
+        let item119 = TemplateModel(imageBg: "Texture18")
+        let item120 = TemplateModel(imageBg: "Texture19")
+        let item121 = TemplateModel(imageBg: "Texture20")
+        let item122 = TemplateModel(imageBg: "Texture21")
+        let item123 = TemplateModel(imageBg: "Texture22")
+        let item124 = TemplateModel(imageBg: "Texture23")
+        let item125 = TemplateModel(imageBg: "Texture24")
+        let item126 = TemplateModel(imageBg: "Texture25")
+        let item127 = TemplateModel(imageBg: "Texture26")
+        let item128 = TemplateModel(imageBg: "Texture27")
+        let item129 = TemplateModel(imageBg: "Texture28")
+        let item130 = TemplateModel(imageBg: "Texture29")
+        let item131 = TemplateModel(imageBg: "Texture30")
+        let item132 = TemplateModel(imageBg: "Texture31")
+        let item133 = TemplateModel(imageBg: "Texture32")
+        let item134 = TemplateModel(imageBg: "Texture33")
+        let item135 = TemplateModel(imageBg: "Texture34")
+        let item136 = TemplateModel(imageBg: "Texture35")
+        let item137 = TemplateModel(imageBg: "Texture36")
+        let item138 = TemplateModel(imageBg: "Texture37")
+        let item139 = TemplateModel(imageBg: "Texture43")
+        let item140 = TemplateModel(imageBg: "Texture38")
+        let item141 = TemplateModel(imageBg: "Texture39")
+        let item142 = TemplateModel(imageBg: "Texture40")
+        let item143 = TemplateModel(imageBg: "Texture41")
+        let item144 = TemplateModel(imageBg: "Texture42")
+
+        
+        let item200 = TemplateModel(imageBg: "Geometric00")
+        let item201 = TemplateModel(imageBg: "Geometric01")
+        let item202 = TemplateModel(imageBg: "Geometric02")
+        let item203 = TemplateModel(imageBg: "Geometric03")
+        let item204 = TemplateModel(imageBg: "Geometric04")
+        let item205 = TemplateModel(imageBg: "Geometric05")
+        let item206 = TemplateModel(imageBg: "Geometric06")
+        let item207 = TemplateModel(imageBg: "Geometric07")
+
+        
+        let item300 = TemplateModel(imageBg: "Pattern00")
+        let item301 = TemplateModel(imageBg: "Pattern01")
+        let item302 = TemplateModel(imageBg: "Pattern02")
+        let item303 = TemplateModel(imageBg: "Pattern03")
+        let item304 = TemplateModel(imageBg: "Pattern04")
+        let item305 = TemplateModel(imageBg: "Pattern05")
+        let item306 = TemplateModel(imageBg: "Pattern06")
+        let item307 = TemplateModel(imageBg: "Pattern07")
+        let item308 = TemplateModel(imageBg: "Pattern08")
+        let item309 = TemplateModel(imageBg: "Pattern09")
+        let item310 = TemplateModel(imageBg: "Pattern10")
+        let item311 = TemplateModel(imageBg: "Pattern11")
+        let item312 = TemplateModel(imageBg: "Pattern12")
+        let item313 = TemplateModel(imageBg: "Pattern13")
+        let item314 = TemplateModel(imageBg: "Pattern14")
+        let item315 = TemplateModel(imageBg: "Pattern15")
+        let item316 = TemplateModel(imageBg: "Pattern16")
+        let item317 = TemplateModel(imageBg: "Pattern17")
+        let item318 = TemplateModel(imageBg: "Pattern18")
+        let item319 = TemplateModel(imageBg: "Pattern19")
+        let item320 = TemplateModel(imageBg: "Pattern20")
+        let item321 = TemplateModel(imageBg: "Pattern21")
+        let item322 = TemplateModel(imageBg: "Pattern22")
+        let item323 = TemplateModel(imageBg: "Pattern23")
+        let item324 = TemplateModel(imageBg: "Pattern24")
+        let item325 = TemplateModel(imageBg: "Pattern25")
+        let item326 = TemplateModel(imageBg: "Pattern26")
+        let item327 = TemplateModel(imageBg: "Pattern27")
+        let item328 = TemplateModel(imageBg: "Pattern28")
+        let item329 = TemplateModel(imageBg: "Pattern29")
+        let item330 = TemplateModel(imageBg: "Pattern30")
+        let item331 = TemplateModel(imageBg: "Pattern31")
+        let item332 = TemplateModel(imageBg: "Pattern32")
+        let item333 = TemplateModel(imageBg: "Pattern33")
+
+        
+        let items = [[item00,item01,item02,item03,item04,item05,item06,item07,item08,item09,item10,item11,item12,item13,item14,item15,item16,item17],
+                     [item100,item101,item102,item103,item104,item105,item106,item107,item108,item109,item110,item112,item113,item114,item115,item116,item117,item118,item119,item120,item121,item122,item123,item124,item125,item126,item127,item128,item129,item130,item131,item132,item133,item134,item135,item136,item137,item138,item139,item140,item141,item142,item143,item144],
+                     [item200,item201,item202,item203,item204,item205,item206,item207],
+                     [item300,item301,item302,item303,item304,item305,item306,item307,item308,item309,item310,item311,item312,item313,item314,item315,item316,item317,item318,item319,item320,item321,item322,item323,item324,item325,item326,item327,item328,item329,item330,item331,item332,item333]
+        ]
+        
+        return items
+    }
     
     static func getTemplateTabData() -> [String] {
         let items = [BSWHPhotoPickerLocalization.shared.localized("ALL"),

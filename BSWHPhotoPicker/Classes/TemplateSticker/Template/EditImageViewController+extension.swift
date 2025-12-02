@@ -222,7 +222,11 @@ extension EditImageViewController:RatioToolViewDelegate {
                 sticker.removeFromSuperview()
             }
             
-            StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName, currentVC: self)
+            if let name = item?.jsonName, name.count > 0 {
+                StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName!, currentVC: self)
+            }else{
+                StickerManager.shared.getCurrentVC(currentVC: self)
+            }
             
             convertStickerFrames(
                 stickers: StickerManager.shared.stickerArr,
