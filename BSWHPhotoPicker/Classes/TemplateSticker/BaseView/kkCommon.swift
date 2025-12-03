@@ -10,7 +10,7 @@ import UIKit
 class kkCommon {
     static func imageFromHex(_ hex: String,
                       alpha: CGFloat = 1.0,
-                      size: CGSize = CGSize(width: 10, height: 10)) -> UIImage? {
+                      size: CGSize = CGSize(width: 400, height: 400)) -> UIImage? {
 
         guard let color = UIColor(hex: hex)?.withAlphaComponent(alpha) else { return nil }
 

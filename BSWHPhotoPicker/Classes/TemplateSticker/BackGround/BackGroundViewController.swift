@@ -186,8 +186,9 @@ extension BackGroundViewController: UIColorPickerViewControllerDelegate {
         print("选中的颜色:", color)
         if let cItem = colorItem {
             viewController.dismiss(animated: false)
-            let img = UIImage.from(color: color, size: CGSize(width: 10, height: 10))
+            let img = UIImage.from(color: color, size: CGSize(width: 400, height: 400))
             let controller = EditImageViewController(image: img)
+            controller.pickerColor = color
             controller.item = cItem
             controller.modalPresentationStyle = .fullScreen
             self.present(controller, animated: true)

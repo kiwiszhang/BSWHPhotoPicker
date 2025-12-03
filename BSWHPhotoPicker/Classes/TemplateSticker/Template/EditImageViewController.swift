@@ -15,6 +15,7 @@ let kRatioToolsViewHeight = 193.h
 
 public class EditImageViewController: ZLEditImageViewController {
     var item:TemplateModel? = nil
+    var pickerColor:UIColor? = nil
     var currentSticker:EditableStickerView? = nil
     private var stickerToolsViewBottomConstraint: Constraint?
     private var ratioToolViewBottomConstraint: Constraint?

@@ -250,7 +250,24 @@ extension EditImageViewController:StickerToolsViewDelegate {
 // MARK: - 比例工具栏 RatioToolView-RatioToolViewDelegate
 extension EditImageViewController:RatioToolViewDelegate {
     func RatioToolViewDidSelectItemAt(_ sender: RatioToolView, indexPath: IndexPath,ratioItem:RatioToolsModel) {
-        let image = BSWHBundle.image(named: item!.imageBg)
+        
+        var image:UIImage? = nil
+        if item!.imageBg.hasPrefix("#") {
+            if let img = kkCommon.imageFromHex(item!.imageBg) {
+                image = img
+            }
+        }else if item!.imageBg == "BackgroundNoColor" {
+            if let img = kkCommon.imageFromHex("#FFFFFF",alpha: 0) {
+                image = img
+            }
+        }else if item!.imageBg == "BackgroundPicker" {
+            if let color = pickerColor {
+                image = UIImage.from(color: color, size: CGSize(width: 400, height: 400))
+            }
+        }else{
+            image = BSWHBundle.image(named: item!.imageBg)
+        }
+        
         if let squareImage = image!.cropped(toAspectRatioWidth: ratioItem.width, height: ratioItem.height) {
             
             for sticker in StickerManager.shared.stickerArr {
