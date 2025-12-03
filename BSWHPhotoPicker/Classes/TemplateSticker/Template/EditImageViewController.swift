@@ -188,7 +188,13 @@ public class EditImageViewController: ZLEditImageViewController {
             hideBottomPanel()
         }
 
-        if sticker.stickerModel?.imageName == "Birthday02-sticker-bg00" {
+        if sticker.stickerModel?.imageName == "Travel-sticker-bg06" {
+            if sticker.imageData != BSWHBundle.image(named: "addEmptyImage")?.pngData() {
+                imageView.image = UIImage(data: (sticker.stickerModel?.imageData)!)?.forceRGBA()
+            }else{
+                imageView.image = BSWHBundle.image(named: "Travel07-bg")?.forceRGBA()
+            }
+        }else if sticker.stickerModel?.imageName == "Birthday02-sticker-bg00" {
             if sticker.imageData != BSWHBundle.image(named: "addEmptyImage")?.pngData() {
                 imageView.image = UIImage(data: (sticker.stickerModel?.imageData)!)?.forceRGBA()
             }else{
@@ -260,19 +266,19 @@ public class EditImageViewController: ZLEditImageViewController {
     // MARK: - stickerToolsView 隐藏显示处理
     @objc func showBottomPanel() {
         topView.hidden(true)
-        topView.snp.remakeConstraints { make in
+        topView.snp.updateConstraints { make in
             make.top.equalTo(statusView.snp.bottom)
             make.height.equalTo(0.h)
             make.left.right.equalToSuperview()
         }
-        contentView.snp.remakeConstraints { make in
+        contentView.snp.updateConstraints { make in
             make.width.equalTo(kkScreenWidth)
             make.left.equalToSuperview().offset(0)
             make.height.equalTo(kkScreenHeight - kstickerToolsViewHeight - kkSAFE_AREA_TOP)
             make.top.equalTo(topView.snp.bottom).offset(0)
         }
         contentView.addSubview(mainScrollView)
-        mainScrollView.snp.remakeConstraints { make in
+        mainScrollView.snp.updateConstraints { make in
             make.width.equalTo(kkScreenWidth)
             make.left.equalToSuperview().offset(0)
             make.height.equalToSuperview()

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import BSWHPhotoPicker
 import Photos
 
 // MARK: - 顶部工具栏 TemplateTopView-TemplateTopViewDelegate
@@ -17,7 +16,7 @@ extension EditImageViewController:TemplateTopViewDelegate {
     }
     func backTemplate(_ sender: TemplateTopView){
         currentSticker = nil
-        hideBottomPanel()
+//        hideBottomPanel()
         if canRedo {
             redoAction()
         }
@@ -25,7 +24,7 @@ extension EditImageViewController:TemplateTopViewDelegate {
     }
     func reBackTemplate(_ sender: TemplateTopView) {
         currentSticker = nil
-        hideBottomPanel()
+//        hideBottomPanel()
         if canUndo {
             undoAction()
         }

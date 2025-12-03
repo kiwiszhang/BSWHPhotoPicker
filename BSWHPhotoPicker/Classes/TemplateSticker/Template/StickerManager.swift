@@ -153,7 +153,7 @@ public final class StickerManager: NSObject {
 //        let selectedImage: UIImage = sticker.stickerModel?.stickerImage ?? BSWHBundle.image(named: (sticker.stickerModel?.bgAddImageType)!)!
         var selectedImage: UIImage = UIImage(data: sticker.state.imageData)!
         if sticker.state.imageData == BSWHBundle.image(named: "addEmptyImage")?.pngData() {
-            selectedImage = BSWHBundle.image(named: "Birthday02-bg")!
+            selectedImage = BSWHBundle.image(named: "Travel07-bg")!
         }
         sticker.updateImage(selectedImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: controller!)
     }
@@ -329,15 +329,21 @@ extension ZLImageStickerView {
                let frame = BSWHBundle.image(named: stickerModel.imageMask!) {
                 
                 if stickerModel.imageMask == "addEmptyImage" {
-                    var tempImg:UIImage? = nil
                     vc.imageView.contentMode(.scaleAspectFill)
-                    if stickerModel.imageData == nil {
-                        tempImg = BSWHBundle.image(named: "Birthday02-bg")!
-                        vc.imageView.image = BSWHBundle.image(named: "Birthday02-bg")
-                    }else{
-                        tempImg = newImage
-                        vc.imageView.image = newImage.forceRGBA()
-                     }
+
+                    if stickerModel.imageName == "Travel-sticker-bg06" {
+                        if stickerModel.imageData == nil {
+                            vc.imageView.image = BSWHBundle.image(named: "Travel07-bg")
+                        }else{
+                            vc.imageView.image = newImage.forceRGBA()
+                         }
+                    }else if stickerModel.imageName == "Birthday02-sticker-bg00" {
+                        if stickerModel.imageData == nil {
+                            vc.imageView.image = BSWHBundle.image(named: "Travel07-bg")
+                        }else{
+                            vc.imageView.image = newImage.forceRGBA()
+                         }
+                    }
                     finalImage = overlayImageWithFrame(BSWHBundle.image(named: "Birthday02-sticker-bg00")!, baseImage: base, frameImage: frame)
                 }else{
                     finalImage = overlayImageWithFrame(newImage, baseImage: base, frameImage: frame)
