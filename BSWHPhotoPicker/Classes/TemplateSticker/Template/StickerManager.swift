@@ -257,6 +257,7 @@ extension StickerManager: PHPickerViewControllerDelegate {
                                     let newState = stickerView.state
                                     stickerView.setOperation02(false,oldState:oldState,newState:newState)
                                 }
+                                self.controller?.backAndreBackStatus()
                             }
                         }
                     }
@@ -279,6 +280,7 @@ extension StickerManager: PHPickerViewControllerDelegate {
                         if let image = sticker.stickerModel?.stickerImage {
                             sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: self.controller!)
                         }
+                        self.controller?.backAndreBackStatus()
                     }
                 }
             }

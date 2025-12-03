@@ -116,7 +116,7 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
                 sticker.frame = result.frame
                 let image = sticker.toImage(targetSize: result.frame.size)
                 let frame = result.frame
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [self] in
                     self.switchOperation(type: .imageSticker)
                     let state: ImageStickerModel = ImageStickerModel(imageName: "empty",imageData:image.pngData(), originFrame: CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width, height: frame.size.height),gesScale: 1,gesRotation: 0,overlayRect: CGRect(x:0,y: 0,width: 1,height: 1) ,isBgImage: true)
                     state.imageData = image.pngData()
@@ -129,6 +129,7 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
                     if let image = sticker.stickerModel?.stickerImage {
                         sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: self)
                     }
+                    backAndreBackStatus()
                 }
             }
         }
@@ -141,6 +142,7 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
                 self.imageView.image = UIImage(data: self.currentSticker!.imageData!)?.forceRGBA()
             }
         }
+        backAndreBackStatus()
     }
     
     func addPhoto(){
@@ -154,6 +156,7 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
             } else {
                 print("⚠️ 没有返回图片")
             }
+            backAndreBackStatus()
         }
     }
     
@@ -161,7 +164,7 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
         StickerManager.shared.delegate?.addStickerImage(controller: self) { [weak self] image in
             print("添加贴纸")
             if let img = image {
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [self] in
                     self!.switchOperation(type: .imageSticker)
                     let state: ImageStickerModel = ImageStickerModel(imageName: "empty",imageData:img.pngData(), originFrame: CGRect(x: 240, y: 100, width: 120, height: 120),gesScale: 1,gesRotation: 0,overlayRect: CGRect(x:0,y: 0,width: 1,height: 1) ,isBgImage: true)
                     let sticker = self!.addImageSticker01(state: state)
@@ -173,6 +176,7 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
                     if let image = sticker.stickerModel?.stickerImage {
                         sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: self!)
                     }
+                    self!.backAndreBackStatus()
                 }
             } else {
                 

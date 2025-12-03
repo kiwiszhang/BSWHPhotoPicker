@@ -338,7 +338,7 @@ public class EditImageViewController: ZLEditImageViewController {
         }
     }
     
-    func backAndreBackStatus(){
+    public func backAndreBackStatus(){
         if canRedo {
             topView.backImg.image(BSWHBundle.image(named: "template-back"))
         }else{
