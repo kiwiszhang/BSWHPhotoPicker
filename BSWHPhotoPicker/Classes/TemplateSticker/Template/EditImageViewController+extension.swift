@@ -81,75 +81,106 @@ extension EditImageViewController:TemplateTopViewDelegate {
 // MARK: - 整体工具栏 ToolsCollectionView-ToolsCollectionViewDelegate
 extension EditImageViewController:ToolsCollectionViewDelegate {
     func cellDidSelectItemAt(_ sender: ToolsCollectionView, indexPath: IndexPath) {
-        if indexPath.row == 0 {
-            self.switchOperation(type: .textSticker)
-            self.addTextSticker01(font: UIFont.systemFont(ofSize: 25)) { result in
-                if let result = result {
-                    let sticker = result.sticker
-                    sticker.frame = result.frame
-                    let image = sticker.toImage(targetSize: result.frame.size)
-                    let frame = result.frame
-                    DispatchQueue.main.async {
-                        self.switchOperation(type: .imageSticker)
-                        let state: ImageStickerModel = ImageStickerModel(imageName: "empty",imageData:image.pngData(), originFrame: CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width, height: frame.size.height),gesScale: 1,gesRotation: 0,overlayRect: CGRect(x:0,y: 0,width: 1,height: 1) ,isBgImage: true)
-                        state.imageData = image.pngData()
-                        let sticker = self.addImageSticker01(state: state)
-                        sticker.stickerModel = state
-                        StickerManager.shared.modelMap[sticker.id] = state
-                        StickerManager.shared.stickerArr.append(sticker)
-                        let tap = UITapGestureRecognizer(target: StickerManager.shared, action: #selector(StickerManager.shared.stickerTapped(_:)))
-                        sticker.addGestureRecognizer(tap)
-                        if let image = sticker.stickerModel?.stickerImage {
-                            sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: self)
-                        }
+
+        if StickerManager.shared.templateOrBackground == 1 {
+            if indexPath.row == 0 {
+                addTextView()
+            }else if indexPath.row == 1 {
+                addPhoto()
+            }else if indexPath.row == 2 {
+                StickerManager.shared.checkPhotoAuthorizationAndPresentPicker(presentTypeFrom: 1)
+            }else if indexPath.row == 3 {
+                addStickerView()
+            }else if indexPath.row == 4 {
+                changeRatio()
+            }
+        }else if StickerManager.shared.templateOrBackground == 2 {
+            if indexPath.row == 0 {
+                addTextView()
+            }else if indexPath.row == 1 {
+                StickerManager.shared.checkPhotoAuthorizationAndPresentPicker(presentTypeFrom: 1)
+            }else if indexPath.row == 2 {
+                addStickerView()
+            }else if indexPath.row == 3 {
+                changeRatio()
+            }else if indexPath.row == 4 {
+            }
+        }
+    }
+    
+    func addTextView(){
+        self.switchOperation(type: .textSticker)
+        self.addTextSticker01(font: UIFont.systemFont(ofSize: 25)) { result in
+            if let result = result {
+                let sticker = result.sticker
+                sticker.frame = result.frame
+                let image = sticker.toImage(targetSize: result.frame.size)
+                let frame = result.frame
+                DispatchQueue.main.async {
+                    self.switchOperation(type: .imageSticker)
+                    let state: ImageStickerModel = ImageStickerModel(imageName: "empty",imageData:image.pngData(), originFrame: CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width, height: frame.size.height),gesScale: 1,gesRotation: 0,overlayRect: CGRect(x:0,y: 0,width: 1,height: 1) ,isBgImage: true)
+                    state.imageData = image.pngData()
+                    let sticker = self.addImageSticker01(state: state)
+                    sticker.stickerModel = state
+                    StickerManager.shared.modelMap[sticker.id] = state
+                    StickerManager.shared.stickerArr.append(sticker)
+                    let tap = UITapGestureRecognizer(target: StickerManager.shared, action: #selector(StickerManager.shared.stickerTapped(_:)))
+                    sticker.addGestureRecognizer(tap)
+                    if let image = sticker.stickerModel?.stickerImage {
+                        sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: self)
                     }
-                }
-            }
-        }else if indexPath.row == 1 {
-//            showBottomPanel()
-            StickerManager.shared.delegate?.replaceBackgroundWith(controller: self,imageRect: imageView.frame) { [weak self] image in
-                guard let self = self else { return }
-                if let img = image {
-                    print("🎉 收到代理返回的图片：\(img)")
-                    replaceBgImage(image: img)
-                    resetContainerViewFrame()
-//                    convertStickerFrames(stickers: StickerManager.shared.stickerArr, oldSize: BSWHBundle.image(named: item!.imageBg)!.size, newSize: containerView.frame.size, mode: .fit)
-                } else {
-                    print("⚠️ 没有返回图片")
-                }
-            }
-        }else if indexPath.row == 2 {
-            StickerManager.shared.checkPhotoAuthorizationAndPresentPicker(presentTypeFrom: 1)
-        }else if indexPath.row == 3 {
-            StickerManager.shared.delegate?.addStickerImage(controller: self) { [weak self] image in
-                print("添加贴纸")
-                if let img = image {
-                    DispatchQueue.main.async {
-                        self!.switchOperation(type: .imageSticker)
-                        let state: ImageStickerModel = ImageStickerModel(imageName: "empty",imageData:img.pngData(), originFrame: CGRect(x: 240, y: 100, width: 120, height: 120),gesScale: 1,gesRotation: 0,overlayRect: CGRect(x:0,y: 0,width: 1,height: 1) ,isBgImage: true)
-                        let sticker = self!.addImageSticker01(state: state)
-                        sticker.stickerModel = state
-                        StickerManager.shared.modelMap[sticker.id] = state
-                        StickerManager.shared.stickerArr.append(sticker)
-                        let tap = UITapGestureRecognizer(target: StickerManager.shared, action: #selector(StickerManager.shared.stickerTapped(_:)))
-                        sticker.addGestureRecognizer(tap)
-                        if let image = sticker.stickerModel?.stickerImage {
-                            sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: self!)
-                        }
-                    }
-                } else {
-                    
-                }
-            }
-        }else if indexPath.row == 4 {
-            showRatioBottomPanel()
-            if let sticker = self.currentSticker {
-                if sticker.imageMask == "addEmptyImage" {
-                    self.imageView.image = UIImage(data: self.currentSticker!.imageData!)?.forceRGBA()
                 }
             }
         }
     }
+    
+    func changeRatio(){
+        showRatioBottomPanel()
+        if let sticker = self.currentSticker {
+            if sticker.imageMask == "addEmptyImage" {
+                self.imageView.image = UIImage(data: self.currentSticker!.imageData!)?.forceRGBA()
+            }
+        }
+    }
+    
+    func addPhoto(){
+        StickerManager.shared.delegate?.replaceBackgroundWith(controller: self,imageRect: imageView.frame) { [weak self] image in
+            guard let self = self else { return }
+            if let img = image {
+                print("🎉 收到代理返回的图片：\(img)")
+                replaceBgImage(image: img)
+                resetContainerViewFrame()
+//                    convertStickerFrames(stickers: StickerManager.shared.stickerArr, oldSize: BSWHBundle.image(named: item!.imageBg)!.size, newSize: containerView.frame.size, mode: .fit)
+            } else {
+                print("⚠️ 没有返回图片")
+            }
+        }
+    }
+    
+    func addStickerView(){
+        StickerManager.shared.delegate?.addStickerImage(controller: self) { [weak self] image in
+            print("添加贴纸")
+            if let img = image {
+                DispatchQueue.main.async {
+                    self!.switchOperation(type: .imageSticker)
+                    let state: ImageStickerModel = ImageStickerModel(imageName: "empty",imageData:img.pngData(), originFrame: CGRect(x: 240, y: 100, width: 120, height: 120),gesScale: 1,gesRotation: 0,overlayRect: CGRect(x:0,y: 0,width: 1,height: 1) ,isBgImage: true)
+                    let sticker = self!.addImageSticker01(state: state)
+                    sticker.stickerModel = state
+                    StickerManager.shared.modelMap[sticker.id] = state
+                    StickerManager.shared.stickerArr.append(sticker)
+                    let tap = UITapGestureRecognizer(target: StickerManager.shared, action: #selector(StickerManager.shared.stickerTapped(_:)))
+                    sticker.addGestureRecognizer(tap)
+                    if let image = sticker.stickerModel?.stickerImage {
+                        sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: self!)
+                    }
+                }
+            } else {
+                
+            }
+        }
+    }
+    
+    
 }
 
 

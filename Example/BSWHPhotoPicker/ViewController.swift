@@ -118,6 +118,7 @@ class ViewController: UIViewController {
     
     func presentBgVC(){
         let vc = UINavigationController(rootViewController: BackGroundViewController())
+        StickerManager.shared.delegate = self
         vc.modalPresentationStyle = .overFullScreen
         self.present(vc, animated: true)
     }
