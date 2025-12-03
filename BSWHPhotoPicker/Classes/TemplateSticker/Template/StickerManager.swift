@@ -336,7 +336,7 @@ extension ZLImageStickerView {
                         vc.imageView.image = BSWHBundle.image(named: "Birthday02-bg")
                     }else{
                         tempImg = newImage
-                        vc.imageView.image = newImage
+                        vc.imageView.image = newImage.forceRGBA()
                      }
                     finalImage = overlayImageWithFrame(BSWHBundle.image(named: "Birthday02-sticker-bg00")!, baseImage: base, frameImage: frame)
                 }else{
@@ -423,7 +423,7 @@ extension ZLImageStickerView {
         
         // MARK: - 更新 UIImageView 或 self.image
         if let imageView = self.subviews.compactMap({ $0 as? UIImageView }).first {
-            imageView.image = finalImage
+            imageView.image = finalImage?.forceRGBA()
             imageView.setNeedsDisplay()
         } else if let finalImage = finalImage {
             self.image = finalImage

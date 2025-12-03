@@ -53,7 +53,9 @@ class ConfigDataItem {
         let items = [BSWHPhotoPickerLocalization.shared.localized("Color"),
                      BSWHPhotoPickerLocalization.shared.localized("Texture"),
                      BSWHPhotoPickerLocalization.shared.localized("Geometric"),
-                     BSWHPhotoPickerLocalization.shared.localized("Pattern"),]
+                     BSWHPhotoPickerLocalization.shared.localized("Pattern"),
+                     BSWHPhotoPickerLocalization.shared.localized("Grid"),
+        ]
         return items
     }
     
@@ -162,17 +164,21 @@ class ConfigDataItem {
         let item326 = TemplateModel(imageBg: "Pattern26")
         let item327 = TemplateModel(imageBg: "Pattern27")
         let item328 = TemplateModel(imageBg: "Pattern28")
-        let item329 = TemplateModel(imageBg: "Pattern29")
-        let item330 = TemplateModel(imageBg: "Pattern30")
-        let item331 = TemplateModel(imageBg: "Pattern31")
-        let item332 = TemplateModel(imageBg: "Pattern32")
-        let item333 = TemplateModel(imageBg: "Pattern33")
+        
+        
+        let item400 = TemplateModel(imageBg: "Pattern29")
+        let item401 = TemplateModel(imageBg: "Pattern30")
+        let item402 = TemplateModel(imageBg: "Pattern31")
+        let item403 = TemplateModel(imageBg: "Pattern32")
+        let item404 = TemplateModel(imageBg: "Pattern33")
+        let item405 = TemplateModel(imageBg: "Pattern34")
 
         
         let items = [[item00,item01,item02,item03,item04,item05,item06,item07,item08,item09,item10,item11,item12,item13,item14,item15,item16,item17],
                      [item100,item101,item102,item103,item104,item105,item106,item107,item108,item109,item110,item112,item113,item114,item115,item116,item117,item118,item119,item120,item121,item122,item123,item124,item125,item126,item127,item128,item129,item130,item131,item132,item133,item134,item135,item136,item137,item138,item139,item140,item141,item142,item143,item144],
                      [item200,item201,item202,item203,item204,item205,item206,item207],
-                     [item300,item301,item302,item303,item304,item305,item306,item307,item308,item309,item310,item311,item312,item313,item314,item315,item316,item317,item318,item319,item320,item321,item322,item323,item324,item325,item326,item327,item328,item329,item330,item331,item332,item333]
+                     [item300,item301,item302,item303,item304,item305,item306,item307,item308,item309,item310,item311,item312,item313,item314,item315,item316,item317,item318,item319,item320,item321,item322,item323,item324,item325,item326,item327,item328],
+                     [item400,item401,item402,item403,item404,item405]
         ]
         
         return items

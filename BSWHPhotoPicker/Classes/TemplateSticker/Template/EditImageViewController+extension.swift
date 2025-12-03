@@ -146,7 +146,7 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
             showRatioBottomPanel()
             if let sticker = self.currentSticker {
                 if sticker.imageMask == "addEmptyImage" {
-                    self.imageView.image = UIImage(data: self.currentSticker!.imageData!)
+                    self.imageView.image = UIImage(data: self.currentSticker!.imageData!)?.forceRGBA()
                 }
             }
         }
@@ -262,7 +262,7 @@ func convertStickerFrames(
     case .byHeight:
         scale = scaleByHeight
     case .fit:
-        scale = min(scaleByWidth, scaleByHeight)
+        scale = min(scaleByWidth, scaleByHeight) * (newSize.width / kkScreenWidth)
     }
 
     let scaledCanvasW = oldSize.width * scale
@@ -272,7 +272,7 @@ func convertStickerFrames(
 
     for sticker in stickers {
         let oldCenter = sticker.center
-        let newCenter = CGPoint(x: oldCenter.x * scale + offsetX,
+        let newCenter = CGPoint(x: oldCenter.x * scale + offsetX * scale,
                                 y: oldCenter.y * scale + offsetY)
 
         sticker.totalTranslationPoint.x *= scale

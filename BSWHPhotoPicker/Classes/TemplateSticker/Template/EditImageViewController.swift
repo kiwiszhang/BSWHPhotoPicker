@@ -83,7 +83,7 @@ public class EditImageViewController: ZLEditImageViewController {
             self.hideBottomPanel()
             if let sticker = self.currentSticker {
                 if sticker.imageMask == "addEmptyImage" {
-                    self.imageView.image = UIImage(data: self.currentSticker!.imageData!)
+                    self.imageView.image = UIImage(data: self.currentSticker!.imageData!)?.forceRGBA()
                 }
             }
         }
@@ -91,7 +91,7 @@ public class EditImageViewController: ZLEditImageViewController {
             self.hideRatioBottomPanel()
             if let sticker = self.currentSticker {
                 if sticker.imageMask == "addEmptyImage" {
-                    self.imageView.image = UIImage(data: self.currentSticker!.imageData!)
+                    self.imageView.image = UIImage(data: self.currentSticker!.imageData!)?.forceRGBA()
                 }
             }
         }
@@ -190,9 +190,9 @@ public class EditImageViewController: ZLEditImageViewController {
 
         if sticker.stickerModel?.imageName == "Birthday02-sticker-bg00" {
             if sticker.imageData != BSWHBundle.image(named: "addEmptyImage")?.pngData() {
-                imageView.image = UIImage(data: (sticker.stickerModel?.imageData)!)
+                imageView.image = UIImage(data: (sticker.stickerModel?.imageData)!)?.forceRGBA()
             }else{
-                imageView.image = BSWHBundle.image(named: "Birthday02-bg")
+                imageView.image = BSWHBundle.image(named: "Birthday02-bg")?.forceRGBA()
             }
         }
     }

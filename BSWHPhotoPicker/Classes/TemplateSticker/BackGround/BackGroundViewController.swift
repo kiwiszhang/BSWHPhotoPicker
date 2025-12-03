@@ -166,7 +166,6 @@ extension BackGroundViewController: BackgroundContentCellDelegate {
             guard let image = imageBG else { return }
             persentVC(item: item, image: image)
         }
-        
     }
     
     func persentVC(item: TemplateModel,image:UIImage){
