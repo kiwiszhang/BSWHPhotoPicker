@@ -397,7 +397,7 @@ extension ZLImageStickerView {
 //                        let cornerRadius = min(overlayRect.width, overlayRect.height) * (stickerModel.cornerRadiusScale ?? 0.1)
                         var cornerRadius = 16.0.h
                         if stickerModel.imageName == "Travel-sticker-bg03" {
-                            cornerRadius = 57.h
+                            cornerRadius = 50.h
                         }
                         return UIBezierPath(roundedRect: overlayRect, cornerRadius: cornerRadius)
                     default:

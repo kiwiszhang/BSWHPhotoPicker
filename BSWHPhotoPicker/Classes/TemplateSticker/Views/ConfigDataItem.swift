@@ -124,6 +124,35 @@ class ConfigDataItem {
         let item143 = TemplateModel(imageBg: "Texture41")
         let item144 = TemplateModel(imageBg: "Texture42")
 
+        let item145 = TemplateModel(imageBg: "Pattern34")
+        let item146 = TemplateModel(imageBg: "Pattern35")
+        let item147 = TemplateModel(imageBg: "Pattern36")
+        let item148 = TemplateModel(imageBg: "Pattern37")
+        let item149 = TemplateModel(imageBg: "Pattern38")
+        let item150 = TemplateModel(imageBg: "Pattern39")
+        let item151 = TemplateModel(imageBg: "Pattern40")
+        let item152 = TemplateModel(imageBg: "Pattern41")
+        let item153 = TemplateModel(imageBg: "Pattern42")
+        let item154 = TemplateModel(imageBg: "Pattern43")
+        let item155 = TemplateModel(imageBg: "Pattern44")
+        let item156 = TemplateModel(imageBg: "Pattern45")
+        let item157 = TemplateModel(imageBg: "Pattern46")
+        let item158 = TemplateModel(imageBg: "Pattern47")
+        let item159 = TemplateModel(imageBg: "Pattern48")
+        let item160 = TemplateModel(imageBg: "Pattern49")
+        let item161 = TemplateModel(imageBg: "Pattern50")
+        let item162 = TemplateModel(imageBg: "Pattern51")
+        let item163 = TemplateModel(imageBg: "Pattern52")
+        let item164 = TemplateModel(imageBg: "Pattern53")
+        let item165 = TemplateModel(imageBg: "Pattern54")
+        let item166 = TemplateModel(imageBg: "Pattern55")
+        let item167 = TemplateModel(imageBg: "Pattern56")
+        let item168 = TemplateModel(imageBg: "Pattern57")
+        let item169 = TemplateModel(imageBg: "Pattern58")
+        let item170 = TemplateModel(imageBg: "Pattern59")
+        let item171 = TemplateModel(imageBg: "Pattern60")
+
+
         
         let item200 = TemplateModel(imageBg: "Geometric00")
         let item201 = TemplateModel(imageBg: "Geometric01")
@@ -171,14 +200,13 @@ class ConfigDataItem {
         let item402 = TemplateModel(imageBg: "Pattern31")
         let item403 = TemplateModel(imageBg: "Pattern32")
         let item404 = TemplateModel(imageBg: "Pattern33")
-        let item405 = TemplateModel(imageBg: "Pattern34")
 
         
         let items = [[item00,item01,item02,item03,item04,item05,item06,item07,item08,item09,item10,item11,item12,item13,item14,item15,item16,item17],
-                     [item100,item101,item102,item103,item104,item105,item106,item107,item108,item109,item110,item112,item113,item114,item115,item116,item117,item118,item119,item120,item121,item122,item123,item124,item125,item126,item127,item128,item129,item130,item131,item132,item133,item134,item135,item136,item137,item138,item139,item140,item141,item142,item143,item144],
+                     [item100,item101,item102,item103,item104,item105,item106,item107,item108,item109,item110,item112,item113,item114,item115,item116,item117,item118,item119,item120,item121,item122,item123,item124,item125,item126,item127,item128,item129,item130,item131,item132,item133,item134,item135,item136,item137,item138,item139,item140,item141,item142,item143,item144,item145,item146,item147,item148,item149,item150,item151,item152,item153,item154,item155,item156,item157,item158,item159,item160,item161,item162,item163,item164,item165,item166,item167,item168,item169,item170,item171],
                      [item200,item201,item202,item203,item204,item205,item206,item207],
                      [item300,item301,item302,item303,item304,item305,item306,item307,item308,item309,item310,item311,item312,item313,item314,item315,item316,item317,item318,item319,item320,item321,item322,item323,item324,item325,item326,item327,item328],
-                     [item400,item401,item402,item403,item404,item405]
+                     [item400,item401,item402,item403,item404]
         ]
         
         return items
