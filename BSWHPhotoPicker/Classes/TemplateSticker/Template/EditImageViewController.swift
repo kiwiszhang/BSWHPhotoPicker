@@ -117,7 +117,11 @@ public class EditImageViewController: ZLEditImageViewController {
         mainScrollView.showsHorizontalScrollIndicator = false
         //根据调整后的containerView布局里面的贴纸
         if item?.isNeedFit == true {
-            convertStickerFrames(stickers: StickerManager.shared.stickerArr, oldSize: BSWHBundle.image(named: item!.imageBg)!.size, newSize: containerView.frame.size, mode: .fit)
+            convertStickerFrames(stickers: StickerManager.shared.stickerArr, oldSize: BSWHBundle.image(named: item!.imageBg)!.size, newSize: containerView.frame.size,
+                                 mode: .fit,
+                                 templateModel: item!,
+                                 ratioModel: nil,
+                                 wBigh: containerView.frame.size.width / containerView.frame.size.height > 1)
         }
         
         if item?.cornerRadius != 0.0 {

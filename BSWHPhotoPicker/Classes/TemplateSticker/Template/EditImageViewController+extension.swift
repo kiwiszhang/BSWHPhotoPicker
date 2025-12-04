@@ -152,7 +152,11 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
             }else{
                 StickerManager.shared.getCurrentVC(currentVC: self)
             }
-            convertStickerFrames(stickers: StickerManager.shared.stickerArr, oldSize: BSWHBundle.image(named: item!.imageBg)!.size, newSize: containerView.frame.size, mode: .fit)
+            convertStickerFrames(stickers: StickerManager.shared.stickerArr, oldSize: BSWHBundle.image(named: item!.imageBg)!.size, newSize: containerView.frame.size,
+                                 mode: .fit,
+                                 templateModel: item!,
+                                 ratioModel: nil,
+                                 wBigh: containerView.frame.size.width / containerView.frame.size.height > 1)
             resetContainerViewFrame()
         }
     }
@@ -164,7 +168,6 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
                 print("🎉 收到代理返回的图片：\(img)")
                 replaceBgImage(image: img)
                 resetContainerViewFrame()
-//                    convertStickerFrames(stickers: StickerManager.shared.stickerArr, oldSize: BSWHBundle.image(named: item!.imageBg)!.size, newSize: containerView.frame.size, mode: .fit)
             } else {
                 print("⚠️ 没有返回图片")
             }
@@ -295,7 +298,11 @@ extension EditImageViewController:RatioToolViewDelegate {
             convertStickerFrames(
                 stickers: StickerManager.shared.stickerArr,
                 oldSize: image!.size,
-                newSize: squareImage.size,mode: .fit
+                newSize: squareImage.size,
+                mode: .fit,
+                templateModel:item!,
+                ratioModel:ratioItem,
+                wBigh: ratioItem.width / ratioItem.height > 1
             )
             replaceBgImage(image: squareImage)
             resetContainerViewFrame()
@@ -306,53 +313,129 @@ extension EditImageViewController:RatioToolViewDelegate {
 
 }
 
+
 func convertStickerFrames(
     stickers: [EditableStickerView],
     oldSize: CGSize,
     newSize: CGSize,
-    mode: CanvasResizeMode
+    mode: CanvasResizeMode,
+    templateModel:TemplateModel,
+    ratioModel:RatioToolsModel?,
+    wBigh:Bool
 ) {
     guard oldSize.width > 0, oldSize.height > 0 else { return }
 
-    // 计算 scale
-    let scaleByWidth = newSize.width / oldSize.width
-    let scaleByHeight = newSize.height / oldSize.height
+    if ratioModel != nil {
+            // scale
+            let scaleByWidth = newSize.width / oldSize.width
+            let scaleByHeight = newSize.height / oldSize.height
 
-    let scale: CGFloat
-    switch mode {
-    case .byWidth:
-        scale = scaleByWidth
-    case .byHeight:
-        scale = scaleByHeight
-    case .fit:
-        scale = min(scaleByWidth, scaleByHeight) * (newSize.width / kkScreenWidth)
+            let scale: CGFloat
+            switch mode {
+            case .byWidth:
+                scale = scaleByWidth
+            case .byHeight:
+                scale = scaleByHeight
+            case .fit:
+                scale = min(scaleByWidth, scaleByHeight)
+            }
+
+            // 缩放后 canvas 尺寸
+            let scaledCanvasW = oldSize.width * scale
+            let scaledCanvasH = oldSize.height * scale
+
+            // 居中偏移
+            let offsetX = (newSize.width - scaledCanvasW) / 2.0
+            let offsetY = (newSize.height - scaledCanvasH) / 2.0
+
+            for sticker in stickers {
+
+                let oldCenter = sticker.center
+
+                // 比例
+                let percentX = oldCenter.x / oldSize.width
+                let percentY = oldCenter.y / oldSize.height
+
+                // 正确的新中心点（关键代码）
+                let newCenter = CGPoint(
+                    x: percentX * scaledCanvasW + offsetX,
+                    y: percentY * scaledCanvasH + offsetY
+                )
+
+                // 缩放
+                sticker.originScale *= scale
+                sticker.gesScale = 1
+                sticker.updateTransform()
+
+                // 设置位置
+                sticker.center = newCenter
+
+                sticker.setNeedsLayout()
+                sticker.layoutIfNeeded()
+                sticker.refreshResizeButtonPosition()
+
+                sticker.originFrame = sticker.frame
+                sticker.originTransform = sticker.transform
+            }
+    }else{
+        // 以保持内容不变形的缩放方式计算 scale（fit）
+        let scaleW = newSize.width / oldSize.width
+        let scaleH = newSize.height / oldSize.height
+        let scale = min(scaleW, scaleH)
+
+        var newScale = 1.0
+        if newSize.width < newSize.height && (equalBy3Decimal(newSize.width / newSize.height, 3 / 4.0) || equalBy3Decimal(newSize.width / newSize.height, 9 / 16.0)) {
+                newScale = scale
+                if (oldSize.height == 812 || oldSize.height == 591) &&  equalBy3Decimal(newSize.width / newSize.height, 3 / 4.0){
+                    newScale = 1.0
+                }else if (oldSize.height == 591 || oldSize.height == 375) &&  equalBy3Decimal(newSize.width / newSize.height, 9 / 16.0){
+                    newScale = 1
+                }else{
+                    newScale = scale
+                }
+            }else if newSize.width < 376 && oldSize.height == 812 {
+                newScale = scale
+            }else{
+                newScale = 1.0
+            }
+
+
+        for sticker in stickers {
+
+            let oldCenter = sticker.center
+
+            // ---- 1⃣️比例位置 ----
+            let percentX = oldCenter.x / oldSize.width
+            let percentY = oldCenter.y / oldSize.height
+
+            // ---- 2⃣️按比例映射到新画布 ----
+            let newCenter = CGPoint(
+                x: percentX * newSize.width * newScale,
+                y: percentY * newSize.height * newScale
+            )
+
+            // ---- 3⃣️缩放贴纸大小 ----
+            sticker.originScale *= scale
+            sticker.gesScale = 1
+            sticker.updateTransform()
+
+            // ---- 4⃣️设置位置 ----
+            sticker.center = newCenter
+
+            sticker.setNeedsLayout()
+            sticker.layoutIfNeeded()
+            sticker.refreshResizeButtonPosition()
+
+            sticker.originFrame = sticker.frame
+            sticker.originTransform = sticker.transform
+        }
+    }
+    func equalBy3Decimal(_ a: CGFloat, _ b: CGFloat) -> Bool {
+        let aa = (a * 1000).rounded() / 1000
+        let bb = (b * 1000).rounded() / 1000
+        return aa == bb
     }
 
-    let scaledCanvasW = oldSize.width * scale
-    let scaledCanvasH = oldSize.height * scale
-    let offsetX = (newSize.width - scaledCanvasW) / 2.0
-    let offsetY = (newSize.height - scaledCanvasH) / 2.0
-
-    for sticker in stickers {
-        let oldCenter = sticker.center
-        let newCenter = CGPoint(x: oldCenter.x * scale + offsetX,
-                                y: oldCenter.y * scale + offsetY)
-        sticker.totalTranslationPoint.x *= scale
-        sticker.totalTranslationPoint.y *= scale
-
-        sticker.originScale *= scale
-        sticker.gesScale = 1
-        sticker.updateTransform()
-
-        sticker.center = newCenter
-
-        sticker.setNeedsLayout()
-        sticker.layoutIfNeeded()
-        sticker.refreshResizeButtonPosition()
-
-        sticker.originFrame = sticker.frame
-        sticker.originTransform = sticker.transform
-    }
 }
 
 enum CanvasResizeMode {

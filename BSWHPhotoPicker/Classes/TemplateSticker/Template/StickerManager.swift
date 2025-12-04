@@ -33,7 +33,7 @@ public protocol StickerManagerDelegate: AnyObject {
 // MARK: - StickerManager
 public final class StickerManager: NSObject {
     weak var controller: EditImageViewController?
-    private weak var currentStickerView: ZLImageStickerView?
+    private weak var currentStickerView: EditableStickerView?
     var modelMap: [String: ImageStickerModel] = [:]
     var stickerArr: [EditableStickerView] = []
     public weak var delegate: StickerManagerDelegate?
@@ -260,6 +260,7 @@ extension StickerManager: PHPickerViewControllerDelegate {
                                     let newState = stickerView.state
                                     stickerView.setOperation02(false,oldState:oldState,newState:newState)
                                 }
+                                self.controller?.currentSticker = self.currentStickerView
                                 self.controller?.backAndreBackStatus()
                             }
                         }
