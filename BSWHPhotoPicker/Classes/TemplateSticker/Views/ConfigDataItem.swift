@@ -233,7 +233,7 @@ class ConfigDataItem {
         let item00 = TemplateHomeModel(image: BSWHBundle.image(named: "backgroundHome03"),templateType: BSWHPhotoPickerLocalization.shared.localized("Texture"))
         let item10 = TemplateHomeModel(image:BSWHBundle.image(named: "backgroundHome02"),templateType: BSWHPhotoPickerLocalization.shared.localized("Color"))
         let item23 = TemplateHomeModel(image: BSWHBundle.image(named: "backgroundHome01") ,templateType: BSWHPhotoPickerLocalization.shared.localized("Pattern"))
-        let item32 = TemplateHomeModel(image: BSWHBundle.image(named: "backgroundHome02"),templateType: BSWHPhotoPickerLocalization.shared.localized("Geometric"))
+        let item32 = TemplateHomeModel(image: BSWHBundle.image(named: "backgroundHome04"),templateType: BSWHPhotoPickerLocalization.shared.localized("Grid"))
         return  [item00,item10,item23,item32]
     }
     
