@@ -671,7 +671,7 @@ public class EditableStickerView: ZLImageStickerView {
 
     @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
         isEditingCustom.toggle()
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":self])
+//        NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":self])
 //        setOperation01(true)
 //        isEditingCustom.toggle()
 //        syncResizeButtonToOverlay()
@@ -743,7 +743,7 @@ public class EditableStickerView: ZLImageStickerView {
             totalTranslationPoint.y += dy
             gesTranslationPoint = .zero
             setOperation(false)
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":self])
+//            NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":self])
         default: break
         }
     }

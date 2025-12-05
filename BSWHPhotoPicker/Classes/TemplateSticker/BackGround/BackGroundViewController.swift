@@ -230,7 +230,7 @@ class BackgroundContentCell: UICollectionViewCell {
         layout.minimumLineSpacing = 9.w         // 上下 cell 间距
 
         let screenWidth = UIScreen.main.bounds.width
-        let itemWidth = (screenWidth - 24.w - 24.w - 9*2.w) / 3
+        let itemWidth = (screenWidth - 24.w - 24.w - 10*2.w) / 3
 
         layout.sectionInset = UIEdgeInsets(top: 9.w, left: 24.w, bottom: 9.w, right: 24.w)
         layout.itemSize = CGSize(width: itemWidth, height: itemWidth)

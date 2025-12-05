@@ -95,7 +95,7 @@ class ViewController: UIViewController {
         presentBgVC()
     }
     @objc private func onClickBack(_ sender: UIButton) {
-        StickerManager.shared.selectedTemplateIndex = 5
+        StickerManager.shared.selectedTemplateIndex = 3
         presentVC()
     }
     @objc private func onClickLang00(_ sender: UIButton) {

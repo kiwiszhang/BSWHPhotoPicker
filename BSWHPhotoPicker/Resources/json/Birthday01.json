@@ -31,7 +31,7 @@
     "overlayRectHeight": 1,
     "imageType": "circle",
     "isBgImage": true,
-    "bgAddImageType":"addGrayImage"
+    "bgAddImageType":"addWhiteImage"
 },{
     "imageName": "empty",
     "originScale": 1,
