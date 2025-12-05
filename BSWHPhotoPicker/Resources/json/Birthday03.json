@@ -13,6 +13,7 @@
     "overlayRectWidth": 0.98,
     "overlayRectHeight": 0.98,
     "imageType": "rectangle",
+    "cornerRadiusScale":20,
     "isBgImage": true,
     "bgAddImageType":"addWhiteImage"
 },{

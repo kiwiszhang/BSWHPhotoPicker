@@ -400,12 +400,7 @@ extension ZLImageStickerView {
                     case "square":
                         return UIBezierPath(rect: overlayRect)
                     case "rectangle":
-//                        let cornerRadius = min(overlayRect.width, overlayRect.height) * (stickerModel.cornerRadiusScale ?? 0.1)
-                        var cornerRadius = 16.0.h
-                        if stickerModel.imageName == "Travel-sticker-bg03" {
-                            cornerRadius = 50.h
-                        }
-                        return UIBezierPath(roundedRect: overlayRect, cornerRadius: cornerRadius)
+                        return UIBezierPath(roundedRect: overlayRect, cornerRadius: stickerModel.cornerRadiusScale ?? 0.0)
                     default:
                         return UIBezierPath(rect: overlayRect)
                     }
