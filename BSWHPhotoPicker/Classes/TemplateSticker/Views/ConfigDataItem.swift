@@ -235,14 +235,14 @@ class ConfigDataItem {
     }
     
     
-    static func getBackgroundToolsData() -> [ToolsModel] {
-        let item00 = ToolsModel(text: BSWHPhotoPickerLocalization.shared.localized("Text"),imageName: "template-text")
-        let item02 = ToolsModel(text: BSWHPhotoPickerLocalization.shared.localized("Photos"),imageName: "template-photos")
-        let item03 = ToolsModel(text: BSWHPhotoPickerLocalization.shared.localized("Stickers"),imageName: "template-stickers")
-        let item04 = ToolsModel(text: BSWHPhotoPickerLocalization.shared.localized("Ratio"),imageName: "template-ratio")
-        let items = [item00,item02,item03,item04]
-        return items
-    }
+//    static func getBackgroundToolsData() -> [ToolsModel] {
+//        let item00 = ToolsModel(text: BSWHPhotoPickerLocalization.shared.localized("Text"),imageName: "template-text")
+//        let item02 = ToolsModel(text: BSWHPhotoPickerLocalization.shared.localized("Photos"),imageName: "template-photos")
+//        let item03 = ToolsModel(text: BSWHPhotoPickerLocalization.shared.localized("Stickers"),imageName: "template-stickers")
+//        let item04 = ToolsModel(text: BSWHPhotoPickerLocalization.shared.localized("Ratio"),imageName: "template-ratio")
+//        let items = [item00,item02,item03,item04]
+//        return items
+//    }
     
     static func getTemplateToolsData() -> [ToolsModel] {
         let item00 = ToolsModel(text: BSWHPhotoPickerLocalization.shared.localized("Text"),imageName: "template-text")

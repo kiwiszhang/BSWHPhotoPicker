@@ -51,7 +51,7 @@ class ViewController: UIViewController {
         button.backgroundColor = .blue
         return button
     }()
-    
+    var count = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -134,9 +134,17 @@ class ViewController: UIViewController {
 extension ViewController: StickerManagerDelegate {
     
     func replaceBackgroundWith(controller: BSWHPhotoPicker.EditImageViewController, imageRect: CGRect, completion: @escaping (UIImage?) -> Void) {
-        let img = UIImage(named: "Christmas02-bg")
+        var img:UIImage? = nil
+        if count == 0 {
+            img = UIImage(named: "Pattern55")
+        }else if count == 1{
+            img = UIImage(named: "Texture00")
+        }else{
+            img = UIImage(named: "Christmas02-bg")
+        }
+        count += 1
         print("image")
-        completion(img)
+        completion(img!)
     }
     
     func addStickerImage(controller: BSWHPhotoPicker.EditImageViewController, completion: @escaping (UIImage?) -> Void) {

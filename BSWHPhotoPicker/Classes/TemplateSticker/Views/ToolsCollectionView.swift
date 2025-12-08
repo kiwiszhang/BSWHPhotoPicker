@@ -53,11 +53,11 @@ class ToolsCollectionView: UIView {
             make.top.equalToSuperview()
             make.height.equalTo(120.h)
         }
-        if StickerManager.shared.templateOrBackground == 1 {
+//        if StickerManager.shared.templateOrBackground == 1 {
             items = ConfigDataItem.getTemplateToolsData()
-        }else{
-            items = ConfigDataItem.getBackgroundToolsData()
-        }
+//        }else{
+//            items = ConfigDataItem.getBackgroundToolsData()
+//        }
         reload()
     }
 

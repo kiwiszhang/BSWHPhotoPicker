@@ -113,7 +113,7 @@ extension EditImageViewController:TemplateTopViewDelegate {
 extension EditImageViewController:ToolsCollectionViewDelegate {
     func cellDidSelectItemAt(_ sender: ToolsCollectionView, indexPath: IndexPath) {
 
-        if StickerManager.shared.templateOrBackground == 1 {
+//        if StickerManager.shared.templateOrBackground == 1 {
             if indexPath.row == 0 {
                 addTextView()
             }else if indexPath.row == 1 {
@@ -125,18 +125,18 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
             }else if indexPath.row == 4 {
                 changeRatio()
             }
-        }else if StickerManager.shared.templateOrBackground == 2 {
-            if indexPath.row == 0 {
-                addTextView()
-            }else if indexPath.row == 1 {
-                StickerManager.shared.checkPhotoAuthorizationAndPresentPicker(presentTypeFrom: 1)
-            }else if indexPath.row == 2 {
-                addStickerView()
-            }else if indexPath.row == 3 {
-                changeRatio()
-            }else if indexPath.row == 4 {
-            }
-        }
+//        }else if StickerManager.shared.templateOrBackground == 2 {
+//            if indexPath.row == 0 {
+//                addTextView()
+//            }else if indexPath.row == 1 {
+//                StickerManager.shared.checkPhotoAuthorizationAndPresentPicker(presentTypeFrom: 1)
+//            }else if indexPath.row == 2 {
+//                addStickerView()
+//            }else if indexPath.row == 3 {
+//                changeRatio()
+//            }else if indexPath.row == 4 {
+//            }
+//        }
     }
     
     func addTextView(){
@@ -198,6 +198,13 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
                 print("🎉 收到代理返回的图片：\(img)")
                 replaceBgImage(image: img)
                 resetContainerViewFrame()
+                convertStickerFrames(stickers: StickerManager.shared.stickerArr,
+                                     oldSize: containerViewOriginFrame.size,
+                                     newSize: containerView.frame.size,
+                                     mode: .fit)
+                resetContainerViewFrame()
+                containerViewOriginFrame = containerView.frame
+
             } else {
                 print("⚠️ 没有返回图片")
             }
