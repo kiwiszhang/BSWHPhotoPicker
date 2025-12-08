@@ -13,9 +13,8 @@
     "overlayRectY": 0,
     "overlayRectWidth": 1,
     "overlayRectHeight": 1,
+    "cornerRadiusScale":54,
     "imageType": "rectangle",
-    "bgAddImageType":"addWhiteImage"
-}
-]
-
+    "bgAddImageType":"Travel-sticker-add02"
+}]
 
