@@ -24,7 +24,7 @@ public class EditImageViewController: ZLEditImageViewController {
     private lazy var ratioToolView = RatioToolView().cornerRadius(20.w, corners: [.topLeft,.topRight]).backgroundColor(.white)
     private lazy var statusView = UIView().backgroundColor(kkColorFromHex("F5F5F5"))
     private lazy var topView = TemplateTopView().backgroundColor(kkColorFromHex("F5F5F5"))
-    private lazy var contentView = UIView().backgroundColor(.white)
+    private lazy var contentView = UIView().backgroundColor(.clear)
     let toolCollectionView:ToolsCollectionView = {
        let view = ToolsCollectionView()
         view.backgroundColor = kkColorFromHex("F5F5F5")
@@ -41,6 +41,8 @@ public class EditImageViewController: ZLEditImageViewController {
         view.addSubview(toolCollectionView)
         view.addSubview(stickerToolsView)
         view.addSubview(ratioToolView)
+        
+        contentView.isOpaque = false
         
         stickerToolsView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()

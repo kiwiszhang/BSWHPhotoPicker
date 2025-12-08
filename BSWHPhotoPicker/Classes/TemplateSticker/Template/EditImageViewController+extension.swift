@@ -31,10 +31,30 @@ extension EditImageViewController:TemplateTopViewDelegate {
         backAndreBackStatus()
     }
     func saveTemplate(_ sender: TemplateTopView) {
-        guard let finalImage = renderImage(from: containerView) else { return }
-        saveImageToAlbum(finalImage)
+//        guard let finalImage = renderImage(from: containerView) else { return }
+        
+        if item?.imageBg == "BackgroundNoColor" {
+            imageView.backgroundColor = .clear
+            imageView.isOpaque = false
+            let v = UIView()
+            v.frame.size = CGSize(width: 400, height: 400)
+            let img = v.exportTransparentPNG()
+            imageView.image = img
+        }
+        if let finalImage = containerView.exportTransparentPNG() {
+            if let data = finalImage.pngData() {
+                print("Has transparent pixel:", data.contains(0))
+            }
+            saveImageToAlbum(finalImage)
+        }
+        
+        if item?.imageBg == "BackgroundNoColor" {
+            imageView.image = BSWHBundle.image(named: "BackgroundNoColor")
+            imageView.backgroundColor = .white
+            imageView.isOpaque = true
+        }
     }
-    
+
     
     func renderImage(from view: UIView) -> UIImage? {
         let format = UIGraphicsImageRendererFormat()
@@ -48,12 +68,23 @@ extension EditImageViewController:TemplateTopViewDelegate {
         }
     }
 
+    func savePNG(_ image: UIImage) {
+        guard let data = image.pngData() else { return }
 
+        PHPhotoLibrary.shared().performChanges({
+            let request = PHAssetCreationRequest.forAsset()
+            let options = PHAssetResourceCreationOptions()
+            options.uniformTypeIdentifier = "public.png"  // 强制 PNG
+            request.addResource(with: .photo, data: data, options: options)
+        }, completionHandler: { success, error in
+            print("Saved:", success, error ?? "")
+        })
+    }
     
     func saveImageToAlbum(_ image: UIImage) {
-        PHPhotoLibrary.requestAuthorization { status in
+        PHPhotoLibrary.requestAuthorization { [self] status in
             if status == .authorized || status == .limited {
-                UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+                savePNG(image)
             } else {
                 DispatchQueue.main.async {
                     self.showAlbumPermissionAlert()
