@@ -170,7 +170,7 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
         showRatioBottomPanel()
         if let sticker = self.currentSticker {
             if sticker.imageMask == "addEmptyImage" {
-                self.imageView.image = UIImage(data: self.currentSticker!.imageData!)?.forceRGBA()
+                self.imageView.image = UIImage(data: self.currentSticker!.imageData!)
             }
         }
         backAndreBackStatus()

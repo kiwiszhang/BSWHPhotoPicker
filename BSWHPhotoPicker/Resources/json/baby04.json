@@ -15,7 +15,7 @@
     "imageType": "IrregularMask",
     "imageMask": "baby04-sticker-bg00",
     "isBgImage": true,
-    "bgAddImageType":"addWhiteImage"
+    "bgAddImageType":"baby03-sticker-add00"
   },{
         "imageName": "empty",
         "originScale": 1,

@@ -343,13 +343,13 @@ extension ZLImageStickerView {
                         if stickerModel.imageData == nil {
                             vc.imageView.image = BSWHBundle.image(named: "Travel07-bg")
                         }else{
-                            vc.imageView.image = newImage.forceRGBA()
+                            vc.imageView.image = newImage
                          }
                     }else if stickerModel.imageName == "Birthday02-sticker-bg00" {
                         if stickerModel.imageData == nil {
                             vc.imageView.image = BSWHBundle.image(named: "Travel07-bg")
                         }else{
-                            vc.imageView.image = newImage.forceRGBA()
+                            vc.imageView.image = newImage
                          }
                     }
                     finalImage = overlayImageWithFrame(BSWHBundle.image(named: "Birthday02-sticker-bg00")!, baseImage: base, frameImage: frame)
@@ -432,7 +432,7 @@ extension ZLImageStickerView {
         
         // MARK: - 更新 UIImageView 或 self.image
         if let imageView = self.subviews.compactMap({ $0 as? UIImageView }).first {
-            imageView.image = finalImage?.forceRGBA()
+            imageView.image = finalImage
             imageView.setNeedsDisplay()
         } else if let finalImage = finalImage {
             self.image = finalImage

@@ -87,7 +87,7 @@ public class EditImageViewController: ZLEditImageViewController {
             self.hideBottomPanel()
             if let sticker = self.currentSticker {
                 if sticker.imageMask == "addEmptyImage" {
-                    self.imageView.image = UIImage(data: self.currentSticker!.imageData!)?.forceRGBA()
+                    self.imageView.image = UIImage(data: self.currentSticker!.imageData!)
                 }
             }
         }
@@ -95,7 +95,7 @@ public class EditImageViewController: ZLEditImageViewController {
             self.hideRatioBottomPanel()
             if let sticker = self.currentSticker {
                 if sticker.imageMask == "addEmptyImage" {
-                    self.imageView.image = UIImage(data: self.currentSticker!.imageData!)?.forceRGBA()
+                    self.imageView.image = UIImage(data: self.currentSticker!.imageData!)
                 }
             }
         }
@@ -202,15 +202,15 @@ public class EditImageViewController: ZLEditImageViewController {
             let model = stickerTemp.stickerModel
             if model?.imageName == "Travel-sticker-bg06" {
                 if stickerTemp.imageData != BSWHBundle.image(named: "addEmptyImage")?.pngData() {
-                    imageView.image = UIImage(data: (model?.imageData)!)?.forceRGBA()
+                    imageView.image = UIImage(data: (model?.imageData)!)
                 }else{
-                    imageView.image = BSWHBundle.image(named: "Travel07-bg")?.forceRGBA()
+                    imageView.image = BSWHBundle.image(named: "Travel07-bg")
                 }
             }else if model?.imageName == "Birthday02-sticker-bg00" {
                 if stickerTemp.imageData != BSWHBundle.image(named: "addEmptyImage")?.pngData() {
-                    imageView.image = UIImage(data: (model?.imageData)!)?.forceRGBA()
+                    imageView.image = UIImage(data: (model?.imageData)!)
                 }else{
-                    imageView.image = BSWHBundle.image(named: "Birthday02-bg")?.forceRGBA()
+                    imageView.image = BSWHBundle.image(named: "Birthday02-bg")
                 }
             }
         }
