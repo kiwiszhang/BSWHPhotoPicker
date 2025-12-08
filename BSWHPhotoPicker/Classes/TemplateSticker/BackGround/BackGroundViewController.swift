@@ -217,8 +217,6 @@ public class BackGroundViewController: UIViewController, UIScrollViewDelegate {
         setupTopView()
         setupCollectionView()
 
-        // initial selection
-        tabView.selectIndex(index: StickerManager.shared.selectedTemplateIndex, animated: false)
         tabView.delegate?.scrViewDidSelect(index: StickerManager.shared.selectedTemplateIndex)
     }
 
@@ -327,10 +325,9 @@ extension BackGroundViewController: UICollectionViewDataSource, UICollectionView
 
 extension BackGroundViewController: CustomScrViewListDelegate {
     func scrViewDidSelect(index: Int) {
-        // safer scroll
-        if index >= 0 && index < titles.count {
-            let ip = IndexPath(item: index, section: 0)
-            collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: true)
+        collectionView.layoutIfNeeded()
+        if let attributes = collectionView.layoutAttributesForItem(at: IndexPath(item: index, section: 0)) {
+            collectionView.scrollRectToVisible(attributes.frame, animated: true)
         }
     }
 }
