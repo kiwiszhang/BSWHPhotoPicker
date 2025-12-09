@@ -334,7 +334,7 @@ class BackGroundWaterfallImageCell: UICollectionViewCell {
             return
         }
         
-        imgView.image = BSWHBundle.image(named: item.imageName)
+        imgView.image = BSWHBundle.image(named: item.imageName + "-thum")
     }
 }
 

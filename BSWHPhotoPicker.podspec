@@ -31,15 +31,16 @@ Pod::Spec.new do |s|
 
   s.dependency 'SnapKit', '~> 5.7.1'
 
-  s.source_files = 'BSWHPhotoPicker/Classes/**/*'
   s.exclude_files = ["BSWHPhotoPicker/Classes/General/ZLWeakProxy.swift"]
   
+  s.source_files = 'BSWHPhotoPicker/Classes/**/*.{swift,h,m}'
   s.resource_bundles = {
     'BSWHPhotoPicker' => [
-      'BSWHPhotoPicker/Assets/StickerAssets.xcassets',
-      'BSWHPhotoPicker/Resources/**/*'
+      'BSWHPhotoPicker/Resources/**/*',
+      'BSWHPhotoPicker/Assets/StickerAssets.xcassets'
     ]
   }
+
 
 #  s.resources = 'BSWHPhotoPicker/BSWHPhotoPicker.bundle'
 

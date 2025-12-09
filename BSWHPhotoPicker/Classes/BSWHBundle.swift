@@ -20,10 +20,32 @@ open class BSWHBundle {
     }
 
     // MARK: - 图片资源
+//    public class func image(named name: String) -> UIImage? {
+//        let bundle = self.bundle()
+//        return UIImage(named: name, in: bundle, compatibleWith: nil)
+//    }
     public class func image(named name: String) -> UIImage? {
         let bundle = self.bundle()
-        return UIImage(named: name, in: bundle, compatibleWith: nil)
+        
+        // 优先匹配完整文件名
+        if let path = bundle.path(forResource: name, ofType: nil) {
+            return UIImage(contentsOfFile: path)
+        }
+
+        // 尝试 png
+        if let path = bundle.path(forResource: name, ofType: "png") {
+            return UIImage(contentsOfFile: path)
+        }
+
+        // 尝试 jpg
+        if let path = bundle.path(forResource: name, ofType: "jpg") {
+            return UIImage(contentsOfFile: path)
+        }
+
+        return nil
     }
+
+
 
     // MARK: - JSON 资源
     public class func json(named name: String) -> [String: Any]? {

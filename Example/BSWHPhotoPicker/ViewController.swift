@@ -98,7 +98,7 @@ class ViewController: UIViewController {
     }
     @objc private func onClickBack(_ sender: UIButton) {
         BSWHPhotoPickerLocalization.shared.currentLanguage = "id"
-        StickerManager.shared.selectedTemplateIndex = 3
+        StickerManager.shared.selectedTemplateIndex = 2
         presentVC()
     }
     @objc private func onClickLang00(_ sender: UIButton) {
