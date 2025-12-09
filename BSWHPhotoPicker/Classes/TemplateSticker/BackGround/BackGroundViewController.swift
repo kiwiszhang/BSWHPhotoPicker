@@ -5,324 +5,129 @@
 //  Created by 笔尚文化 on 2025/12/2.
 //
 
-final class BackGroundImageCell: UICollectionViewCell {
-
-    static let reuseId = "BackGroundImageCell"
-
-    private let imgView: UIImageView = {
-        let img = UIImageView()
-        img.contentMode = .scaleAspectFill
-        img.clipsToBounds = true
-        img.layer.cornerRadius = 10
-        return img
-    }()
-
-    // track what image name is currently loading/assigned to avoid race
-    private var currentImageName: String?
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        contentView.addSubview(imgView)
-        imgView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            imgView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            imgView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            imgView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            imgView.rightAnchor.constraint(equalTo: contentView.rightAnchor)
-        ])
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        // clear image and cancel logical token
-        imgView.image = nil
-        currentImageName = nil
-    }
-
-    /// Set item - async safe
-    func setItem(_ item: TemplateModel) {
-        // colors or special items handled synchronously (cheap)
-        let key = item.imageBg
-        currentImageName = key
-
-        if key.hasPrefix("#") {
-            imgView.image = kkCommon.imageFromHex(key)
-            return
-        }
-
-        if key == "BackgroundPicker" {
-            // show a placeholder color icon or something
-            imgView.image = BSWHBundle.image(named: "BackgroundPicker")
-            return
-        }
-
-        if key == "BackgroundNoColor" {
-            imgView.image = BSWHBundle.image(named: "BackgroundNoColor")
-            return
-        }
-
-        // try synchronous cache first
-        if let cached = BGImageCache.shared.cachedImage(named: key) {
-            imgView.image = cached
-            return
-        }
-
-        // async load/ decode
-        BGImageCache.shared.loadImage(named: key) { [weak self] image in
-            guard let self = self else { return }
-            // ensure still relevant (cell may have been reused)
-            if self.currentImageName != key { return }
-            self.imgView.image = image
-        }
-    }
-}
-
-// ---------------------------
-// MARK: - BackgroundContentCell
-// ---------------------------
-
-protocol BackgroundContentCellDelegate: AnyObject {
-    func backgroundContentCell(_ cell: BackgroundContentCell, didSelectItem item: TemplateModel, at index: IndexPath)
-}
-
-final class BackgroundContentCell: UICollectionViewCell {
-
-    static let reuseId = "BackgroundContentCell"
-
-    weak var delegate: BackgroundContentCellDelegate?
-
-    // store items; only reload inner collection when changed
-    var items: [TemplateModel] = [] {
-        didSet {
-            // compare equality to avoid unnecessary reload
-            if oldValue != items {
-                innerCollectionView.reloadData()
-                // scroll to top for better UX
-                innerCollectionView.setContentOffset(.zero, animated: false)
-            }
-        }
-    }
-
-    private lazy var innerCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumInteritemSpacing = 9
-        layout.minimumLineSpacing = 9
-
-        let screenWidth = UIScreen.main.bounds.width
-        let itemWidth = (screenWidth - 24 - 24 - 10*2) / 3 // match your previous math
-        layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
-        layout.sectionInset = UIEdgeInsets(top: 9, left: 24, bottom: 9, right: 24)
-
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .white
-        cv.dataSource = self
-        cv.delegate = self
-        cv.showsVerticalScrollIndicator = false
-        cv.register(BackGroundImageCell.self, forCellWithReuseIdentifier: BackGroundImageCell.reuseId)
-        // IMPORTANT: remove prefetch to avoid mass decode when user scrolls
-        cv.isPrefetchingEnabled = false
-        return cv
-    }()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        contentView.addSubview(innerCollectionView)
-        innerCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            innerCollectionView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            innerCollectionView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            innerCollectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            innerCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-extension BackgroundContentCell: UICollectionViewDataSource, UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return items.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BackGroundImageCell.reuseId, for: indexPath) as? BackGroundImageCell else {
-            return UICollectionViewCell()
-        }
-
-        let model = items[indexPath.item]
-        cell.setItem(model)
-        return cell
-    }
-
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let item = items[indexPath.item]
-        delegate?.backgroundContentCell(self, didSelectItem: item, at: indexPath)
-    }
-}
-
-// ---------------------------
-// MARK: - BackGroundViewController (optimized, single-file)
-// ---------------------------
 
 public class BackGroundViewController: UIViewController, UIScrollViewDelegate {
-
-    private let topView = UIView()
-    private lazy var backBtn: UIImageView = {
-        let iv = UIImageView()
-        iv.isUserInteractionEnabled = true
-        iv.image = BSWHBundle.image(named: "templateNavBack")
-        let tap = UITapGestureRecognizer(target: self, action: #selector(onBack))
-        iv.addGestureRecognizer(tap)
-        return iv
-    }()
-
-    private lazy var titleLab: UILabel = {
-        let l = UILabel()
-        l.textColor = kkColorFromHex("333333")
-        l.font = UIFont.systemFont(ofSize: 18)
-        l.textAlignment = .center
-        l.text = BSWHPhotoPickerLocalization.shared.localized("Background")
-        return l
-    }()
-
-    private let tabView = CustomScrViewList()
-    private var collectionView: UICollectionView!
-
-    private var titles: [String] = []
-    private var items: [[TemplateModel]] = []
-
-    private var colorItem: TemplateModel?
-
+    
+    let topView = UIView()
+    private lazy var backBtn = UIImageView().image(BSWHBundle.image(named: "templateNavBack")).enable(true).onTap {
+        self.dismiss(animated: true)
+    }
+    private lazy var titleLab = UILabel().color(kkColorFromHex("333333")).hnFont(size: 18.h, weight: .boldBase).centerAligned()
+    let tabView = CustomScrViewList()
+    var collectionView: UICollectionView!
+    private var titles:[String] = []
+    var items:[[TemplateModel]] = []
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.hidden(true)
+        self.navigationController?.navigationBar.hidden(true)
     }
-
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        StickerManager.shared.templateOrBackground = 2
-
+        StickerManager.shared.templateOrBackground = 1
         titles = ConfigDataItem.getBackgroundTabData()
         items = ConfigDataItem.getBackgroundListData()
-
-        setupTopView()
+        
+        setupTabView()
         setupCollectionView()
-
         tabView.delegate?.scrViewDidSelect(index: StickerManager.shared.selectedTemplateIndex)
     }
-
-    @objc private func onBack() {
-        dismiss(animated: true)
-    }
-
-    private func setupTopView() {
+    
+    private func setupTabView() {
+        
         view.addSubview(topView)
-        topView.backgroundColor = .white
-        topView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            topView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            topView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            topView.topAnchor.constraint(equalTo: view.topAnchor),
-            topView.heightAnchor.constraint(equalToConstant: kkNAVIGATION_BAR_HEIGHT + 44)
-        ])
-
+        topView.backgroundColor(.white)
+        topView.snp.makeConstraints { make in
+            make.left.right.top.equalToSuperview()
+            make.height.equalTo(kkNAVIGATION_BAR_HEIGHT + 44.h)
+        }
+        
         tabView.titles = titles
         tabView.backgroundColor = .white
         tabView.delegate = self
         topView.addSubview(tabView)
         topView.addSubview(backBtn)
         topView.addSubview(titleLab)
-
-        tabView.translatesAutoresizingMaskIntoConstraints = false
-        backBtn.translatesAutoresizingMaskIntoConstraints = false
-        titleLab.translatesAutoresizingMaskIntoConstraints = false
-
-        NSLayoutConstraint.activate([
-            tabView.bottomAnchor.constraint(equalTo: topView.bottomAnchor),
-            tabView.leftAnchor.constraint(equalTo: topView.leftAnchor, constant: 24),
-            tabView.rightAnchor.constraint(equalTo: topView.rightAnchor),
-            tabView.heightAnchor.constraint(equalToConstant: 44),
-
-            backBtn.widthAnchor.constraint(equalToConstant: 24),
-            backBtn.heightAnchor.constraint(equalToConstant: 24),
-            backBtn.leftAnchor.constraint(equalTo: topView.leftAnchor, constant: 12),
-            backBtn.bottomAnchor.constraint(equalTo: tabView.topAnchor, constant: -8),
-
-            titleLab.centerYAnchor.constraint(equalTo: backBtn.centerYAnchor),
-            titleLab.centerXAnchor.constraint(equalTo: topView.centerXAnchor),
-            titleLab.leftAnchor.constraint(equalTo: topView.leftAnchor, constant: 36),
-            titleLab.rightAnchor.constraint(equalTo: topView.rightAnchor, constant: -36)
-        ])
+        tabView.snp.makeConstraints { make in
+            make.bottom.equalToSuperview()
+            make.left.equalToSuperview().offset(24.w)
+            make.right.equalToSuperview()
+            make.height.equalTo((44.h))
+        }
+        
+        backBtn.snp.makeConstraints { make in
+            make.width.height.equalTo(24.w)
+            make.left.equalToSuperview().offset(12.w)
+            make.bottom.equalTo(tabView.snp.top).offset(-8.h)
+        }
+        
+        titleLab.snp.makeConstraints { make in
+            make.height.equalTo(backBtn.snp.height)
+            make.centerY.equalTo(backBtn.snp.centerY)
+            make.centerX.equalToSuperview()
+            make.left.equalToSuperview().offset(36.w)
+            make.right.equalToSuperview().offset(-36.w)
+        }
+        titleLab.text = BSWHPhotoPickerLocalization.shared.localized("ChooseATemplate")
+        
     }
-
+    
     private func setupCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
-        layout.itemSize = CGSize(width: view.bounds.width, height: view.bounds.height - kkNAVIGATION_BAR_HEIGHT - 44)
-
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.isPagingEnabled = true
-        cv.showsHorizontalScrollIndicator = false
-        cv.backgroundColor = .white
-        cv.dataSource = self
-        cv.delegate = self
-        cv.register(BackgroundContentCell.self, forCellWithReuseIdentifier: BackgroundContentCell.reuseId)
-        cv.translatesAutoresizingMaskIntoConstraints = false
-
-        view.addSubview(cv)
-        NSLayoutConstraint.activate([
-            cv.topAnchor.constraint(equalTo: tabView.bottomAnchor),
-            cv.leftAnchor.constraint(equalTo: view.leftAnchor),
-            cv.rightAnchor.constraint(equalTo: view.rightAnchor),
-            cv.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-        collectionView = cv
+        layout.itemSize = CGSize(width: view.frame.width, height: view.frame.height - kkNAVIGATION_BAR_HEIGHT - 44.h)
+        
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.isPagingEnabled = true
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = .white
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(BackGroundContentCell.self, forCellWithReuseIdentifier: "BackGroundContentCell")
+        
+        view.addSubview(collectionView)
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(tabView.snp.bottom)
+            make.left.right.bottom.equalToSuperview()
+        }
     }
+
+    // MARK: - =====================actions==========================
+   
+    
+    // MARK: - =====================delegate==========================
+    
+    
+    // MARK: - =====================Deinit==========================
+
 }
 
+// MARK: - UICollectionViewDataSource & Delegate
 extension BackGroundViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return titles.count
     }
-
+    
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BackgroundContentCell.reuseId, for: indexPath) as? BackgroundContentCell else {
-            return UICollectionViewCell()
-        }
-
-        // assign items (BackgroundContentCell will only reload if changed)
-        if indexPath.item < items.count {
-            cell.items = items[indexPath.item]
-        } else {
-            cell.items = []
-        }
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BackGroundContentCell", for: indexPath) as! BackGroundContentCell
         cell.delegate = self
+        cell.items = items[indexPath.row]
         return cell
     }
-
+    
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let page = Int(round(scrollView.contentOffset.x / scrollView.frame.width))
         tabView.selectIndex(index: page, animated: true)
     }
-
+    
     public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         let page = Int(round(scrollView.contentOffset.x / scrollView.frame.width))
         tabView.selectIndex(index: page, animated: true)
     }
 }
 
+// MARK: - CustomScrViewListDelegate
 extension BackGroundViewController: CustomScrViewListDelegate {
     func scrViewDidSelect(index: Int) {
         collectionView.layoutIfNeeded()
@@ -332,68 +137,250 @@ extension BackGroundViewController: CustomScrViewListDelegate {
     }
 }
 
-extension BackGroundViewController: BackgroundContentCellDelegate {
-    func backgroundContentCell(_ cell: BackgroundContentCell, didSelectItem item: TemplateModel, at index: IndexPath) {
+extension BackGroundViewController: BackGroundContentCellDelegate {
+    func backGroundContentCell(_ cell: BackGroundContentCell, didSelectItem item: TemplateModel, at index: IndexPath) {
+//        guard let image = BSWHBundle.image(named: item.imageBg) else { return }
+        var image:UIImage? = nil
 
-        let key = item.imageBg
-        if key.hasPrefix("#") {
-            guard let img = kkCommon.imageFromHex(key) else { return }
-            presentEdit(item: item, image: img)
-            return
+        // --- special fixed icons ---
+        if item.imageBg == "BackgroundPicker" {
+            image = BSWHBundle.image(named: "BackgroundPicker")
         }
-
-        if key == "BackgroundNoColor" {
-//            let v = UIView()
-//            v.frame.size = CGSize(width: 400, height: 400)
-//            let img = v.exportTransparentPNG()
-//            if let data = img!.pngData() {
-//                print("Has transparent pixel:", data.contains(0))
-//            }
-            let img = BSWHBundle.image(named: "BackgroundNoColor")
-            presentEdit(item: item, image: img!)
-            return
+        if item.imageBg == "BackgroundNoColor" {
+            image = BSWHBundle.image(named: "BackgroundNoColor")
         }
-
-        if key == "BackgroundPicker" {
-            colorItem = item
-            let picker = UIColorPickerViewController()
-            picker.delegate = self
-            picker.supportsAlpha = true
-            present(picker, animated: true)
-            return
+        
+        if item.imageBg.hasPrefix("#") {
+            image = kkCommon.imageFromHex(item.imageBg)
+        }else{
+            image = BSWHBundle.image(named: item.imageBg)
         }
-
-        // try cache sync then async fallback
-        if let cached = BGImageCache.shared.cachedImage(named: key) ?? BSWHBundle.image(named: key) {
-            presentEdit(item: item, image: cached)
-            return
-        }
-
-        BGImageCache.shared.loadImage(named: key) { [weak self] image in
-            guard let self = self, let img = image else { return }
-            self.presentEdit(item: item, image: img)
-        }
-    }
-
-    private func presentEdit(item: TemplateModel, image: UIImage) {
-        let controller = EditImageViewController(image: image)
+        
+        let controller = EditImageViewController(image: image!)
         controller.item = item
         controller.modalPresentationStyle = .fullScreen
-        present(controller, animated: true)
+        self.present(controller, animated: true)
     }
 }
 
-// ---------------------------
-// MARK: - Color Picker
-// ---------------------------
 
-extension BackGroundViewController: UIColorPickerViewControllerDelegate {
-    public func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
-        guard let item = colorItem else { return }
-        let color = viewController.selectedColor
-        let image = UIImage.from(color: color, size: CGSize(width: 400, height: 400))
-        viewController.dismiss(animated: false)
-        presentEdit(item: item, image: image)
+
+protocol BackGroundContentCellDelegate: AnyObject {
+    func backGroundContentCell(_ cell: BackGroundContentCell, didSelectItem item: TemplateModel, at index: IndexPath)
+}
+
+// MARK: - UICollectionViewCell
+class BackGroundContentCell: UICollectionViewCell {
+    
+    private var collectionView: UICollectionView!
+    private var layout: BackGroundWaterfallLayout!
+    weak var delegate: BackGroundContentCellDelegate?
+
+    var items: [TemplateModel] = [] {
+        didSet {
+            // ✅ 每次更新都清空旧高度
+            itemHeights = []
+            calculateItemHeights()
+            reloadCollectionView()
+        }
+    }
+    
+    private var itemHeights: [CGFloat] = []
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupCollectionViewIfNeeded()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - CollectionView Setup
+    
+    private func setupCollectionViewIfNeeded() {
+        guard collectionView == nil else { return }
+        
+        layout = BackGroundWaterfallLayout()
+        layout.columnCount = 3
+        layout.columnSpacing = 9
+        layout.rowSpacing = 9
+        layout.sectionInset = UIEdgeInsets(top: 12, left: 12, bottom: 8, right: 12)
+        
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .white
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.register(BackGroundWaterfallImageCell.self, forCellWithReuseIdentifier: "BackGroundWaterfallImageCell")
+        
+        contentView.addSubview(collectionView)
+        collectionView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
+    
+    private func reloadCollectionView() {
+        layout.itemHeights = itemHeights
+        collectionView.reloadData()
+        // 确保在当前 runloop 后再刷新布局（避免闪动）
+        DispatchQueue.main.async { [weak self] in
+            self?.layout.invalidateLayout()
+        }
+    }
+
+    
+    // MARK: - Calculate Item Heights
+    private func calculateItemHeights() {
+        collectionView.layoutIfNeeded()
+        let totalWidth = collectionView.bounds.width
+        let columnCount: CGFloat = CGFloat(layout.columnCount)
+        let spacing = layout.sectionInset.left
+                    + layout.sectionInset.right
+                    + layout.columnSpacing * (columnCount - 1)
+
+        let itemWidth = (totalWidth - spacing) / columnCount
+
+        itemHeights = items.map { item in
+            let imageName = item.imageName
+            if let cached = ImageHeightCache.shared.get(imageName: imageName, width: itemWidth) {
+                return cached
+            }
+            let height: CGFloat
+            if let img = BSWHBundle.image(named: imageName) {
+                let ratio = img.size.height / img.size.width
+                height = itemWidth * ratio
+            } else {
+                height = itemWidth
+            }
+            ImageHeightCache.shared.set(imageName: imageName, width: itemWidth, height: height)
+            return height
+        }
+    }
+
+}
+
+// MARK: - UICollectionViewDataSource & Delegate
+extension BackGroundContentCell: UICollectionViewDataSource, UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return items.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BackGroundWaterfallImageCell", for: indexPath) as! BackGroundWaterfallImageCell
+        cell.setItem(item: items[indexPath.row])
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item = items[indexPath.row]
+        delegate?.backGroundContentCell(self, didSelectItem: item, at: indexPath)
+    }
+
+}
+
+class BackGroundWaterfallImageCell: UICollectionViewCell {
+
+    private let imgView: UIImageView = {
+        let img = UIImageView()
+        img.contentMode = .scaleAspectFill // ✅ 保持比例裁切
+        img.clipsToBounds = true
+        img.layer.cornerRadius = 10
+        return img
+    }()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        contentView.addSubview(imgView)
+        imgView.frame = contentView.bounds
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        imgView.frame = contentView.bounds
+    }
+
+    
+    func setItem(item: TemplateModel) {
+        
+        // --- Color hex background ---
+        if item.imageBg.hasPrefix("#") {
+            imgView.image = kkCommon.imageFromHex(item.imageBg)
+            return
+        }
+
+        // --- special fixed icons ---
+        if item.imageBg == "BackgroundPicker" {
+            imgView.image = BSWHBundle.image(named: "BackgroundPicker")
+            return
+        }
+        if item.imageBg == "BackgroundNoColor" {
+            imgView.image = BSWHBundle.image(named: "BackgroundNoColor")
+            return
+        }
+        
+        imgView.image = BSWHBundle.image(named: item.imageName)
+    }
+}
+
+class BackGroundWaterfallLayout: UICollectionViewLayout {
+
+    var columnCount = 3            // 两列
+    var columnSpacing: CGFloat = 8 // 列间距
+    var rowSpacing: CGFloat = 8    // 行间距
+    var sectionInset: UIEdgeInsets = .init(top: 8, left: 8, bottom: 8, right: 8)
+
+    var itemHeights: [CGFloat] = [] // 外部传入的动态高度数组
+    private var attributes: [UICollectionViewLayoutAttributes] = []
+    private var contentHeight: CGFloat = 0
+
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        return true
+    }
+
+    override func prepare() {
+        guard let collectionView = collectionView else { return }
+        attributes.removeAll()
+        contentHeight = 0
+
+        let width = collectionView.bounds.width
+        let itemWidth = (width - sectionInset.left - sectionInset.right - CGFloat(columnCount - 1) * columnSpacing) / CGFloat(columnCount)
+
+        var columnHeights = Array(repeating: sectionInset.top, count: columnCount)
+
+        for item in 0 ..< itemHeights.count {
+            let indexPath = IndexPath(item: item, section: 0)
+            let height = itemHeights[item]
+
+            // 找最短列
+            let minColumn = columnHeights.firstIndex(of: columnHeights.min()!)!
+            let x = sectionInset.left + CGFloat(minColumn) * (itemWidth + columnSpacing)
+            let y = columnHeights[minColumn]
+
+            let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+            attr.frame = CGRect(x: x, y: y, width: itemWidth, height: height)
+
+            attributes.append(attr)
+
+            columnHeights[minColumn] = attr.frame.maxY + rowSpacing
+            contentHeight = max(contentHeight, attr.frame.maxY)
+        }
+    }
+
+    override var collectionViewContentSize: CGSize {
+        return CGSize(width: collectionView?.bounds.width ?? 0, height: contentHeight + sectionInset.bottom)
+    }
+
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        return attributes.filter { $0.frame.intersects(rect) }
+    }
+
+    override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        return attributes[indexPath.item]
     }
 }
 
