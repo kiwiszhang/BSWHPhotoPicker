@@ -22,54 +22,6 @@ class ImageHeightCache {
     }
 }
 
-final class BGImageCache {
-
-    static let shared = BGImageCache()
-
-    private let cache = NSCache<NSString, UIImage>()
-    private let queue = DispatchQueue(label: "com.yourapp.bgImageDecode", qos: .userInitiated)
-
-    private init() {
-        // tune these according to app memory constraints
-        cache.countLimit = 150 // keep up to 150 images
-        cache.totalCostLimit = 180 * 1024 * 1024 // ~180MB
-    }
-
-    /// Synchronous cached fetch (fast if in memory). If not present, returns nil.
-    func cachedImage(named name: String) -> UIImage? {
-        return cache.object(forKey: name as NSString)
-    }
-
-    /// Asynchronous load with background decode -> returns on main thread
-    func loadImage(named name: String, completion: @escaping (UIImage?) -> Void) {
-        // if cached return immediately
-        if let img = cachedImage(named: name) {
-            DispatchQueue.main.async { completion(img) }
-            return
-        }
-
-        queue.async { [weak self] in
-            guard let self = self else { return }
-            // load from bundle (or other source). This may be nil.
-            let raw = BSWHBundle.image(named: name) ?? UIImage(named: name)
-            guard let rawImage = raw else {
-                DispatchQueue.main.async { completion(nil) }
-                return
-            }
-
-            // decode/draw into bitmap context to force decoding off main thread
-            let decoded = rawImage.decodedImage()
-
-            // compute approximate cost (byte size)
-            let cost = decoded.pngData()?.count ?? 0
-            self.cache.setObject(decoded, forKey: name as NSString, cost: cost)
-            DispatchQueue.main.async {
-                completion(decoded)
-            }
-        }
-    }
-}
-
 struct RatioToolsModel {
     var text:String = "Text"
     var imageName:String = "template-text"

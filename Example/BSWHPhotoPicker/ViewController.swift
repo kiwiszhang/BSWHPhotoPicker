@@ -92,15 +92,17 @@ class ViewController: UIViewController {
         lang01Button.addTarget(self, action: #selector(onClickLang01(_:)), for: .touchUpInside)
     }
     @objc private func onClickBack01(_ sender: UIButton) {
+        BSWHPhotoPickerLocalization.shared.currentLanguage = "es-MX"
         StickerManager.shared.selectedTemplateIndex = 3
         presentBgVC()
     }
     @objc private func onClickBack(_ sender: UIButton) {
+        BSWHPhotoPickerLocalization.shared.currentLanguage = "id"
         StickerManager.shared.selectedTemplateIndex = 3
         presentVC()
     }
     @objc private func onClickLang00(_ sender: UIButton) {
-        BSWHPhotoPickerLocalization.shared.currentLanguage = "en"
+        BSWHPhotoPickerLocalization.shared.currentLanguage = "ar"
         let model:TemplateHomeModel = StickerManager.shared.templateHomeData[1]
         print(model.templateType)
         print(model.image!)
@@ -108,7 +110,7 @@ class ViewController: UIViewController {
         presentVC()
     }
     @objc private func onClickLang01(_ sender: UIButton) {
-        BSWHPhotoPickerLocalization.shared.currentLanguage = "zh"
+        BSWHPhotoPickerLocalization.shared.currentLanguage = "he"
         let model:TemplateHomeModel = StickerManager.shared.backgroundHomeData[1]
         print(model.templateType)
         print(model.image!)

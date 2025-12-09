@@ -9,8 +9,8 @@
 public class BackGroundViewController: UIViewController, UIScrollViewDelegate {
     
     let topView = UIView()
-    private lazy var backBtn = UIImageView().image(BSWHBundle.image(named: "templateNavBack")).enable(true).onTap {
-        self.dismiss(animated: true)
+    private lazy var backBtn = UIImageView().image(BSWHBundle.image(named: "templateNavBack")).enable(true).onTap { [weak self] in
+        self?.dismiss(animated: true)
     }
     private lazy var titleLab = UILabel().color(kkColorFromHex("333333")).hnFont(size: 18.h, weight: .boldBase).centerAligned()
     let tabView = CustomScrViewList()
@@ -71,7 +71,12 @@ public class BackGroundViewController: UIViewController, UIScrollViewDelegate {
         titleLab.text = BSWHPhotoPickerLocalization.shared.localized("ChooseATemplate")
         
     }
-    
+    deinit {
+        print("BackGroundViewController deinit 🔥🔥🔥")
+        collectionView.delegate = nil
+        collectionView.dataSource = nil
+    }
+
     private func setupCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -185,6 +190,12 @@ class BackGroundContentCell: UICollectionViewCell {
         }
     }
     
+    deinit {
+        print("BackGroundContentCell deinit")
+        collectionView.delegate = nil
+        collectionView.dataSource = nil
+    }
+
     private var itemHeights: [CGFloat] = []
     
     override init(frame: CGRect) {
