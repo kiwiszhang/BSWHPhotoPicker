@@ -136,15 +136,7 @@ class ViewController: UIViewController {
 extension ViewController: StickerManagerDelegate {
     
     func replaceBackgroundWith(controller: BSWHPhotoPicker.EditImageViewController, imageRect: CGRect, completion: @escaping (UIImage?) -> Void) {
-        var img:UIImage? = nil
-        if count == 0 {
-            img = UIImage(named: "Pattern55")
-        }else if count == 1{
-            img = UIImage(named: "Texture00")
-        }else{
-            img = UIImage(named: "Christmas02-bg")
-        }
-        count += 1
+        let img = UIImage(named: "Pattern55")
         print("image")
         completion(img!)
     }
@@ -162,3 +154,14 @@ extension ViewController: StickerManagerDelegate {
     }
 }
 
+
+
+//var img:UIImage? = nil
+//if count % 3 == 0 {
+//    img = UIImage(named: "Pattern55")
+//}else if count % 3 == 1{
+//    img = UIImage(named: "Texture00")
+//}else{
+//    img = UIImage(named: "Christmas02-bg")
+//}
+//count += 1

@@ -11,8 +11,10 @@ import UIKit
 public class TemplateViewController: UIViewController, UIScrollViewDelegate {
     
     let topView = UIView()
-    private lazy var backBtn = UIImageView().image(BSWHBundle.image(named: "templateNavBack")).enable(true).onTap {
-        self.dismiss(animated: true)
+    private lazy var backBtn = UIImageView().image(BSWHBundle.image(named: "templateNavBack")).enable(true).onTap { [weak self] in
+        self?.titles = []
+        self?.items = []
+        self?.dismiss(animated: true)
     }
     private lazy var titleLab = UILabel().color(kkColorFromHex("333333")).hnFont(size: 18.h, weight: .boldBase).centerAligned()
     let tabView = CustomScrViewList()
@@ -33,6 +35,12 @@ public class TemplateViewController: UIViewController, UIScrollViewDelegate {
         setupTabView()
         setupCollectionView()
         tabView.delegate?.scrViewDidSelect(index: StickerManager.shared.selectedTemplateIndex)
+    }
+    
+    deinit {
+        print("TemplateViewController deinit 🔥🔥🔥")
+        collectionView.delegate = nil
+        collectionView.dataSource = nil
     }
     
     private func setupTabView() {
@@ -182,6 +190,12 @@ class ContentCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        print("ContentCell deinit")
+        collectionView.delegate = nil
+        collectionView.dataSource = nil
+    }
+
     // MARK: - CollectionView Setup
     
     private func setupCollectionViewIfNeeded() {
