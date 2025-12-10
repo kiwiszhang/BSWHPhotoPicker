@@ -196,14 +196,25 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
             guard let self = self else { return }
             if let img = image {
                 print("🎉 收到代理返回的图片：\(img)")
+                
+                for sticker in StickerManager.shared.stickerArr {
+                    sticker.removeFromSuperview()
+                }
+                
+                if let name = item?.jsonName, name.count > 0 {
+                    StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName!, currentVC: self)
+                }else{
+                    StickerManager.shared.getCurrentVC(currentVC: self)
+                }
                 replaceBgImage(image: img)
+
                 resetContainerViewFrame()
                 convertStickerFrames(stickers: StickerManager.shared.stickerArr,
                                      oldSize: containerViewOriginFrame.size,
                                      newSize: containerView.frame.size,
                                      mode: .fit)
-                resetContainerViewFrame()
-                containerViewOriginFrame = containerView.frame
+//                resetContainerViewFrame()
+//                containerViewOriginFrame = containerView.frame
 
             } else {
                 print("⚠️ 没有返回图片")
