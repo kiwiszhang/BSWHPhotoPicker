@@ -15,6 +15,7 @@ let kRatioToolsViewHeight = 193.h
 
 public class EditImageViewController: ZLEditImageViewController {
     public var item:TemplateModel? = nil
+    public var imagePicker:[UIImage] = []
     var containerViewOriginFrame = CGRectZero
     var pickerColor:UIColor? = nil
     var currentSticker:EditableStickerView? = nil
@@ -130,6 +131,10 @@ public class EditImageViewController: ZLEditImageViewController {
         
         if item?.cornerRadius != 0.0 {
             containerView.cornerRadius(item!.cornerRadius)
+        }
+        
+        if imagePicker.count > 0 {
+            StickerManager.shared.freeStyleAddImages(images: imagePicker,canvasSize:containerViewOriginFrame.size)
         }
     }
     

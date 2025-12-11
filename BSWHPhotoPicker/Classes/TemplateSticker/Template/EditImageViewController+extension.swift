@@ -229,7 +229,7 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
             if let img = image {
                 DispatchQueue.main.async { [self] in
                     self!.switchOperation(type: .imageSticker)
-                    let state: ImageStickerModel = ImageStickerModel(imageName: "empty",imageData:img.pngData(), originFrame: CGRect(x: 240, y: 100, width: 120, height: 120),gesScale: 1,gesRotation: 0,overlayRect: CGRect(x:0,y: 0,width: 1,height: 1) ,isBgImage: true)
+                    let state: ImageStickerModel = ImageStickerModel(imageName: "empty",imageData:img.pngData(), originFrame: CGRect(x: 0, y: 0, width: 120, height: 120),gesScale: 1,gesRotation: 0,overlayRect: CGRect(x:0,y: 0,width: 1,height: 1) ,isBgImage: true)
                     let sticker = self!.addImageSticker01(state: state)
                     sticker.stickerModel = state
                     StickerManager.shared.modelMap[sticker.id] = state

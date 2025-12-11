@@ -291,7 +291,7 @@ extension StickerManager: PHPickerViewControllerDelegate {
                 }
             }
         }
-    }
+    }    
 }
 
 /// 选择照片

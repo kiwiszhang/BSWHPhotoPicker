@@ -162,14 +162,22 @@ extension ZLEditImageViewController {
         editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
     }
 
-    public func addImageSticker01(state: ImageStickerModel) -> EditableStickerView {
+    public func addImageSticker01(state: ImageStickerModel,isFreeStyle:Bool = false) -> EditableStickerView {
         var clearImage:UIImage? = nil
         if state.imageName == "empty" {
             clearImage = createTransparentImage(size: CGSize(width: state.originFrameWidth, height: state.originFrameHeight))
         }else{
             clearImage = state.image ?? BSWHBundle.image(named: state.imageName)!
         }
-        let imageSticker = EditableStickerView(image:clearImage!, originScale: state.originScale, originAngle: state.originAngle, originFrame: CGRect(x: state.originFrameX.w, y: state.originFrameY.h, width: state.originFrameWidth.w, height: state.originFrameHeight.h),gesRotation: state.gesRotation,isBgImage: state.isBgImage,bgAddImageType: state.bgAddImageType!,imageMask: state.imageMask ?? "",imageData: state.imageData ?? BSWHBundle.image(named: state.bgAddImageType!)?.pngData(),zIndex: state.zIndex)
+        
+        var originFrameRect:CGRect = CGRectZero
+        if isFreeStyle {
+            originFrameRect = CGRect(x: state.originFrameX, y: state.originFrameY, width: state.originFrameWidth, height: state.originFrameHeight)
+        }else{
+            originFrameRect = CGRect(x: state.originFrameX.w, y: state.originFrameY.h, width: state.originFrameWidth.w, height: state.originFrameHeight.h)
+        }
+        
+        let imageSticker = EditableStickerView(image:clearImage!, originScale: state.originScale, originAngle: state.originAngle, originFrame: originFrameRect,gesRotation: state.gesRotation,isBgImage: state.isBgImage,bgAddImageType: state.bgAddImageType!,imageMask: state.imageMask ?? "",imageData: state.imageData ?? BSWHBundle.image(named: state.bgAddImageType!)?.pngData(),zIndex: state.zIndex)
         addSticker(imageSticker)
         view.layoutIfNeeded()
         editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))

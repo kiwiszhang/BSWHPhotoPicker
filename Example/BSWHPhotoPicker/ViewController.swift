@@ -119,7 +119,7 @@ class ViewController: UIViewController, PHPickerViewControllerDelegate {
     }
     
     @objc private func onClickBack02(_ sender: UIButton) {
-        
+        StickerManager.shared.delegate = self
         checkPhotoAuthorizationAndPresentPicker()
     }
     
@@ -213,7 +213,7 @@ class ViewController: UIViewController, PHPickerViewControllerDelegate {
     func presentPhotoPicker() {
         var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
         config.filter = .images
-        config.selectionLimit = 10  // 选择 1 张，可改为 0 表示无限制
+        config.selectionLimit = 12  // 选择 1 张，可改为 0 表示无限制
         let picker = PHPickerViewController(configuration: config)
         picker.delegate = self
         self.present(picker, animated: true)
@@ -222,12 +222,32 @@ class ViewController: UIViewController, PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
 
-        let image = imageFromHex("#FFFFFF")
-        let item = TemplateModel(imageName: "#FFFFFF",imageBg: "#FFFFFF")
-        let controller = EditImageViewController(image: image!)
-        controller.item = item
-        controller.modalPresentationStyle = .fullScreen
-        self.present(controller, animated: true)
+        guard !results.isEmpty else { return }
+       var images: [UIImage] = []
+       let group = DispatchGroup()
+       for result in results {
+           if result.itemProvider.canLoadObject(ofClass: UIImage.self) {
+               group.enter()
+               result.itemProvider.loadObject(ofClass: UIImage.self) { object, error in
+                   if let image = object as? UIImage {
+                       images.append(image)
+                   }
+                   group.leave()
+               }
+           }
+       }
+        group.notify(queue: .main) { [self] in
+           print("选中图片数量: \(images.count)")
+           // ✅ 在这里使用 images
+           let image = imageFromHex("#FFFFFF")
+           let item = TemplateModel(imageName: "#FFFFFF",imageBg: "#FFFFFF")
+           let controller = EditImageViewController(image: image!)
+           controller.item = item
+           controller.imagePicker = images
+           controller.modalPresentationStyle = .fullScreen
+           self.present(controller, animated: true)
+       }
+
     }
 }
 
