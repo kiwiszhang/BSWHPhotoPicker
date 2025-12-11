@@ -34,13 +34,29 @@ struct ToolsModel {
     var imageName:String = "template-text"
 }
 
-public struct TemplateModel:Equatable {
-    public var imageName:String = "Christmas00"
-    public var imageBg:String = "Christmas00-bg"
-    public var jsonName:String?
-    public var isNeedFit:Bool = false
-    public var cornerRadius:Double = 0.0
-    public var templateType:String = "Party"
+public struct TemplateModel: Equatable {
+    public var imageName: String
+    public var imageBg: String
+    public var jsonName: String?
+    public var isNeedFit: Bool
+    public var cornerRadius: Double
+    public var templateType: String
+
+    public init(
+        imageName: String = "Christmas00",
+        imageBg: String = "Christmas00-bg",
+        jsonName: String? = nil,
+        isNeedFit: Bool = false,
+        cornerRadius: Double = 0.0,
+        templateType: String = "Party"
+    ) {
+        self.imageName = imageName
+        self.imageBg = imageBg
+        self.jsonName = jsonName
+        self.isNeedFit = isNeedFit
+        self.cornerRadius = cornerRadius
+        self.templateType = templateType
+    }
 }
 
 public struct TemplateHomeModel {

@@ -14,7 +14,7 @@ let kstickerToolsViewHeight = 166.h
 let kRatioToolsViewHeight = 193.h
 
 public class EditImageViewController: ZLEditImageViewController {
-    var item:TemplateModel? = nil
+    public var item:TemplateModel? = nil
     var containerViewOriginFrame = CGRectZero
     var pickerColor:UIColor? = nil
     var currentSticker:EditableStickerView? = nil

@@ -201,7 +201,7 @@ public final class StickerManager: NSObject {
 
 extension StickerManager: PHPickerViewControllerDelegate {
 
-    func checkPhotoAuthorizationAndPresentPicker(presentTypeFrom:Int = 0) {
+    public func checkPhotoAuthorizationAndPresentPicker(presentTypeFrom:Int = 0) {
         persentType = presentTypeFrom
         let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         switch status {
@@ -224,7 +224,7 @@ extension StickerManager: PHPickerViewControllerDelegate {
         }
     }
 
-    func presentPhotoPicker() {
+    public func presentPhotoPicker() {
         var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
         config.filter = .images
         config.selectionLimit = 1  // 选择 1 张，可改为 0 表示无限制

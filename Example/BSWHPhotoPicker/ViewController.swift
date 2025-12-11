@@ -14,8 +14,20 @@ func Localize_Swift_bridge(forKey:String,table:String,fallbackValue:String)->Str
 
 import UIKit
 import BSWHPhotoPicker
+import Photos
+import PhotosUI
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, PHPickerViewControllerDelegate {
+    
+    let backButton02: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setTitle("自由拼贴", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        button.backgroundColor = .blue
+        return button
+    }()
+    
     let backButton01: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("背景列表", for: .normal)
@@ -55,6 +67,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        view.addSubview(backButton02)
         view.addSubview(backButton01)
         view.addSubview(backButton)
         view.addSubview(lang00Button)
@@ -68,6 +81,13 @@ class ViewController: UIViewController {
         backButton01.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalTo(backButton.snp.top).offset(-80)
+            make.width.equalTo(120)
+            make.height.equalTo(50)
+        }
+        
+        backButton02.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalTo(backButton01.snp.top).offset(-80)
             make.width.equalTo(120)
             make.height.equalTo(50)
         }
@@ -88,6 +108,7 @@ class ViewController: UIViewController {
         
         backButton.addTarget(self, action: #selector(onClickBack(_:)), for: .touchUpInside)
         backButton01.addTarget(self, action: #selector(onClickBack01(_:)), for: .touchUpInside)
+        backButton02.addTarget(self, action: #selector(onClickBack02(_:)), for: .touchUpInside)
         lang00Button.addTarget(self, action: #selector(onClickLang00(_:)), for: .touchUpInside)
         lang01Button.addTarget(self, action: #selector(onClickLang01(_:)), for: .touchUpInside)
     }
@@ -96,6 +117,12 @@ class ViewController: UIViewController {
         StickerManager.shared.selectedTemplateIndex = 3
         presentBgVC()
     }
+    
+    @objc private func onClickBack02(_ sender: UIButton) {
+        
+        checkPhotoAuthorizationAndPresentPicker()
+    }
+    
     @objc private func onClickBack(_ sender: UIButton) {
         BSWHPhotoPickerLocalization.shared.currentLanguage = "id"
         StickerManager.shared.selectedTemplateIndex = 2
@@ -131,6 +158,77 @@ class ViewController: UIViewController {
         vc.modalPresentationStyle = .overFullScreen
         self.present(vc, animated: true)
     }
+    
+    func imageFromHex(_ hex: String,
+                      alpha: CGFloat = 1.0,
+                      size: CGSize = CGSize(width: 400, height: 400)) -> UIImage? {
+
+        guard let color = UIColor(hex: hex)?.withAlphaComponent(alpha) else { return nil }
+
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { ctx in
+            color.setFill()
+            ctx.fill(CGRect(origin: .zero, size: size))
+        }
+    }
+    
+    func checkPhotoAuthorizationAndPresentPicker(presentTypeFrom:Int = 0) {
+        let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+        switch status {
+        case .authorized, .limited:
+            presentPhotoPicker()
+        case .notDetermined:
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { newStatus in
+                DispatchQueue.main.async {
+                    if newStatus == .authorized || newStatus == .limited {
+                        self.presentPhotoPicker()
+                    } else {
+                        self.showPhotoPermissionAlert()
+                    }
+                }
+            }
+        case .denied, .restricted:
+            showPhotoPermissionAlert()
+        @unknown default:
+            showPhotoPermissionAlert()
+        }
+    }
+    func showPhotoPermissionAlert() {
+        let alert = UIAlertController(
+            title: BSWHPhotoPickerLocalization.shared.localized("NoPermission"),
+            message: BSWHPhotoPickerLocalization.shared.localized("photoLibrarySettings"),
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title:BSWHPhotoPickerLocalization.shared.localized("Cancel"), style: .cancel))
+        alert.addAction(UIAlertAction(title: BSWHPhotoPickerLocalization.shared.localized("GotoSettings"), style: .default, handler: { _ in
+            if let url = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(url)
+            }
+        }))
+
+        self.present(alert, animated: true)
+    }
+    
+    func presentPhotoPicker() {
+        var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
+        config.filter = .images
+        config.selectionLimit = 10  // 选择 1 张，可改为 0 表示无限制
+        let picker = PHPickerViewController(configuration: config)
+        picker.delegate = self
+        self.present(picker, animated: true)
+    }
+    
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+
+        let image = imageFromHex("#FFFFFF")
+        let item = TemplateModel(imageName: "#FFFFFF",imageBg: "#FFFFFF")
+        let controller = EditImageViewController(image: image!)
+        controller.item = item
+        controller.modalPresentationStyle = .fullScreen
+        self.present(controller, animated: true)
+    }
 }
 
 extension ViewController: StickerManagerDelegate {
@@ -165,7 +263,26 @@ extension ViewController: StickerManagerDelegate {
     }
 }
 
+extension UIColor {
+    convenience init?(hex: String) {
+        var hexString = hex.trimmingCharacters(in: .whitespacesAndNewlines)
 
+        if hexString.hasPrefix("#") {
+            hexString.removeFirst()
+        }
+
+        guard hexString.count == 6 else { return nil }
+        
+        var rgbValue: UInt64 = 0
+        Scanner(string: hexString).scanHexInt64(&rgbValue)
+
+        let r = CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0
+        let g = CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0
+        let b = CGFloat(rgbValue & 0x0000FF) / 255.0
+
+        self.init(red: r, green: g, blue: b, alpha: 1.0)
+    }
+}
 
 //var img:UIImage? = nil
 //if count % 3 == 0 {
