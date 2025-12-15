@@ -117,7 +117,7 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
             if indexPath.row == 0 {
                 addTextView()
             }else if indexPath.row == 1 {
-                addPhoto()
+                replaceBackground()
             }else if indexPath.row == 2 {
                 StickerManager.shared.checkPhotoAuthorizationAndPresentPicker(presentTypeFrom: 1)
             }else if indexPath.row == 3 {
@@ -182,31 +182,13 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
         }
     }
     
-    func addPhoto(){
+    func replaceBackground(){
         StickerManager.shared.delegate?.replaceBackgroundWith(controller: self,imageRect: imageView.frame) { [weak self] image in
             guard let self = self else { return }
             if let img = image {
                 print("🎉 收到代理返回的图片：\(img)")
-                
-//                for sticker in StickerManager.shared.stickerArr {
-//                    sticker.removeFromSuperview()
-//                }
-//                
-//                if let name = item?.jsonName, name.count > 0 {
-//                    StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName!, currentVC: self)
-//                }else{
-                    StickerManager.shared.getCurrentVC(currentVC: self)
-//                }
-                replaceBgImage(image: img)
-
-                resetContainerViewFrame()
-                convertStickerFrames(stickers: StickerManager.shared.stickerArr,
-                                     oldSize: containerViewOriginFrame.size,
-                                     newSize: containerView.frame.size,
-                                     mode: .fit)
-//                resetContainerViewFrame()
-//                containerViewOriginFrame = containerView.frame
-
+                StickerManager.shared.replaceBgImage = img
+                ratioAndReplaceBgImage(img: img)
             } else {
                 print("⚠️ 没有返回图片")
             }
@@ -292,6 +274,7 @@ extension EditImageViewController:StickerToolsViewDelegate {
     }
 }
 
+
 // MARK: - 比例工具栏 RatioToolView-RatioToolViewDelegate
 extension EditImageViewController:RatioToolViewDelegate {
     func RatioToolViewDidSelectItemAt(_ sender: RatioToolView, indexPath: IndexPath,ratioItem:RatioToolsModel) {
@@ -313,34 +296,40 @@ extension EditImageViewController:RatioToolViewDelegate {
             image = BSWHBundle.image(named: item!.imageBg)
         }
         
-        if let squareImage = image!.cropped(toAspectRatioWidth: ratioItem.width, height: ratioItem.height) {
-            
-            StickerManager.shared.getCurrentVC(currentVC: self)
-            
-            replaceBgImage(image: squareImage)
-            resetContainerViewFrame()
-            
-            for (index,sticker) in StickerManager.shared.stickerArr.enumerated() {
-                let data = StickerManager.shared.stickerData[index]
-                sticker.originAngle = data.originAngle
-                sticker.originScale = data.originScale
-                sticker.gesScale = data.gesScale
-                sticker.originTransform = data.originTransform
-                sticker.totalTranslationPoint = data.totalTranslationPoint
-                sticker.gesTranslationPoint = data.gesTranslationPoint
-                sticker.originFrame = data.originFrame
-                sticker.center = data.center
-                sticker.updateTransform()
-            }
-            
-            let newFrame = containerView.frame
-            convertStickerFrames(
-                stickers: StickerManager.shared.stickerArr,
-                oldSize: item?.isNeedFit == true ? CGSize(width: kkScreenWidth, height: kkScreenHeight) : containerViewOriginFrame.size,
-                newSize: newFrame.size,
-                mode: .fit
-            )
+        if let bgImage = StickerManager.shared.replaceBgImage {
+            image = bgImage
         }
+        
+        if let squareImage = image!.cropped(toAspectRatioWidth: ratioItem.width, height: ratioItem.height) {
+            ratioAndReplaceBgImage(img: squareImage)
+        }
+    }
+}
+
+extension EditImageViewController {
+    func ratioAndReplaceBgImage(img:UIImage){
+        StickerManager.shared.getCurrentVC(currentVC: self)
+        replaceBgImage(image: img)
+        resetContainerViewFrame()
+        for (index,sticker) in StickerManager.shared.stickerArr.enumerated() {
+            let data = StickerManager.shared.stickerData[index]
+            sticker.originAngle = data.originAngle
+            sticker.originScale = data.originScale
+            sticker.gesScale = data.gesScale
+            sticker.originTransform = data.originTransform
+            sticker.totalTranslationPoint = data.totalTranslationPoint
+            sticker.gesTranslationPoint = data.gesTranslationPoint
+            sticker.originFrame = data.originFrame
+            sticker.center = data.center
+            sticker.updateTransform()
+        }
+        let newFrame = containerView.frame
+        convertStickerFrames(
+            stickers: StickerManager.shared.stickerArr,
+            oldSize: item?.isNeedFit == true ? CGSize(width: kkScreenWidth, height: kkScreenHeight) : containerViewOriginFrame.size,
+            newSize: newFrame.size,
+            mode: .fit
+        )
     }
 }
 
