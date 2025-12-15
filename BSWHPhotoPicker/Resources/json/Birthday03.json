@@ -13,7 +13,7 @@
     "overlayRectWidth": 0.98,
     "overlayRectHeight": 0.98,
     "imageType": "rectangle",
-    "cornerRadiusScale":20,
+    "cornerRadiusScale":40,
     "isBgImage": true,
     "bgAddImageType":"Birthday-sticker-add00"
 },{

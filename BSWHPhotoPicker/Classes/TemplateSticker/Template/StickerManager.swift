@@ -39,6 +39,7 @@ struct stickerData {
     var totalTranslationPoint: CGPoint = .zero
     var gesTranslationPoint: CGPoint = .zero
     var originFrame: CGRect = CGRectZero
+    var center:CGPoint = .zero
 }
 
 // MARK: - StickerManager
@@ -72,6 +73,7 @@ public final class StickerManager: NSObject {
         let items = StickerManager.shared.loadLocalJSON(fileName: jsonName, type: [ImageStickerModel].self)
         StickerManager.shared.modelMap.removeAll()
         StickerManager.shared.stickerArr.removeAll()
+        StickerManager.shared.stickerData.removeAll()
         controller = currentVC
         for (index,state) in items!.enumerated() {
 //            state.zIndex = index
@@ -202,7 +204,8 @@ public final class StickerManager: NSObject {
                                                       originTransform:sticker.originTransform,
                                                       totalTranslationPoint:sticker.totalTranslationPoint,
                                                       gesTranslationPoint:sticker.gesTranslationPoint,
-                                                      originFrame:sticker.originFrame
+                                                      originFrame:sticker.originFrame,
+                                                      center: sticker.center
         )
         StickerManager.shared.stickerData.append(stickerData)
         sticker.stickerModel = state

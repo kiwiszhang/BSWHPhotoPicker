@@ -315,9 +315,11 @@ extension EditImageViewController:RatioToolViewDelegate {
         
         if let squareImage = image!.cropped(toAspectRatioWidth: ratioItem.width, height: ratioItem.height) {
             
-            replaceBgImage(image: image!)
+            StickerManager.shared.getCurrentVC(currentVC: self)
+            
+            replaceBgImage(image: squareImage)
             resetContainerViewFrame()
-            containerView.frame = containerViewOriginFrame01
+            
             for (index,sticker) in StickerManager.shared.stickerArr.enumerated() {
                 let data = StickerManager.shared.stickerData[index]
                 sticker.originAngle = data.originAngle
@@ -326,14 +328,11 @@ extension EditImageViewController:RatioToolViewDelegate {
                 sticker.originTransform = data.originTransform
                 sticker.totalTranslationPoint = data.totalTranslationPoint
                 sticker.gesTranslationPoint = data.gesTranslationPoint
-//                sticker.originFrame = data.originFrame
+                sticker.originFrame = data.originFrame
+                sticker.center = data.center
                 sticker.updateTransform()
             }
-
-            StickerManager.shared.getCurrentVC(currentVC: self)
             
-            replaceBgImage(image: squareImage)
-            resetContainerViewFrame()
             let newFrame = containerView.frame
             convertStickerFrames(
                 stickers: StickerManager.shared.stickerArr,
@@ -341,7 +340,6 @@ extension EditImageViewController:RatioToolViewDelegate {
                 newSize: newFrame.size,
                 mode: .fit
             )
-            containerViewOriginFrame01 = containerView.frame
         }
     }
 }
