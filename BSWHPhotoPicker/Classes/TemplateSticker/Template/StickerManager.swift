@@ -74,30 +74,9 @@ public final class StickerManager: NSObject {
         StickerManager.shared.stickerArr.removeAll()
         controller = currentVC
         for (index,state) in items!.enumerated() {
-            state.zIndex = index
+//            state.zIndex = index
             self.controller!.switchOperation(type: .imageSticker)
-            let sticker = currentVC.addImageSticker01(state: state)
-            let stickerData = BSWHPhotoPicker.stickerData(originScale:state.originScale,
-                                                          originAngle:state.originAngle,
-                                                          gesScale:state.gesScale,
-                                                          gesRotation:state.gesRotation,
-                                                          originTransform:sticker.originTransform,
-                                                          totalTranslationPoint:sticker.totalTranslationPoint,
-                                                          gesTranslationPoint:sticker.gesTranslationPoint,
-                                                          originFrame:sticker.originFrame
-            )
-            StickerManager.shared.stickerData.append(stickerData)
-            sticker.stickerModel = state
-            StickerManager.shared.modelMap[sticker.id] = state
-            StickerManager.shared.stickerArr.append(sticker)
-            if state.isBgImage == true {
-                let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
-                sticker.addGestureRecognizer(tap)
-                sticker.isUserInteractionEnabled = true
-                if let image = sticker.stickerModel?.stickerImage {
-                    sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: controller!)
-                }
-            }
+            StickerManager.shared.addStickerImageHandle(state: state)
         }
     }
     
@@ -140,28 +119,7 @@ public final class StickerManager: NSObject {
         }
         state.image = stickerOld.image
         self.controller!.switchOperation(type: .imageSticker)
-        let sticker = controller!.addImageSticker01(state: state)
-        let stickerData = BSWHPhotoPicker.stickerData(originScale:state.originScale,
-                                                      originAngle:state.originAngle,
-                                                      gesScale:state.gesScale,
-                                                      gesRotation:state.gesRotation,
-                                                      originTransform:sticker.originTransform,
-                                                      totalTranslationPoint:sticker.totalTranslationPoint,
-                                                      gesTranslationPoint:sticker.gesTranslationPoint,
-                                                      originFrame:sticker.originFrame
-        )
-        StickerManager.shared.stickerData.append(stickerData)
-        state.zIndex = StickerManager.shared.stickerArr.count
-        sticker.stickerModel = state
-        StickerManager.shared.modelMap[sticker.id] = state
-        StickerManager.shared.stickerArr.append(sticker)
-        if state.isBgImage == true {
-            let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
-            sticker.addGestureRecognizer(tap)
-            sticker.isUserInteractionEnabled = true
-            let selectedImage: UIImage = (sticker.stickerModel?.stickerImage)!
-            sticker.updateImage(selectedImage, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: controller!)
-        }
+        StickerManager.shared.addStickerImageHandle(state: state)
     }
 
     @objc func duplicateTextSticker(_ notification: Notification) {
@@ -233,6 +191,31 @@ public final class StickerManager: NSObject {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":stickerView])
         }
     }
+    
+    func addStickerImageHandle(state: ImageStickerModel,isFreeStyle:Bool = false){
+        state.zIndex = StickerManager.shared.stickerArr.count
+        let sticker = self.controller!.addImageSticker01(state: state,isFreeStyle: isFreeStyle)
+        let stickerData = BSWHPhotoPicker.stickerData(originScale:state.originScale,
+                                                      originAngle:state.originAngle,
+                                                      gesScale:state.gesScale,
+                                                      gesRotation:state.gesRotation,
+                                                      originTransform:sticker.originTransform,
+                                                      totalTranslationPoint:sticker.totalTranslationPoint,
+                                                      gesTranslationPoint:sticker.gesTranslationPoint,
+                                                      originFrame:sticker.originFrame
+        )
+        StickerManager.shared.stickerData.append(stickerData)
+        sticker.stickerModel = state
+        StickerManager.shared.modelMap[sticker.id] = state
+        StickerManager.shared.stickerArr.append(sticker)
+        let tap = UITapGestureRecognizer(target: StickerManager.shared, action: #selector(StickerManager.shared.stickerTapped(_:)))
+        sticker.addGestureRecognizer(tap)
+        if let image = sticker.stickerModel?.stickerImage {
+            sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: self.controller!)
+        }
+        self.controller!.backAndreBackStatus()
+    }
+    
 }
 
 extension StickerManager: PHPickerViewControllerDelegate {
@@ -313,27 +296,7 @@ extension StickerManager: PHPickerViewControllerDelegate {
                     DispatchQueue.main.async { [self] in
                         self.controller!.switchOperation(type: .imageSticker)
                         let state: ImageStickerModel = ImageStickerModel(imageName: "empty",imageData:newImage.pngData(), originFrame: CGRect(x: 40, y: 100, width: 120, height: 120),gesScale: 1,gesRotation: 0,overlayRect: CGRect(x:0,y: 0,width: 1,height: 1) ,isBgImage: true)
-                        state.zIndex = StickerManager.shared.stickerArr.count
-                        let sticker = self.controller!.addImageSticker01(state: state)
-                        let stickerData = BSWHPhotoPicker.stickerData(originScale:state.originScale,
-                                                                      originAngle:state.originAngle,
-                                                                      gesScale:state.gesScale,
-                                                                      gesRotation:state.gesRotation,
-                                                                      originTransform:sticker.originTransform,
-                                                                      totalTranslationPoint:sticker.totalTranslationPoint,
-                                                                      gesTranslationPoint:sticker.gesTranslationPoint,
-                                                                      originFrame:sticker.originFrame
-                        )
-                        StickerManager.shared.stickerData.append(stickerData)
-                        sticker.stickerModel = state
-                        StickerManager.shared.modelMap[sticker.id] = state
-                        StickerManager.shared.stickerArr.append(sticker)
-                        let tap = UITapGestureRecognizer(target: self, action: #selector(self.stickerTapped(_:)))
-                        sticker.addGestureRecognizer(tap)
-                        if let image = sticker.stickerModel?.stickerImage {
-                            sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: self.controller!)
-                        }
-                        self.controller?.backAndreBackStatus()
+                        StickerManager.shared.addStickerImageHandle(state: state)
                     }
                 }
             }

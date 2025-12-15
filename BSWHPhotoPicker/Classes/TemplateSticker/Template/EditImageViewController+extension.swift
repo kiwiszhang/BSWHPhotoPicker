@@ -151,27 +151,7 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
                     self.switchOperation(type: .imageSticker)
                     let state: ImageStickerModel = ImageStickerModel(imageName: "empty",imageData:image.pngData(), originFrame: CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width, height: frame.size.height),gesScale: 1,gesRotation: 0,overlayRect: CGRect(x:0,y: 0,width: 1,height: 1) ,isBgImage: true)
                     state.imageData = image.pngData()
-                    let stickerData = BSWHPhotoPicker.stickerData(originScale:state.originScale,
-                                                                  originAngle:state.originAngle,
-                                                                  gesScale:state.gesScale,
-                                                                  gesRotation:state.gesRotation,
-                                                                  originTransform:sticker.originTransform,
-                                                                  totalTranslationPoint:sticker.totalTranslationPoint,
-                                                                  gesTranslationPoint:sticker.gesTranslationPoint,
-                                                                  originFrame:sticker.originFrame
-                    )
-                    StickerManager.shared.stickerData.append(stickerData)
-                    state.zIndex = StickerManager.shared.stickerArr.count
-                    let sticker = self.addImageSticker01(state: state)
-                    sticker.stickerModel = state
-                    StickerManager.shared.modelMap[sticker.id] = state
-                    StickerManager.shared.stickerArr.append(sticker)
-                    let tap = UITapGestureRecognizer(target: StickerManager.shared, action: #selector(StickerManager.shared.stickerTapped(_:)))
-                    sticker.addGestureRecognizer(tap)
-                    if let image = sticker.stickerModel?.stickerImage {
-                        sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: self)
-                    }
-                    backAndreBackStatus()
+                    StickerManager.shared.addStickerImageHandle(state: state)
                 }
             }
         }
@@ -241,27 +221,7 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
                 DispatchQueue.main.async { [self] in
                     self!.switchOperation(type: .imageSticker)
                     let state: ImageStickerModel = ImageStickerModel(imageName: "empty",imageData:img.pngData(), originFrame: CGRect(x: 0, y: 0, width: 120, height: 120),gesScale: 1,gesRotation: 0,overlayRect: CGRect(x:0,y: 0,width: 1,height: 1) ,isBgImage: true)
-                    state.zIndex = StickerManager.shared.stickerArr.count
-                    let sticker = self!.addImageSticker01(state: state)
-                    let stickerData = BSWHPhotoPicker.stickerData(originScale:state.originScale,
-                                                                  originAngle:state.originAngle,
-                                                                  gesScale:state.gesScale,
-                                                                  gesRotation:state.gesRotation,
-                                                                  originTransform:sticker.originTransform,
-                                                                  totalTranslationPoint:sticker.totalTranslationPoint,
-                                                                  gesTranslationPoint:sticker.gesTranslationPoint,
-                                                                  originFrame:sticker.originFrame
-                    )
-                    StickerManager.shared.stickerData.append(stickerData)
-                    sticker.stickerModel = state
-                    StickerManager.shared.modelMap[sticker.id] = state
-                    StickerManager.shared.stickerArr.append(sticker)
-                    let tap = UITapGestureRecognizer(target: StickerManager.shared, action: #selector(StickerManager.shared.stickerTapped(_:)))
-                    sticker.addGestureRecognizer(tap)
-                    if let image = sticker.stickerModel?.stickerImage {
-                        sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: self!)
-                    }
-                    self!.backAndreBackStatus()
+                    StickerManager.shared.addStickerImageHandle(state: state)
                 }
             } else {
                 
@@ -369,7 +329,6 @@ extension EditImageViewController:RatioToolViewDelegate {
 //                sticker.originFrame = data.originFrame
                 sticker.updateTransform()
             }
-            
 
             StickerManager.shared.getCurrentVC(currentVC: self)
             

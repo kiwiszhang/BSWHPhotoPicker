@@ -30,6 +30,7 @@ extension StickerManager {
 
 
             for (index, img) in images.enumerated() {
+                self.controller!.switchOperation(type: .imageSticker)
 
                 let frame = frames[index]
 
@@ -42,28 +43,7 @@ extension StickerManager {
                     overlayRect: CGRect(x:0,y:0,width:1,height:1),
                     isBgImage: false
                 )
-                state.zIndex = index
-            self.controller!.switchOperation(type: .imageSticker)
-            let sticker = self.controller!.addImageSticker01(state: state,isFreeStyle: true)
-                let stickerData = BSWHPhotoPicker.stickerData(originScale:state.originScale,
-                                                              originAngle:state.originAngle,
-                                                              gesScale:state.gesScale,
-                                                              gesRotation:state.gesRotation,
-                                                              originTransform:sticker.originTransform,
-                                                              totalTranslationPoint:sticker.totalTranslationPoint,
-                                                              gesTranslationPoint:sticker.gesTranslationPoint,
-                                                              originFrame:sticker.originFrame
-                )
-                StickerManager.shared.stickerData.append(stickerData)
-            sticker.stickerModel = state
-            StickerManager.shared.modelMap[sticker.id] = state
-            StickerManager.shared.stickerArr.append(sticker)
-            let tap = UITapGestureRecognizer(target: self, action: #selector(self.stickerTapped(_:)))
-            sticker.addGestureRecognizer(tap)
-            if let image = sticker.stickerModel?.stickerImage {
-                sticker.updateImage(image, stickerModel: sticker.stickerModel!, withBaseImage: sticker.image,vc: self.controller!)
-            }
-            self.controller?.backAndreBackStatus()
+                StickerManager.shared.addStickerImageHandle(state: state, isFreeStyle: true)
         }
     }
 
