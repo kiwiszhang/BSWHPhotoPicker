@@ -30,12 +30,24 @@ public protocol StickerManagerDelegate: AnyObject {
         )
 }
 
+struct stickerData {
+    var originScale:Double = 1.0
+    var originAngle:Double = 1.0
+    var gesScale:Double = 1.0
+    var gesRotation:Double = 0.0
+    var originTransform: CGAffineTransform = .identity
+    var totalTranslationPoint: CGPoint = .zero
+    var gesTranslationPoint: CGPoint = .zero
+    var originFrame: CGRect = CGRectZero
+}
+
 // MARK: - StickerManager
 public final class StickerManager: NSObject {
     weak var controller: EditImageViewController?
     private weak var currentStickerView: EditableStickerView?
     var modelMap: [String: ImageStickerModel] = [:]
     var stickerArr: [EditableStickerView] = []
+    var stickerData:[stickerData] = []
     public weak var delegate: StickerManagerDelegate?
     var persentType:Int = 0
     var templateOrBackground:Int = 0
@@ -63,7 +75,18 @@ public final class StickerManager: NSObject {
         controller = currentVC
         for (index,state) in items!.enumerated() {
             state.zIndex = index
+            self.controller!.switchOperation(type: .imageSticker)
             let sticker = currentVC.addImageSticker01(state: state)
+            let stickerData = BSWHPhotoPicker.stickerData(originScale:state.originScale,
+                                                          originAngle:state.originAngle,
+                                                          gesScale:state.gesScale,
+                                                          gesRotation:state.gesRotation,
+                                                          originTransform:sticker.originTransform,
+                                                          totalTranslationPoint:sticker.totalTranslationPoint,
+                                                          gesTranslationPoint:sticker.gesTranslationPoint,
+                                                          originFrame:sticker.originFrame
+            )
+            StickerManager.shared.stickerData.append(stickerData)
             sticker.stickerModel = state
             StickerManager.shared.modelMap[sticker.id] = state
             StickerManager.shared.stickerArr.append(sticker)
@@ -116,9 +139,22 @@ public final class StickerManager: NSObject {
             state.imageData = stateTmp.imageData
         }
         state.image = stickerOld.image
+        self.controller!.switchOperation(type: .imageSticker)
         let sticker = controller!.addImageSticker01(state: state)
+        let stickerData = BSWHPhotoPicker.stickerData(originScale:state.originScale,
+                                                      originAngle:state.originAngle,
+                                                      gesScale:state.gesScale,
+                                                      gesRotation:state.gesRotation,
+                                                      originTransform:sticker.originTransform,
+                                                      totalTranslationPoint:sticker.totalTranslationPoint,
+                                                      gesTranslationPoint:sticker.gesTranslationPoint,
+                                                      originFrame:sticker.originFrame
+        )
+        StickerManager.shared.stickerData.append(stickerData)
+        state.zIndex = StickerManager.shared.stickerArr.count
         sticker.stickerModel = state
         StickerManager.shared.modelMap[sticker.id] = state
+        StickerManager.shared.stickerArr.append(sticker)
         if state.isBgImage == true {
             let tap = UITapGestureRecognizer(target: self, action: #selector(stickerTapped(_:)))
             sticker.addGestureRecognizer(tap)
@@ -277,7 +313,18 @@ extension StickerManager: PHPickerViewControllerDelegate {
                     DispatchQueue.main.async { [self] in
                         self.controller!.switchOperation(type: .imageSticker)
                         let state: ImageStickerModel = ImageStickerModel(imageName: "empty",imageData:newImage.pngData(), originFrame: CGRect(x: 40, y: 100, width: 120, height: 120),gesScale: 1,gesRotation: 0,overlayRect: CGRect(x:0,y: 0,width: 1,height: 1) ,isBgImage: true)
+                        state.zIndex = StickerManager.shared.stickerArr.count
                         let sticker = self.controller!.addImageSticker01(state: state)
+                        let stickerData = BSWHPhotoPicker.stickerData(originScale:state.originScale,
+                                                                      originAngle:state.originAngle,
+                                                                      gesScale:state.gesScale,
+                                                                      gesRotation:state.gesRotation,
+                                                                      originTransform:sticker.originTransform,
+                                                                      totalTranslationPoint:sticker.totalTranslationPoint,
+                                                                      gesTranslationPoint:sticker.gesTranslationPoint,
+                                                                      originFrame:sticker.originFrame
+                        )
+                        StickerManager.shared.stickerData.append(stickerData)
                         sticker.stickerModel = state
                         StickerManager.shared.modelMap[sticker.id] = state
                         StickerManager.shared.stickerArr.append(sticker)

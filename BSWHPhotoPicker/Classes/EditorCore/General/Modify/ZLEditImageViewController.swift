@@ -116,7 +116,7 @@ open class ZLEditImageViewController: UIViewController {
         let view = UIScrollView()
         view.backgroundColor = .black
         view.minimumZoomScale = 1
-        view.maximumZoomScale = 3
+        view.maximumZoomScale = 20
         view.delegate = self
         return view
     }()

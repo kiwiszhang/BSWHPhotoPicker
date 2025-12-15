@@ -151,6 +151,17 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
                     self.switchOperation(type: .imageSticker)
                     let state: ImageStickerModel = ImageStickerModel(imageName: "empty",imageData:image.pngData(), originFrame: CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width, height: frame.size.height),gesScale: 1,gesRotation: 0,overlayRect: CGRect(x:0,y: 0,width: 1,height: 1) ,isBgImage: true)
                     state.imageData = image.pngData()
+                    let stickerData = BSWHPhotoPicker.stickerData(originScale:state.originScale,
+                                                                  originAngle:state.originAngle,
+                                                                  gesScale:state.gesScale,
+                                                                  gesRotation:state.gesRotation,
+                                                                  originTransform:sticker.originTransform,
+                                                                  totalTranslationPoint:sticker.totalTranslationPoint,
+                                                                  gesTranslationPoint:sticker.gesTranslationPoint,
+                                                                  originFrame:sticker.originFrame
+                    )
+                    StickerManager.shared.stickerData.append(stickerData)
+                    state.zIndex = StickerManager.shared.stickerArr.count
                     let sticker = self.addImageSticker01(state: state)
                     sticker.stickerModel = state
                     StickerManager.shared.modelMap[sticker.id] = state
@@ -175,14 +186,14 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
         }
         backAndreBackStatus()
         if item?.isNeedFit == true {
-            for sticker in StickerManager.shared.stickerArr {
-                sticker.removeFromSuperview()
-            }
-            if let name = item?.jsonName, name.count > 0 {
-                StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName!, currentVC: self)
-            }else{
+//            for sticker in StickerManager.shared.stickerArr {
+//                sticker.removeFromSuperview()
+//            }
+//            if let name = item?.jsonName, name.count > 0 {
+//                StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName!, currentVC: self)
+//            }else{
                 StickerManager.shared.getCurrentVC(currentVC: self)
-            }
+//            }
             convertStickerFrames(stickers: StickerManager.shared.stickerArr,
                                  oldSize: item?.isNeedFit == true ? CGSize(width: kkScreenWidth, height: kkScreenHeight) : containerViewOriginFrame.size,
                                  newSize: containerView.frame.size,
@@ -197,15 +208,15 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
             if let img = image {
                 print("🎉 收到代理返回的图片：\(img)")
                 
-                for sticker in StickerManager.shared.stickerArr {
-                    sticker.removeFromSuperview()
-                }
-                
-                if let name = item?.jsonName, name.count > 0 {
-                    StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName!, currentVC: self)
-                }else{
+//                for sticker in StickerManager.shared.stickerArr {
+//                    sticker.removeFromSuperview()
+//                }
+//                
+//                if let name = item?.jsonName, name.count > 0 {
+//                    StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName!, currentVC: self)
+//                }else{
                     StickerManager.shared.getCurrentVC(currentVC: self)
-                }
+//                }
                 replaceBgImage(image: img)
 
                 resetContainerViewFrame()
@@ -230,7 +241,18 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
                 DispatchQueue.main.async { [self] in
                     self!.switchOperation(type: .imageSticker)
                     let state: ImageStickerModel = ImageStickerModel(imageName: "empty",imageData:img.pngData(), originFrame: CGRect(x: 0, y: 0, width: 120, height: 120),gesScale: 1,gesRotation: 0,overlayRect: CGRect(x:0,y: 0,width: 1,height: 1) ,isBgImage: true)
+                    state.zIndex = StickerManager.shared.stickerArr.count
                     let sticker = self!.addImageSticker01(state: state)
+                    let stickerData = BSWHPhotoPicker.stickerData(originScale:state.originScale,
+                                                                  originAngle:state.originAngle,
+                                                                  gesScale:state.gesScale,
+                                                                  gesRotation:state.gesRotation,
+                                                                  originTransform:sticker.originTransform,
+                                                                  totalTranslationPoint:sticker.totalTranslationPoint,
+                                                                  gesTranslationPoint:sticker.gesTranslationPoint,
+                                                                  originFrame:sticker.originFrame
+                    )
+                    StickerManager.shared.stickerData.append(stickerData)
                     sticker.stickerModel = state
                     StickerManager.shared.modelMap[sticker.id] = state
                     StickerManager.shared.stickerArr.append(sticker)
@@ -302,7 +324,7 @@ extension EditImageViewController:StickerToolsViewDelegate {
 //                }
 //                hideBottomPanel()
                 sticker.setOperation(true)
-                sticker.gesTranslationPoint = CGPoint(x: 10000, y: 10000)
+                sticker.gesTranslationPoint = CGPoint(x: 50000, y: 50000)
                 sticker.updateTransform01()
                 sticker.setOperation(false)
             }
@@ -333,15 +355,23 @@ extension EditImageViewController:RatioToolViewDelegate {
         
         if let squareImage = image!.cropped(toAspectRatioWidth: ratioItem.width, height: ratioItem.height) {
             
-            for sticker in StickerManager.shared.stickerArr {
-                sticker.removeFromSuperview()
+            replaceBgImage(image: image!)
+            resetContainerViewFrame()
+            containerView.frame = containerViewOriginFrame01
+            for (index,sticker) in StickerManager.shared.stickerArr.enumerated() {
+                let data = StickerManager.shared.stickerData[index]
+                sticker.originAngle = data.originAngle
+                sticker.originScale = data.originScale
+                sticker.gesScale = data.gesScale
+                sticker.originTransform = data.originTransform
+                sticker.totalTranslationPoint = data.totalTranslationPoint
+                sticker.gesTranslationPoint = data.gesTranslationPoint
+//                sticker.originFrame = data.originFrame
+                sticker.updateTransform()
             }
             
-            if let name = item?.jsonName, name.count > 0 {
-                StickerManager.shared.initCurrentTemplate(jsonName:item!.jsonName!, currentVC: self)
-            }else{
-                StickerManager.shared.getCurrentVC(currentVC: self)
-            }
+
+            StickerManager.shared.getCurrentVC(currentVC: self)
             
             replaceBgImage(image: squareImage)
             resetContainerViewFrame()
@@ -352,6 +382,7 @@ extension EditImageViewController:RatioToolViewDelegate {
                 newSize: newFrame.size,
                 mode: .fit
             )
+            containerViewOriginFrame01 = containerView.frame
         }
     }
 }

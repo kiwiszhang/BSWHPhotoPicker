@@ -17,6 +17,7 @@ public class EditImageViewController: ZLEditImageViewController {
     public var item:TemplateModel? = nil
     public var imagePicker:[UIImage] = []
     var containerViewOriginFrame = CGRectZero
+    var containerViewOriginFrame01 = CGRectZero
     var pickerColor:UIColor? = nil
     var currentSticker:EditableStickerView? = nil
     private var stickerToolsViewBottomConstraint: Constraint?
@@ -24,8 +25,8 @@ public class EditImageViewController: ZLEditImageViewController {
     private lazy var stickerToolsView = StickerToolsView().cornerRadius(20.w, corners: [.topLeft,.topRight]).backgroundColor(.white)
     private lazy var ratioToolView = RatioToolView().cornerRadius(20.w, corners: [.topLeft,.topRight]).backgroundColor(.white)
     private lazy var statusView = UIView().backgroundColor(kkColorFromHex("F5F5F5"))
-    private lazy var topView = TemplateTopView().backgroundColor(kkColorFromHex("F5F5F5"))
-    private lazy var contentView = UIView().backgroundColor(.clear)
+    lazy var topView = TemplateTopView().backgroundColor(kkColorFromHex("F5F5F5"))
+    lazy var contentView = UIView().backgroundColor(.clear)
     let toolCollectionView:ToolsCollectionView = {
        let view = ToolsCollectionView()
         view.backgroundColor = kkColorFromHex("F5F5F5")
@@ -121,6 +122,7 @@ public class EditImageViewController: ZLEditImageViewController {
         mainScrollView.showsHorizontalScrollIndicator = false
         
         containerViewOriginFrame = containerView.frame
+        containerViewOriginFrame01 = containerView.frame
 
         //根据调整后的containerView布局里面的贴纸
         if item?.isNeedFit == true {
@@ -170,9 +172,21 @@ public class EditImageViewController: ZLEditImageViewController {
                 guard let self = self else { return }
                 self.switchOperation(type: .imageSticker)
                 let state: ImageStickerModel = ImageStickerModel(image: exportedImage,originFrame: CGRect(x: rect.origin.x / (kkScreenWidth / 375.0), y: rect.origin.y / (kkScreenHeight / 812.0), width: rect.size.width / (kkScreenWidth / 375.0), height: rect.size.height / (kkScreenHeight / 812.0)),gesScale: 1,gesRotation: 0,isBgImage: false)
+                state.zIndex = StickerManager.shared.stickerArr.count
+//                let stickerData = BSWHPhotoPicker.stickerData(originScale:state.originScale,
+//                                                              originAngle:state.originAngle,
+//                                                              gesScale:state.gesScale,
+//                                                              gesRotation:state.gesRotation,
+//                                                              originTransform:sticker.originTransform,
+//                                                              totalTranslationPoint:sticker.totalTranslationPoint,
+//                                                              gesTranslationPoint:sticker.gesTranslationPoint,
+//                                                              originFrame:sticker.originFrame
+//                )
+//                StickerManager.shared.stickerData.append(stickerData)
                 let sticker = self.addImageSticker01(state: state)
                 sticker.stickerModel = state
                 StickerManager.shared.modelMap[sticker.id] = state
+                StickerManager.shared.stickerArr.append(sticker)
             }
             present(vc, animated: false)
         }

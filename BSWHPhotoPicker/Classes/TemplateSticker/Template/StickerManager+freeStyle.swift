@@ -35,15 +35,26 @@ extension StickerManager {
 
                 let state = ImageStickerModel(
                     imageName: "empty",
-                    imageData: img.jpegData(compressionQuality: 1),
+                    imageData: img.pngData(),
                     originFrame: frame,
                     gesScale: 1,
                     gesRotation: 0,
                     overlayRect: CGRect(x:0,y:0,width:1,height:1),
                     isBgImage: false
                 )
-
+                state.zIndex = index
+            self.controller!.switchOperation(type: .imageSticker)
             let sticker = self.controller!.addImageSticker01(state: state,isFreeStyle: true)
+                let stickerData = BSWHPhotoPicker.stickerData(originScale:state.originScale,
+                                                              originAngle:state.originAngle,
+                                                              gesScale:state.gesScale,
+                                                              gesRotation:state.gesRotation,
+                                                              originTransform:sticker.originTransform,
+                                                              totalTranslationPoint:sticker.totalTranslationPoint,
+                                                              gesTranslationPoint:sticker.gesTranslationPoint,
+                                                              originFrame:sticker.originFrame
+                )
+                StickerManager.shared.stickerData.append(stickerData)
             sticker.stickerModel = state
             StickerManager.shared.modelMap[sticker.id] = state
             StickerManager.shared.stickerArr.append(sticker)

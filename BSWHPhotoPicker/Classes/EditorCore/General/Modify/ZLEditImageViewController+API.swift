@@ -7,6 +7,10 @@
 
 import Foundation
 
+let maxScale = 10.0
+
+
+
 // MARK: - 操作步骤API
 extension ZLEditImageViewController {
     /// 当前进行的操作
@@ -180,7 +184,9 @@ extension ZLEditImageViewController {
         let imageSticker = EditableStickerView(image:clearImage!, originScale: state.originScale, originAngle: state.originAngle, originFrame: originFrameRect,gesRotation: state.gesRotation,isBgImage: state.isBgImage,bgAddImageType: state.bgAddImageType!,imageMask: state.imageMask ?? "",imageData: state.imageData ?? BSWHBundle.image(named: state.bgAddImageType!)?.pngData(),zIndex: state.zIndex)
         addSticker(imageSticker)
         view.layoutIfNeeded()
-        editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
+        if !isFreeStyle {
+            editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
+        }
         return imageSticker
     }
     
@@ -665,7 +671,7 @@ public class EditableStickerView: ZLImageStickerView {
 //            self.removeFromSuperview()
 //        }
         setOperation(true)
-        gesTranslationPoint = CGPoint(x: 10000, y: 10000)
+        gesTranslationPoint = CGPoint(x: 50000, y: 50000)
         updateTransform01()
         setOperation(false)
     }
@@ -782,7 +788,7 @@ public class EditableStickerView: ZLImageStickerView {
 
             let rawScale = startDistance > 0 ? distance / startDistance : 1
             var finalScale = originScale * rawScale
-            finalScale = min(max(finalScale, 0.3), 2)
+            finalScale = min(max(finalScale, 0.3), maxScale)
             gesScale = finalScale / originScale
 
             let rotation = angle - startAngle
@@ -860,7 +866,7 @@ public class EditableStickerView: ZLImageStickerView {
         case .changed:
             let rawScale = gesture.scale
             var finalScale = originScale * rawScale
-            finalScale = min(max(finalScale, 0.3), 2)
+            finalScale = min(max(finalScale, 0.3), maxScale)
             let scale = finalScale / originScale
             
             gestureScale = scale
