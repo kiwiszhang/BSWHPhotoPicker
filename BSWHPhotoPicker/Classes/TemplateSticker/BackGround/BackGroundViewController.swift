@@ -27,6 +27,7 @@ public class BackGroundViewController: UIViewController, UIScrollViewDelegate {
         super.viewDidLoad()
         view.backgroundColor = .white
         StickerManager.shared.templateOrBackground = 1
+        StickerManager.shared.replaceBgImage = nil
         titles = ConfigDataItem.getBackgroundTabData()
         items = ConfigDataItem.getBackgroundListData()
         

@@ -657,22 +657,7 @@ open class ZLEditImageViewController: UIViewController {
         
         selectedTool = nil
     }
-    
-    private func clipImage(status: ZLClipStatus) {
-        let oldAngle = currentClipStatus.angle
-        let oldContainerSize = stickersContainer.frame.size
-        if oldAngle != status.angle {
-            currentClipStatus.angle = status.angle
-            rotationImageView()
-        }
-        
-        currentClipStatus.editRect = status.editRect
-        currentClipStatus.ratio = status.ratio
-        resetContainerViewFrame()
-        recalculateStickersFrame(oldContainerSize, oldAngle, status.angle)
-    }
-    
-    
+ 
     func changeAdjustTool(_ tool: ZLImageEditorConfiguration.AdjustTool) {
         selectedAdjustTool = tool
         
@@ -1476,6 +1461,21 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
         clipImage(status: status)
         preClipStatus = status
     }
+    
+    private func clipImage(status: ZLClipStatus) {
+        let oldAngle = currentClipStatus.angle
+        let oldContainerSize = stickersContainer.frame.size
+        if oldAngle != status.angle {
+            currentClipStatus.angle = status.angle
+            rotationImageView()
+        }
+        
+        currentClipStatus.editRect = status.editRect
+        currentClipStatus.ratio = status.ratio
+        resetContainerViewFrame()
+        recalculateStickersFrame(oldContainerSize, oldAngle, status.angle)
+    }
+    
     
     private func undoMosaic(_ path: ZLMosaicPath) {
         mosaicPaths.removeLast()
