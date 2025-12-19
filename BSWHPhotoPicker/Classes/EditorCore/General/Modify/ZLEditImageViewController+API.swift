@@ -51,6 +51,8 @@ extension ZLEditImageViewController {
         case .adjust:// 参数调整
             selectedTool = ((selectedTool == .adjust) ? nil : ZLImageEditorConfiguration.EditTool.adjust)
             generateAdjustImageRef()
+        case .replaceBg: // 替换背景
+            print("replaceBgreplaceBgreplaceBgreplaceBg")
         default:
             selectedTool = nil
         }

@@ -187,8 +187,9 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
             guard let self = self else { return }
             if let img = image {
                 print("🎉 收到代理返回的图片：\(img)")
+                switchOperation(type: .replaceBg)
                 StickerManager.shared.replaceBgImage = img
-                ratioAndReplaceBgImage(img: img)
+                ratioAndReplaceBgImage(img: img,oldImage:imageView.image!)
             } else {
                 print("⚠️ 没有返回图片")
             }
@@ -301,15 +302,16 @@ extension EditImageViewController:RatioToolViewDelegate {
         }
         
         if let squareImage = image!.cropped(toAspectRatioWidth: ratioItem.width, height: ratioItem.height) {
-            ratioAndReplaceBgImage(img: squareImage)
+            ratioAndReplaceBgImage(img: squareImage,oldImage: imageView.image!)
         }
     }
 }
 
 extension EditImageViewController {
-    func ratioAndReplaceBgImage(img:UIImage){
+    func ratioAndReplaceBgImage(img:UIImage,oldImage:UIImage){
         StickerManager.shared.getCurrentVC(currentVC: self)
         replaceBgImage(image: img,actions: editorManager.actions)
+        editorManager.storeAction(.replaceBg(oldBg: oldImage, newBg: img))
         resetContainerViewFrame()
         for (index,sticker) in StickerManager.shared.stickerArr.enumerated() {
             let data = StickerManager.shared.stickerData[index]
@@ -330,6 +332,7 @@ extension EditImageViewController {
             newSize: newFrame.size,
             mode: .fit
         )
+        backAndreBackStatus()
     }
 }
 

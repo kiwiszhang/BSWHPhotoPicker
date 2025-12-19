@@ -220,6 +220,30 @@ public final class StickerManager: NSObject {
         }
         self.controller!.backAndreBackStatus()
     }
+    
+    func replaceImage(img:UIImage){
+        controller!.replaceBgImage(image: img,actions: controller!.editorManager.actions)
+        controller!.resetContainerViewFrame()
+        for (index,sticker) in StickerManager.shared.stickerArr.enumerated() {
+            let data = StickerManager.shared.stickerData[index]
+            sticker.originAngle = data.originAngle
+            sticker.originScale = data.originScale
+            sticker.gesScale = data.gesScale
+            sticker.originTransform = data.originTransform
+            sticker.totalTranslationPoint = data.totalTranslationPoint
+            sticker.gesTranslationPoint = data.gesTranslationPoint
+            sticker.originFrame = data.originFrame
+            sticker.center = data.center
+            sticker.updateTransform()
+        }
+        let newFrame = controller!.containerView.frame
+        convertStickerFrames(
+            stickers: StickerManager.shared.stickerArr,
+            oldSize: controller!.containerViewOriginFrame.size,
+            newSize: newFrame.size,
+            mode: .fit
+        )
+    }
 
 }
 

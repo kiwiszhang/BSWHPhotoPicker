@@ -380,14 +380,14 @@ open class ZLEditImageViewController: UIViewController {
         tools = ts
         adjustTools = ZLImageEditorConfiguration.default().adjustTools
         selectedAdjustTool = adjustTools.first
-        editorManager = ZLEditorManager(actions: actions)
+//        editorManager = ZLEditorManager(actions: actions)
         editorManager.delegate = self
         if !drawColors.contains(currentDrawColor) {
             currentDrawColor = drawColors.first!
         }
-        stickers = editModel?.stickers.compactMap {
-            ZLBaseStickerView.initWithState($0)
-        } ?? []
+//        stickers = editModel?.stickers.compactMap {
+//            ZLBaseStickerView.initWithState($0)
+//        } ?? []
     }
     
     @available(*, unavailable)
@@ -1413,6 +1413,8 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
             undoOrRedoFilter(oldFilter)
         case let .adjust(oldStatus, _):
             undoOrRedoAdjust(oldStatus)
+        case let .replaceBg(oldBg, newBg):
+            undoReplaceBg(oldBg, newBg)
         }
     }
     
@@ -1432,8 +1434,21 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
             undoOrRedoFilter(newFilter)
         case let .adjust(_, newStatus):
             undoOrRedoAdjust(newStatus)
+        case let .replaceBg(oldBg, newBg):
+            redoReplaceBg(oldBg, newBg)
         }
     }
+    
+    private func undoReplaceBg(_ oldBg: UIImage?, _ newBg: UIImage?) {
+        print("undoReplaceBg")
+        StickerManager.shared.replaceImage(img: oldBg!)
+    }
+    
+    private func redoReplaceBg(_ oldBg: UIImage?, _ newBg: UIImage?) {
+        print("redoReplaceBg")
+        StickerManager.shared.replaceImage(img: newBg!)
+    }
+    
     
     private func undoDraw(_ path: ZLDrawPath) {
         drawPaths.removeLast()

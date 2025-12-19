@@ -202,6 +202,7 @@ public extension ZLImageEditorConfiguration {
         case mosaic
         case filter
         case adjust
+        case replaceBg
     }
     
     @objc enum AdjustTool: Int {
