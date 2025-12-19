@@ -309,7 +309,7 @@ extension EditImageViewController:RatioToolViewDelegate {
 extension EditImageViewController {
     func ratioAndReplaceBgImage(img:UIImage){
         StickerManager.shared.getCurrentVC(currentVC: self)
-        replaceBgImage(image: img)
+        replaceBgImage(image: img,actions: editorManager.actions)
         resetContainerViewFrame()
         for (index,sticker) in StickerManager.shared.stickerArr.enumerated() {
             let data = StickerManager.shared.stickerData[index]

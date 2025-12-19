@@ -359,15 +359,7 @@ open class ZLEditImageViewController: UIViewController {
         } ?? []
     }
     
-    public func replaceBgImage(image:UIImage,editModel: ZLEditImageModel? = nil) {
-        var image = image
-//        if image.scale != 1,
-//           let cgImage = image.cgImage {
-//            image = image.zl.resize_vI(
-//                CGSize(width: cgImage.width, height: cgImage.height),
-//                scale: 1
-//            ) ?? image
-//        }
+    public func replaceBgImage(image:UIImage,editModel: ZLEditImageModel? = nil,actions: [ZLEditorAction] = []) {
         
         originalImage = image.zl.fixOrientation()
         editImage = originalImage
@@ -388,7 +380,7 @@ open class ZLEditImageViewController: UIViewController {
         tools = ts
         adjustTools = ZLImageEditorConfiguration.default().adjustTools
         selectedAdjustTool = adjustTools.first
-        editorManager = ZLEditorManager(actions: editModel?.actions ?? [])
+        editorManager = ZLEditorManager(actions: actions)
         editorManager.delegate = self
         if !drawColors.contains(currentDrawColor) {
             currentDrawColor = drawColors.first!

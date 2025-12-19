@@ -120,6 +120,7 @@ class ViewController: UIViewController, PHPickerViewControllerDelegate {
     
     @objc private func onClickBack02(_ sender: UIButton) {
         StickerManager.shared.delegate = self
+        BSWHPhotoPickerLocalization.shared.currentLanguage = "zh"
         checkPhotoAuthorizationAndPresentPicker()
     }
     
