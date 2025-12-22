@@ -13,37 +13,42 @@ extension StickerManager {
             var frames: [CGRect] = []
 
         switch images.count {
-            case 1: frames = [layout1(imageSize: sizes[0], canvas: canvasSize)]
-            case 2: frames = layout2(imageSizes: sizes, canvas: canvasSize)
-            case 3: frames = layout3(imageSizes: sizes, canvas: canvasSize)
-            case 4: frames = layout4(imageSizes: sizes, canvas: canvasSize)
-            case 5: frames = layout5(imageSizes: sizes, canvas: canvasSize)
-            case 6: frames = layout6(imageSizes: sizes, canvas: canvasSize)
-            case 7: frames = layout7(imageSizes: sizes, canvas: canvasSize)
-            case 8: frames = layout8(imageSizes: sizes, canvas: canvasSize)
-            case 9: frames = layout9(imageSizes: sizes, canvas: canvasSize)
-            case 10: frames = layout10(imageSizes: sizes, canvas: canvasSize)
-            case 11: frames = layout11(imageSizes: sizes, canvas: canvasSize)
-            case 12: frames = layout12(imageSizes: sizes, canvas: canvasSize)
-            default: return
-            }
+        case 1: frames = [layout1(imageSize: sizes[0], canvas: canvasSize)]
+        case 2: frames = layout2(imageSizes: sizes, canvas: canvasSize)
+        case 3: frames = layout3(imageSizes: sizes, canvas: canvasSize)
+        case 4: frames = layout4(imageSizes: sizes, canvas: canvasSize)
+        case 5: frames = layout5(imageSizes: sizes, canvas: canvasSize)
+        case 6: frames = layout6(imageSizes: sizes, canvas: canvasSize)
+        case 7: frames = layout7(imageSizes: sizes, canvas: canvasSize)
+        case 8: frames = layout8(imageSizes: sizes, canvas: canvasSize)
+        case 9: frames = layout9(imageSizes: sizes, canvas: canvasSize)
+        case 10: frames = layout10(imageSizes: sizes, canvas: canvasSize)
+        case 11: frames = layout11(imageSizes: sizes, canvas: canvasSize)
+        case 12: frames = layout12(imageSizes: sizes, canvas: canvasSize)
+        default: return
+        }
 
+        StickerManager.shared.modelMap.removeAll()
+        StickerManager.shared.stickerArr.removeAll()
+        StickerManager.shared.stickerData.removeAll()
 
-            for (index, img) in images.enumerated() {
-                self.controller!.switchOperation(type: .imageSticker)
+        for (index, img) in images.enumerated() {
+            self.controller!.switchOperation(type: .imageSticker)
 
-                let frame = frames[index]
+            let frame = frames[index]
 
-                let state = ImageStickerModel(
-                    imageName: "empty",
-                    imageData: img.pngData(),
-                    originFrame: frame,
-                    gesScale: 1,
-                    gesRotation: 0,
-                    overlayRect: CGRect(x:0,y:0,width:1,height:1),
-                    isBgImage: false
-                )
-                StickerManager.shared.addStickerImageHandle(state: state, isFreeStyle: true)
+            let state = ImageStickerModel(
+                imageName: "empty",
+                imageData: img.pngData(),
+                originScale: 1.0,
+                originAngle: 0.0,
+                originFrame: frame,
+                gesScale: 1,
+                gesRotation: 0,
+                overlayRect: CGRect(x:0,y:0,width:1,height:1),
+                isBgImage: true
+            )
+            StickerManager.shared.addStickerImageHandle(state: state, isFreeStyle: true)
         }
     }
 

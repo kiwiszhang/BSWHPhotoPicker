@@ -924,7 +924,8 @@ open class ZLEditImageViewController: UIViewController {
         let h = view.frame.height / scale
         // Convert to text stickers container view.
         let r = containerView.convert(CGRect(x: x, y: y, width: w, height: h), to: stickersContainer)
-        let originFrame = CGRect(x: r.minX + (r.width - size.width) / 2, y: r.minY + (r.height - size.height) / 2, width: size.width, height: size.height)
+//        let originFrame = CGRect(x: r.minX + (r.width - size.width) / 2, y: r.minY + (r.height - size.height) / 2, width: size.width, height: size.height)
+        let originFrame = CGRect(x: (containerView.frame.width - size.width) / 2, y: (containerView.frame.height - size.height) / 2, width: size.width, height: size.height)
         return originFrame
     }
     

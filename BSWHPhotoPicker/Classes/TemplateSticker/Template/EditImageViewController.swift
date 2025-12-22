@@ -83,7 +83,6 @@ public class EditImageViewController: ZLEditImageViewController {
         }else{
             StickerManager.shared.getCurrentVC(currentVC: self)
         }
-        backAndreBackStatus()
         
         stickerToolsView.onClose = {
             self.hideBottomPanel()
@@ -138,6 +137,7 @@ public class EditImageViewController: ZLEditImageViewController {
         if imagePicker.count > 0 {
             StickerManager.shared.freeStyleAddImages(images: imagePicker,canvasSize:containerViewOriginFrame.size)
         }
+        backAndreBackStatus()
     }
     
     override public func viewDidLayoutSubviews() {
@@ -173,16 +173,6 @@ public class EditImageViewController: ZLEditImageViewController {
                 self.switchOperation(type: .imageSticker)
                 let state: ImageStickerModel = ImageStickerModel(image: exportedImage,originFrame: CGRect(x: rect.origin.x / (kkScreenWidth / 375.0), y: rect.origin.y / (kkScreenHeight / 812.0), width: rect.size.width / (kkScreenWidth / 375.0), height: rect.size.height / (kkScreenHeight / 812.0)),gesScale: 1,gesRotation: 0,isBgImage: false)
                 state.zIndex = StickerManager.shared.stickerArr.count
-//                let stickerData = BSWHPhotoPicker.stickerData(originScale:state.originScale,
-//                                                              originAngle:state.originAngle,
-//                                                              gesScale:state.gesScale,
-//                                                              gesRotation:state.gesRotation,
-//                                                              originTransform:sticker.originTransform,
-//                                                              totalTranslationPoint:sticker.totalTranslationPoint,
-//                                                              gesTranslationPoint:sticker.gesTranslationPoint,
-//                                                              originFrame:sticker.originFrame
-//                )
-//                StickerManager.shared.stickerData.append(stickerData)
                 let sticker = self.addImageSticker01(state: state)
                 sticker.stickerModel = state
                 StickerManager.shared.modelMap[sticker.id] = state

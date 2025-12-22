@@ -183,7 +183,16 @@ extension ZLEditImageViewController {
             originFrameRect = CGRect(x: state.originFrameX.w, y: state.originFrameY.h, width: state.originFrameWidth.w, height: state.originFrameHeight.h)
         }
         
-        let imageSticker = EditableStickerView(image:clearImage!, originScale: state.originScale, originAngle: state.originAngle, originFrame: originFrameRect,gesRotation: state.gesRotation,isBgImage: state.isBgImage,bgAddImageType: state.bgAddImageType!,imageMask: state.imageMask ?? "",imageData: state.imageData ?? BSWHBundle.image(named: state.bgAddImageType!)?.pngData(),zIndex: state.zIndex)
+        let imageSticker = EditableStickerView(image:clearImage!,
+                                               originScale: state.originScale,
+                                               originAngle: state.originAngle,
+                                               originFrame: originFrameRect,
+                                               gesRotation: state.gesRotation,
+                                               isBgImage: state.isBgImage,
+                                               bgAddImageType: state.bgAddImageType!,
+                                               imageMask: state.imageMask ?? "",
+                                               imageData: state.imageData ?? BSWHBundle.image(named: state.bgAddImageType!)?.pngData(),
+                                               zIndex: state.zIndex)
         addSticker(imageSticker)
         view.layoutIfNeeded()
         if !isFreeStyle {

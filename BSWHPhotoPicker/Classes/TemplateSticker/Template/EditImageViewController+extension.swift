@@ -203,7 +203,16 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
             if let img = image {
                 DispatchQueue.main.async { [self] in
                     self!.switchOperation(type: .imageSticker)
-                    let state: ImageStickerModel = ImageStickerModel(imageName: "empty",imageData:img.pngData(), originFrame: CGRect(x: 0, y: 0, width: 120, height: 120),gesScale: 1,gesRotation: 0,overlayRect: CGRect(x:0,y: 0,width: 1,height: 1) ,isBgImage: true)
+                    let state: ImageStickerModel = ImageStickerModel(
+                        imageName: "empty",
+                        imageData:img.pngData(),
+                        originScale: 1.0,
+                        originAngle: 0.0,
+                        originFrame: CGRect(x: 0, y: 0, width: 120.w, height: 120.w),
+                        gesScale: 1,
+                        gesRotation: 0,
+                        overlayRect: CGRect(x:0,y: 0,width: 1,height: 1) ,
+                        isBgImage: true)
                     StickerManager.shared.addStickerImageHandle(state: state)
                 }
             } else {
@@ -211,7 +220,21 @@ extension EditImageViewController:ToolsCollectionViewDelegate {
             }
         }
     }
-    
+   
+//    image: UIImage? = nil,
+//    imageName: String = "",
+//    imageData: Data? = nil,
+//    originScale: Double = 1.0,
+//    originAngle: Double = 0.0,
+//    originFrame: CGRect = .zero,
+//    gesScale: Double = 1.0,
+//    gesRotation: Double = 0.0,
+//    overlayRect: CGRect? = nil,
+//    imageType: ImageAddType? = nil,
+//    cornerRadiusScale:Double = 0.1,
+//    isBgImage: Bool = false,
+//    bgAddImageType:String = "addGrayImage",
+//    zIndex:Int = 0
     
 }
 
@@ -310,20 +333,22 @@ extension EditImageViewController:RatioToolViewDelegate {
 extension EditImageViewController {
     func ratioAndReplaceBgImage(img:UIImage,oldImage:UIImage){
         StickerManager.shared.getCurrentVC(currentVC: self)
-        replaceBgImage(image: img,actions: editorManager.actions)
+        replaceBgImage(image: img)
         editorManager.storeAction(.replaceBg(oldBg: oldImage, newBg: img))
         resetContainerViewFrame()
-        for (index,sticker) in StickerManager.shared.stickerArr.enumerated() {
-            let data = StickerManager.shared.stickerData[index]
-            sticker.originAngle = data.originAngle
-            sticker.originScale = data.originScale
-            sticker.gesScale = data.gesScale
-            sticker.originTransform = data.originTransform
-            sticker.totalTranslationPoint = data.totalTranslationPoint
-            sticker.gesTranslationPoint = data.gesTranslationPoint
-            sticker.originFrame = data.originFrame
-            sticker.center = data.center
-            sticker.updateTransform()
+        for (_,sticker) in StickerManager.shared.stickerArr.enumerated() {
+            if let data = StickerManager.shared.stickerData[sticker.id] {
+//                sticker.originAngle = data.originAngle
+                sticker.gesRotation = data.gesRotation
+                sticker.originScale = data.originScale
+//                sticker.gesScale = data.gesScale
+                sticker.originTransform = data.originTransform
+//                sticker.totalTranslationPoint = data.totalTranslationPoint
+                sticker.gesTranslationPoint = data.gesTranslationPoint
+                sticker.originFrame = data.originFrame
+                sticker.center = data.center
+                sticker.updateTransform02()
+            }
         }
         let newFrame = containerView.frame
         convertStickerFrames(
@@ -394,6 +419,23 @@ func convertStickerFrames(
 
         sticker.originFrame = sticker.frame
         sticker.originTransform = sticker.transform
+        
+//        let state = StickerManager.shared.stickerData[sticker.id]!
+//        let stickerData = BSWHPhotoPicker.stickerData(uuid: state.uuid,
+//                                                      originScale:sticker.originScale,
+//                                                      originAngle:sticker.originAngle,
+//                                                      gesScale:sticker.gesScale,
+//                                                      gesRotation:sticker.gesRotation,
+//                                                      originTransform:sticker.originTransform,
+//                                                      totalTranslationPoint:sticker.totalTranslationPoint,
+//                                                      gesTranslationPoint:sticker.gesTranslationPoint,
+//                                                      originFrame:sticker.originFrame,
+//                                                      center: sticker.center
+//        )
+//        StickerManager.shared.stickerData[sticker.id] = stickerData
+        
+        sticker.updateTransform()
+
     }
 }
 
