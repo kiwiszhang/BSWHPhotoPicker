@@ -341,13 +341,13 @@ extension EditImageViewController {
 //                sticker.originAngle = data.originAngle
                 sticker.gesRotation = data.gesRotation
                 sticker.originScale = data.originScale
-//                sticker.gesScale = data.gesScale
+                sticker.gesScale = data.gesScale
                 sticker.originTransform = data.originTransform
-//                sticker.totalTranslationPoint = data.totalTranslationPoint
+                sticker.totalTranslationPoint = data.totalTranslationPoint
                 sticker.gesTranslationPoint = data.gesTranslationPoint
                 sticker.originFrame = data.originFrame
                 sticker.center = data.center
-                sticker.updateTransform02()
+                sticker.updateTransform()
             }
         }
         let newFrame = containerView.frame
@@ -417,24 +417,15 @@ func convertStickerFrames(
         sticker.layoutIfNeeded()
         sticker.refreshResizeButtonPosition()
 
+        var state = StickerManager.shared.stickerData[sticker.id]
+//        state?.originFrame = sticker.frame
+        state?.originTransform = sticker.transform
+        state?.totalTranslationPoint = sticker.totalTranslationPoint
+        state?.gesTranslationPoint = sticker.gesTranslationPoint
+        StickerManager.shared.stickerData[sticker.id] = state
+        
         sticker.originFrame = sticker.frame
         sticker.originTransform = sticker.transform
-        
-//        let state = StickerManager.shared.stickerData[sticker.id]!
-//        let stickerData = BSWHPhotoPicker.stickerData(uuid: state.uuid,
-//                                                      originScale:sticker.originScale,
-//                                                      originAngle:sticker.originAngle,
-//                                                      gesScale:sticker.gesScale,
-//                                                      gesRotation:sticker.gesRotation,
-//                                                      originTransform:sticker.originTransform,
-//                                                      totalTranslationPoint:sticker.totalTranslationPoint,
-//                                                      gesTranslationPoint:sticker.gesTranslationPoint,
-//                                                      originFrame:sticker.originFrame,
-//                                                      center: sticker.center
-//        )
-//        StickerManager.shared.stickerData[sticker.id] = stickerData
-        
-        sticker.updateTransform()
 
     }
 }

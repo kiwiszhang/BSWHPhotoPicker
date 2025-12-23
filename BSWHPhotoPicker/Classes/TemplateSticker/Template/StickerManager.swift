@@ -243,13 +243,13 @@ public final class StickerManager: NSObject {
 //                sticker.originAngle = data.originAngle
                 sticker.gesRotation = data.gesRotation
                 sticker.originScale = data.originScale
-//                sticker.gesScale = data.gesScale
+                sticker.gesScale = data.gesScale
                 sticker.originTransform = data.originTransform
-//                sticker.totalTranslationPoint = data.totalTranslationPoint
+                sticker.totalTranslationPoint = data.totalTranslationPoint
                 sticker.gesTranslationPoint = data.gesTranslationPoint
                 sticker.originFrame = data.originFrame
                 sticker.center = data.center
-                sticker.updateTransform02()
+                sticker.updateTransform()
             }
         }
         let newFrame = controller!.containerView.frame

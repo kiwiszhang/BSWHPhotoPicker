@@ -1517,8 +1517,8 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
                 sticker.hideBorder()
             }
         }else{
-            oldState.originScale = 1
-            oldState.gesScale = 1
+//            oldState.originScale = 1
+//            oldState.gesScale = 1
             if let sticker = EditableStickerView.initWithState(oldState) {
 //                addSticker(sticker)
                 addSticker01(sticker, at: oldState.zIndex)
@@ -1543,8 +1543,8 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
                 sticker.hideBorder()
             }
         }else{
-            newState.originScale = 1
-            newState.gesScale = 1
+//            newState.originScale = 1
+//            newState.gesScale = 1
             if let sticker = EditableStickerView.initWithState(newState) {
 //                addSticker(sticker)
                 addSticker01(sticker, at: newState.zIndex)

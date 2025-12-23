@@ -195,9 +195,9 @@ extension ZLEditImageViewController {
                                                zIndex: state.zIndex)
         addSticker(imageSticker)
         view.layoutIfNeeded()
-        if !isFreeStyle {
+//        if !isFreeStyle {
             editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
-        }
+//        }
         return imageSticker
     }
     
@@ -768,6 +768,10 @@ public class EditableStickerView: ZLImageStickerView {
             totalTranslationPoint.y += dy
             gesTranslationPoint = .zero
             setOperation(false)
+            var state = StickerManager.shared.stickerData[self.id]
+            state?.totalTranslationPoint = totalTranslationPoint
+            state?.gesTranslationPoint = gesTranslationPoint
+            StickerManager.shared.stickerData[self.id] = state
             NotificationCenter.default.post(name: Notification.Name(rawValue: "tapStickerOutOverlay"), object: ["sticker":self])
         default: break
         }
@@ -810,8 +814,17 @@ public class EditableStickerView: ZLImageStickerView {
             originAngle += gesRotation
             gesScale = 1
             gesRotation = originAngle
-            updateTransform01()
             setOperation(false)
+            
+            var state = StickerManager.shared.stickerData[self.id]
+            state?.originScale = originScale
+            state?.gesScale = gesScale
+//            state?.originAngle = originAngle
+//            state?.gesRotation = gesRotation
+            StickerManager.shared.stickerData[self.id] = state
+            
+            updateTransform01()
+
         default: break
         }
     }
