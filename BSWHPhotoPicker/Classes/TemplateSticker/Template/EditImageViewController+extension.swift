@@ -417,12 +417,12 @@ func convertStickerFrames(
         sticker.layoutIfNeeded()
         sticker.refreshResizeButtonPosition()
 
-        var state = StickerManager.shared.stickerData[sticker.id]
-//        state?.originFrame = sticker.frame
-        state?.originTransform = sticker.transform
-        state?.totalTranslationPoint = sticker.totalTranslationPoint
-        state?.gesTranslationPoint = sticker.gesTranslationPoint
-        StickerManager.shared.stickerData[sticker.id] = state
+//        var state = StickerManager.shared.stickerData[sticker.id]
+////        state?.originFrame = sticker.frame
+//        state?.originTransform = sticker.transform
+//        state?.totalTranslationPoint = sticker.totalTranslationPoint
+//        state?.gesTranslationPoint = sticker.gesTranslationPoint
+//        StickerManager.shared.stickerData[sticker.id] = state
         
         sticker.originFrame = sticker.frame
         sticker.originTransform = sticker.transform

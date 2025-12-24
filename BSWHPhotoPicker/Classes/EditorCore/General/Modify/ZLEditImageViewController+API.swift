@@ -817,8 +817,8 @@ public class EditableStickerView: ZLImageStickerView {
             setOperation(false)
             
             var state = StickerManager.shared.stickerData[self.id]
-            state?.originScale = originScale
-            state?.gesScale = gesScale
+//            state?.originScale = originScale
+//            state?.gesScale = gesScale
 //            state?.originAngle = originAngle
 //            state?.gesRotation = gesRotation
             StickerManager.shared.stickerData[self.id] = state
