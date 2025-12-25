@@ -22,10 +22,10 @@ class TemplateTopView: SuperView {
         delegate?.closeTemplate(self)
     }
     lazy var backImg = UIImageView().image(BSWHBundle.image(named: "template-back")).enable(true).onTap { [self] in
-        delegate?.backTemplate(self)
+        delegate?.reBackTemplate(self)
     }
     lazy var rebackImg = UIImageView().image(BSWHBundle.image(named: "template-reBack")).enable(true).onTap { [self] in
-        delegate?.reBackTemplate(self)
+        delegate?.backTemplate(self)
     }
     private lazy var saveBtn = UILabel().text(BSWHPhotoPickerLocalization.shared.localized("save")).backgroundColor(kkColorFromHex("A216FF")).color(.white).centerAligned().hnFont(size: 14.h, weight: .boldBase).cornerRadius(8.h).onTap { [self] in
         delegate?.saveTemplate(self)

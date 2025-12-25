@@ -223,20 +223,6 @@ public class EditImageViewController: ZLEditImageViewController {
                 }
             }
         }
-        
-//        if sticker.stickerModel?.imageName == "Travel-sticker-bg06" {
-//            if sticker.imageData != BSWHBundle.image(named: "addEmptyImage")?.pngData() {
-//                imageView.image = UIImage(data: (sticker.stickerModel?.imageData)!)?.forceRGBA()
-//            }else{
-//                imageView.image = BSWHBundle.image(named: "Travel07-bg")?.forceRGBA()
-//            }
-//        }else if sticker.stickerModel?.imageName == "Birthday02-sticker-bg00" {
-//            if sticker.imageData != BSWHBundle.image(named: "addEmptyImage")?.pngData() {
-//                imageView.image = UIImage(data: (sticker.stickerModel?.imageData)!)?.forceRGBA()
-//            }else{
-//                imageView.image = BSWHBundle.image(named: "Birthday02-bg")?.forceRGBA()
-//            }
-//        }
     }
     
     // MARK: - ratioToolView 隐藏显示处理
@@ -247,6 +233,7 @@ public class EditImageViewController: ZLEditImageViewController {
             make.height.equalTo(0.h)
             make.left.right.equalToSuperview()
         }
+        backAndreBackStatus()
         contentView.snp.remakeConstraints { make in
             make.width.equalTo(kkScreenWidth)
             make.left.equalToSuperview().offset(0)
@@ -277,6 +264,7 @@ public class EditImageViewController: ZLEditImageViewController {
             make.height.equalTo(44.h)
             make.left.right.equalToSuperview()
         }
+        backAndreBackStatus()
         contentView.snp.remakeConstraints { make in
             make.width.equalTo(kkScreenWidth)
             make.left.equalToSuperview().offset(0)
@@ -308,6 +296,7 @@ public class EditImageViewController: ZLEditImageViewController {
             make.height.equalTo(0.h)
             make.left.right.equalToSuperview()
         }
+        backAndreBackStatus()
         contentView.snp.updateConstraints { make in
             make.width.equalTo(kkScreenWidth)
             make.left.equalToSuperview().offset(0)
@@ -344,6 +333,7 @@ public class EditImageViewController: ZLEditImageViewController {
             make.height.equalTo(44.h)
             make.left.right.equalToSuperview()
         }
+        backAndreBackStatus()
         contentView.snp.remakeConstraints { make in
             make.width.equalTo(kkScreenWidth)
             make.left.equalToSuperview().offset(0)
@@ -377,15 +367,15 @@ public class EditImageViewController: ZLEditImageViewController {
     
     public func backAndreBackStatus(){
         if canRedo {
-            topView.backImg.image(BSWHBundle.image(named: "template-back"))
-        }else{
-            topView.backImg.image(BSWHBundle.image(named: "template-back-lignt"))
-        }
-        
-        if canUndo {
             topView.rebackImg.image(BSWHBundle.image(named: "template-reBack"))
         }else{
             topView.rebackImg.image(BSWHBundle.image(named: "template-reBack-light"))
+        }
+        
+        if canUndo {
+            topView.backImg.image(BSWHBundle.image(named: "template-back"))
+        }else{
+            topView.backImg.image(BSWHBundle.image(named: "template-back-lignt"))
         }
     }
 

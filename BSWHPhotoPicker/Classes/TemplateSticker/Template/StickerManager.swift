@@ -81,7 +81,7 @@ public final class StickerManager: NSObject {
         for (_,state) in items!.enumerated() {
 //            state.zIndex = index
             self.controller!.switchOperation(type: .imageSticker)
-            StickerManager.shared.addStickerImageHandle(state: state)
+            StickerManager.shared.addStickerImageHandle(state: state,isStoreAction: false)
         }
     }
     
@@ -209,9 +209,9 @@ public final class StickerManager: NSObject {
         }
     }
     
-    func addStickerImageHandle(state: ImageStickerModel,isFreeStyle:Bool = false){
+    func addStickerImageHandle(state: ImageStickerModel,isFreeStyle:Bool = false, isStoreAction:Bool = true){
         state.zIndex = StickerManager.shared.stickerArr.count
-        let sticker = self.controller!.addImageSticker01(state: state,isFreeStyle: isFreeStyle)
+        let sticker = self.controller!.addImageSticker01(state: state,isFreeStyle: isFreeStyle,isStoreAction: isStoreAction)
         let stickerData = BSWHPhotoPicker.stickerData(uuid: sticker.id,
                                                       originScale:state.originScale,
                                                       originAngle:state.originAngle,

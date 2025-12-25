@@ -21,6 +21,7 @@ extension EditImageViewController:TemplateTopViewDelegate {
             redoAction()
         }
         backAndreBackStatus()
+        
     }
     func reBackTemplate(_ sender: TemplateTopView) {
         currentSticker = nil
@@ -344,7 +345,7 @@ extension EditImageViewController {
                 sticker.gesScale = data.gesScale
                 sticker.originTransform = data.originTransform
                 sticker.totalTranslationPoint = data.totalTranslationPoint
-                sticker.gesTranslationPoint = data.gesTranslationPoint
+//                sticker.gesTranslationPoint = data.gesTranslationPoint
                 sticker.originFrame = data.originFrame
                 sticker.center = data.center
                 sticker.updateTransform()

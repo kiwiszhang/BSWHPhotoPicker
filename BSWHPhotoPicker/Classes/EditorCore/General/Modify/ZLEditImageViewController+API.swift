@@ -168,7 +168,7 @@ extension ZLEditImageViewController {
         editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
     }
 
-    public func addImageSticker01(state: ImageStickerModel,isFreeStyle:Bool = false) -> EditableStickerView {
+    public func addImageSticker01(state: ImageStickerModel,isFreeStyle:Bool = false,isStoreAction:Bool = true) -> EditableStickerView {
         var clearImage:UIImage? = nil
         if state.imageName == "empty" {
             clearImage = createTransparentImage(size: CGSize(width: state.originFrameWidth, height: state.originFrameHeight))
@@ -195,9 +195,9 @@ extension ZLEditImageViewController {
                                                zIndex: state.zIndex)
         addSticker(imageSticker)
         view.layoutIfNeeded()
-//        if !isFreeStyle {
+        if isStoreAction {
             editorManager.storeAction(.sticker(oldState: nil, newState: imageSticker.state))
-//        }
+        }
         return imageSticker
     }
     
@@ -817,8 +817,8 @@ public class EditableStickerView: ZLImageStickerView {
             setOperation(false)
             
             var state = StickerManager.shared.stickerData[self.id]
-//            state?.originScale = originScale
-//            state?.gesScale = gesScale
+            state?.originScale = originScale
+            state?.gesScale = gesScale
 //            state?.originAngle = originAngle
 //            state?.gesRotation = gesRotation
             StickerManager.shared.stickerData[self.id] = state

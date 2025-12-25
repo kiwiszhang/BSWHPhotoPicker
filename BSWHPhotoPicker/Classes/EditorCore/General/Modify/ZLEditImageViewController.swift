@@ -1521,6 +1521,15 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
 //            oldState.gesScale = 1
             if let sticker = EditableStickerView.initWithState(oldState) {
 //                addSticker(sticker)
+                
+                var state = StickerManager.shared.stickerData[oldState.id]
+                state?.originScale = oldState.originScale
+                state?.gesScale = oldState.gesScale
+                state?.totalTranslationPoint = oldState.totalTranslationPoint
+                state?.originAngle = oldState.originAngle
+                state?.gesRotation = oldState.gesRotation
+                StickerManager.shared.stickerData[oldState.id] = state
+                
                 addSticker01(sticker, at: oldState.zIndex)
                 if oldState.isBgImage == true {
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "stickerImageAddTap"), object: ["sticker":sticker])
@@ -1547,6 +1556,14 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
 //            newState.gesScale = 1
             if let sticker = EditableStickerView.initWithState(newState) {
 //                addSticker(sticker)
+                var state = StickerManager.shared.stickerData[newState.id]
+                state?.originScale = newState.originScale
+                state?.gesScale = newState.gesScale
+                state?.totalTranslationPoint = newState.totalTranslationPoint
+                state?.originAngle = newState.originAngle
+                state?.gesRotation = newState.gesRotation
+                StickerManager.shared.stickerData[newState.id] = state
+                
                 addSticker01(sticker, at: newState.zIndex)
                 if newState.isBgImage == true {
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "stickerImageAddTap"), object: ["sticker":sticker])

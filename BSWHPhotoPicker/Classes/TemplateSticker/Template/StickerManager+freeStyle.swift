@@ -28,6 +28,7 @@ extension StickerManager {
         default: return
         }
 
+        StickerManager.shared.replaceBgImage = nil
         StickerManager.shared.modelMap.removeAll()
         StickerManager.shared.stickerArr.removeAll()
         StickerManager.shared.stickerData.removeAll()
@@ -48,7 +49,7 @@ extension StickerManager {
                 overlayRect: CGRect(x:0,y:0,width:1,height:1),
                 isBgImage: true
             )
-            StickerManager.shared.addStickerImageHandle(state: state, isFreeStyle: true)
+            StickerManager.shared.addStickerImageHandle(state: state, isFreeStyle: true,isStoreAction: false)
         }
     }
 
