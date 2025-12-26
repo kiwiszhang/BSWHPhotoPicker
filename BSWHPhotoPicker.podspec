@@ -21,9 +21,9 @@ Pod::Spec.new do |s|
 基于ZLImageEditor封装.
                        DESC
 
-  s.homepage         = 'https://github.com/kiwiszhang/BSWHPhotoPicker'
+  s.homepage         = 'https://github.com/kiwiszhang/BSWHPhotoPicker.git'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'caoguangming' => '48467160+caoguangming@users.noreply.github.com' }
+  s.author           = { 'caoguangming' => 'zhangzhiqiang.mail@qq.com' }
   s.source           = { :git => 'https://github.com/kiwiszhang/BSWHPhotoPicker.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '15.0'
