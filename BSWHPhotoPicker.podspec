@@ -10,38 +10,33 @@ Pod::Spec.new do |s|
   s.name             = 'BSWHPhotoPicker'
   s.version          = '1.0.0'
   s.summary          = '图片编辑库'
+  s.description      = '基于 ZLImageEditor 封装的图片编辑库'
 
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
-
-  s.description      = <<-DESC
-基于ZLImageEditor封装.
-                       DESC
-
-  s.homepage         = 'https://github.com/kiwiszhang/BSWHPhotoPicker.git'
+  s.homepage         = 'https://github.com/kiwiszhang/BSWHPhotoPicker'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'caoguangming' => 'zhangzhiqiang.mail@qq.com' }
-  s.source           = { :git => 'https://github.com/kiwiszhang/BSWHPhotoPicker.git', :tag => s.version.to_s }
+  s.source           = {
+    :git => 'https://github.com/kiwiszhang/BSWHPhotoPicker.git',
+    :tag => s.version.to_s
+  }
 
   s.ios.deployment_target = '15.0'
   s.swift_versions        = ['5.0', '5.1', '5.2']
 
   s.dependency 'SnapKit', '~> 5.7.1'
 
-  s.exclude_files = ["BSWHPhotoPicker/Classes/General/ZLWeakProxy.swift"]
-  
+  # 只包含代码
   s.source_files = 'BSWHPhotoPicker/Classes/**/*.{swift,h,m}'
+
+  # 排除任何资源目录 & 指定文件
+  s.exclude_files = [
+    'BSWHPhotoPicker/Classes/General/ZLWeakProxy.swift',
+    'BSWHPhotoPicker/Classes/**/Resources/**'
+  ]
+
+  # 所有资源只走 bundle
   s.resource_bundles = {
-    'BSWHPhotoPicker' => [
-      'BSWHPhotoPicker/Resources/**/*',
-      'BSWHPhotoPicker/Assets/StickerAssets.xcassets'
-    ]
+    'BSWHPhotoPicker' => ['BSWHPhotoPicker/Resources/**/*']
   }
-
-
-#  s.resources = 'BSWHPhotoPicker/BSWHPhotoPicker.bundle'
-
 end
+
