@@ -1,5 +1,5 @@
 PODS:
-  - BSWHPhotoPicker (0.0.1):
+  - BSWHPhotoPicker (1.0.0):
     - SnapKit (~> 5.7.1)
   - FBSnapshotTestCase (2.1.4):
     - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
@@ -34,7 +34,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  BSWHPhotoPicker: 19731a98cbcbf056fe2642d0950566cf8b31b399
+  BSWHPhotoPicker: 8d710cd92aa63ebb213906d36263b671e78ecbee
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   Localize-Swift: 6f4475136bdb0d7b2882ea3d4ea919d70142b232
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
