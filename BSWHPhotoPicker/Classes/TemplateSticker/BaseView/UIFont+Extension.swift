@@ -17,18 +17,18 @@ import UIKit
 //    case condensedBold = "CondensedBold"
 //}
 
-public enum InterWeightBase {
+public enum InterWeightBSBase {
     case lightBase, regularBase, mediumBase, boldBase
 }
 
-public enum ArchivoBlackWeightBase {
+public enum ArchivoBlackWeightBSBase {
     case  regularBase
 }
 
 
 
 public extension UIFont {
-    static func interBase(size: CGFloat, weight: InterWeightBase = .regularBase) -> UIFont {
+    static func interBase(size: CGFloat, weight: InterWeightBSBase = .regularBase) -> UIFont {
         
 //        let fontName = "HelveticaNeue" + (weight.rawValue.isEmpty ? "" : "-\(weight.rawValue)")
 //        if let font = UIFont(name: fontName, size: size) {
@@ -62,7 +62,7 @@ public extension UIFont {
 
     }
     
-    static func archivoBlackBase(size: CGFloat, weight: ArchivoBlackWeightBase = .regularBase) -> UIFont {
+    static func archivoBlackBase(size: CGFloat, weight: ArchivoBlackWeightBSBase = .regularBase) -> UIFont {
         // 对应 SwiftGen fonts.yml 里生成的
         let systemWeight: UIFont.Weight
         switch weight {
