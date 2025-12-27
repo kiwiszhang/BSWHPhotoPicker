@@ -100,7 +100,7 @@ extension RatioCollectionView: UICollectionViewDelegateFlowLayout {
 class RatioCollectionViewCell: UICollectionViewCell {
         
     lazy var imgView = UIImageView()
-    lazy var titleLab = UILabel().color(kkColorFromHex("65656D")).hnFont(size: 12.h, weight:.mediumBase).centerAligned()
+    lazy var titleLab = UILabel().color(kkColorFromHex("65656D")).hnFont(size: 12.h, weight:.mediumBSBase).centerAligned()
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()

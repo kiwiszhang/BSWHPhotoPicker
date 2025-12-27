@@ -14,7 +14,7 @@ public class BackGroundViewController: UIViewController, UIScrollViewDelegate {
         self?.items = []
         self?.dismiss(animated: true)
     }
-    private lazy var titleLab = UILabel().color(kkColorFromHex("333333")).hnFont(size: 18.h, weight: .boldBase).centerAligned()
+    private lazy var titleLab = UILabel().color(kkColorFromHex("333333")).hnFont(size: 18.h, weight: .boldBSBase).centerAligned()
     let tabView = CustomScrViewList()
     var collectionView: UICollectionView!
     private var titles:[String] = []

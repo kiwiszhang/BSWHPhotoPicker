@@ -10,13 +10,13 @@ import UIKit
 public extension UILabel {
     //每个项目单独处理
     @discardableResult
-    func hnFont(size: CGFloat, weight: InterWeightBSBase = .regularBase) -> Self {
+    func hnFont(size: CGFloat, weight: InterWeightBSBase = .regularBSBase) -> Self {
         self.font = UIFont.interBase(size: size, weight: weight)
         return self
     }
     
     @discardableResult
-    func abFont(size: CGFloat, weight: ArchivoBlackWeightBSBase = .regularBase) -> Self {
+    func abFont(size: CGFloat, weight: ArchivoBlackWeightBSBase = .regularBSBase) -> Self {
         self.font = UIFont.archivoBlackBase(size: size, weight: weight)
         return self
     }
