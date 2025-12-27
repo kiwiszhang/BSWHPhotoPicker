@@ -31,7 +31,7 @@ Pod::Spec.new do |s|
   # 排除任何资源目录 & 指定文件
   s.exclude_files = [
     'BSWHPhotoPicker/Classes/General/ZLWeakProxy.swift',
-    'BSWHPhotoPicker/Resources/**'
+    'BSWHPhotoPicker/Classes/**/Resources/**'
   ]
 
   # 所有资源只走 bundle
